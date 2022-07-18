@@ -1,0 +1,1 @@
+/usr/bin/g++  -Os -DNDEBUG  -rdynamic CMakeFiles/Solis.dir/src/main.cpp.o  -o Solis 
