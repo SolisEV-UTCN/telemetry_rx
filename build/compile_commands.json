@@ -1,7 +1,0 @@
-[
-{
-  "directory": "/home/misha/solis/build",
-  "command": "/usr/bin/g++    -Os -DNDEBUG   -std=gnu++17 -o CMakeFiles/Solis.dir/src/main.cpp.o -c /home/misha/solis/src/main.cpp",
-  "file": "/home/misha/solis/src/main.cpp"
-}
-]
