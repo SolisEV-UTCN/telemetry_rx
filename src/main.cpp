@@ -4,5 +4,6 @@
 int main(int, char **)
 {
     QRectF r1(100.0, 100.0, 100.0, 100.0);
-    std::cout << "Hello, world!\n";
+    std::cout << "Hello, world!\n"
+              << r1.left() << "\n";
 }

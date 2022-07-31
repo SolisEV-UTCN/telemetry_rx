@@ -15,7 +15,7 @@ set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
-add_executable(solis src/main.cpp)
+add_executable(solis ${SOURCE_PATH}/main.cpp)
 target_link_libraries(solis PRIVATE Qt6::Core)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
