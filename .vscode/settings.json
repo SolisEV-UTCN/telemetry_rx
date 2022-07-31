@@ -1,4 +1,5 @@
 {
+    "cmake.buildDirectory": "${workspaceFolder}/build/target",
     "terminal.integrated.cwd": ".",
     "terminal.integrated.defaultProfile.windows": "Git Bash"
 }
