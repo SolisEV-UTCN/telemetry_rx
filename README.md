@@ -1,4 +1,9 @@
 # solis_dashboard
 
 ## Collaborators:
-TODO
+Alex
+Madalina
+Matei
+Misha
+Raymond
+TODO: Sa pun nume
