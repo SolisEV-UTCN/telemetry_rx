@@ -11,8 +11,11 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    ,m_serial(new QSerialPort(this))
 {
     ui->setupUi(this);
+
+    connect(m_serial, &QSerialPort::readyRead, this, &MainWindow::readData);
 
     videoWidget=new QVideoWidget;
     camera=new QCamera(QMediaDevices::defaultVideoInput());
@@ -51,6 +54,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->soCLabel->setStyleSheet("QLabel{color: white;}");
     ui->progressBar->setMaximum(100);
     ui->progressBar->setMinimum(0);
+    ui->progressBar->setAlignment(Qt::AlignCenter);
+    //ui->progressBar->setStyleSheet("QLabel{color: white;}");
 
 
     //Module voltage/temperature groupBox
@@ -99,6 +104,31 @@ MainWindow::~MainWindow()
 
 void MainWindow::modifyNumber(int num) {
     ui->voltageNum->display(num);
+}
+
+void MainWindow::openSerialPort()
+{
+
+    m_serial->setPortName("COM4");
+    m_serial->setBaudRate(QSerialPort::Baud9600);
+    m_serial->setDataBits(QSerialPort::Data8);
+    m_serial->setParity(QSerialPort::NoParity);
+    m_serial->setStopBits(QSerialPort::OneStop);
+    m_serial->setFlowControl(QSerialPort::NoFlowControl);
+    m_serial->open(QIODevice::ReadWrite);
+}
+
+void MainWindow::readData()
+{
+    const QByteArray data = m_serial->readAll();
+    for(int i = 0; i < data.size(); i++)
+    {
+        unsigned int j = data.at(i);
+
+      QTextStream(stdout) << (uint8_t)j<<"  ";
+      //m_console->putData(j);
+    }
+QTextStream(stdout) <<" \n ";
 }
 
 void MainWindow::turn(bool direction) {

@@ -10,6 +10,11 @@
     <height>826</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>16</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -17,10 +22,10 @@
    <widget class="QScrollArea" name="scrollArea">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>10</y>
-      <width>591</width>
-      <height>411</height>
+      <x>310</x>
+      <y>20</y>
+      <width>801</width>
+      <height>551</height>
      </rect>
     </property>
     <property name="widgetResizable">
@@ -31,8 +36,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>589</width>
-       <height>409</height>
+       <width>799</width>
+       <height>549</height>
       </rect>
      </property>
     </widget>
@@ -66,11 +71,16 @@
    <widget class="QProgressBar" name="progressBar">
     <property name="geometry">
      <rect>
-      <x>1260</x>
-      <y>140</y>
-      <width>171</width>
-      <height>23</height>
+      <x>1180</x>
+      <y>162</y>
+      <width>231</width>
+      <height>51</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
     </property>
     <property name="value">
      <number>24</number>
@@ -79,8 +89,8 @@
    <widget class="QLabel" name="soCLabel">
     <property name="geometry">
      <rect>
-      <x>1260</x>
-      <y>160</y>
+      <x>1210</x>
+      <y>220</y>
       <width>161</width>
       <height>51</height>
      </rect>
@@ -144,8 +154,8 @@
    <widget class="QGroupBox" name="moduleBox">
     <property name="geometry">
      <rect>
-      <x>1240</x>
-      <y>250</y>
+      <x>1210</x>
+      <y>330</y>
       <width>211</width>
       <height>171</height>
      </rect>
@@ -228,7 +238,7 @@
      <x>0</x>
      <y>0</y>
      <width>1471</width>
-     <height>26</height>
+     <height>34</height>
     </rect>
    </property>
   </widget>

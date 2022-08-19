@@ -5,13 +5,14 @@
 #include <QQmlApplicationEngine>
 #include <QThread>
 #include <QTimer>
+#include <QDebug>
+#include <QtConcurrent>
+#include <QThreadPool>
 #include <QSerialPort>
 #include <QSerialPortInfo>
+#include "worker.h"
 
-static QString sensor = "";
-static QList<QSerialPortInfo> portList;
-static QSerialPortInfo sensorport;
-static QSerialPort s_sensor;
+
 class Sleeper : public QThread
 {
 public:
@@ -20,9 +21,30 @@ public:
     static void sleep(unsigned long secs){QThread::sleep(secs);}
 };
 
+
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    //trying something here
+/*
+    QQmlApplicationEngine engine;
+    const QUrl url(QStringLiteral("qrc:/main.qml"));
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
+                     &a, [url](QObject *obj, const QUrl &objUrl) {
+        if (!obj && url == objUrl)
+            QCoreApplication::exit(-1);
+    }, Qt::QueuedConnection);
+    engine.load(url);
+*/
+    // ending here
+
+
+    //Multithreading code starts here
+
+
+
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));
@@ -33,107 +55,54 @@ int main(int argc, char *argv[])
     w.setStyleSheet("QMainWindow {background: rgb(48,48,47);}");
     //w.setStyleSheet("QMainWindow {background: black;}");
     w.show();
+    w.openSerialPort();
+    w.readData();
 
-    portList = QSerialPortInfo::availablePorts();
 
-    int size = portList.size();
-    QTextStream(stdout) <<portList[0].portName()<<"\n";
-    QTextStream(stdout) <<portList[1].portName()<<"\n";
-    QTextStream(stdout) <<portList[2].portName()<<"\n";
 
-    if(portList[2].portName().toStdString()=="COM6")//&&portList[0].description().toStdString()=="USB-Serial Controller D")
-    {
-        sensor.append(portList[2].portName());
-        sensorport = portList[2];
+    //Sleeper::sleep(5);
+    for (int i=1; i < 20; i++){
+        //Sleeper::sleep(2);
+        w.modifyNumber(i);
+        QApplication::processEvents();
     }
+    //w.modifyNumber(69);
+    w.turn(false);
+    w.setSoC(50);
 
-    QTextStream(stdout) << sensor << "\n";
-    QTextStream(stdout) << sensorport.manufacturer() << "\n";
-    s_sensor.setPort(sensorport);
-    QTextStream(stdout) << s_sensor.open(QIODevice::ReadOnly) << "\n";
-    QTextStream(stdout) << s_sensor.portName()<< "\n";
-    QTextStream(stdout) << s_sensor.parity() << "\n";
-    QTextStream(stdout) << s_sensor.baudRate() << "\n";
-    QTextStream(stdout) << s_sensor.dataBits() << "\n";
-    QTextStream(stdout) << s_sensor.stopBits() << "\n";
-    QTextStream(stdout) <<"open: "<< s_sensor.isOpen() << "\n";
-    //QTextStream(stdout) << s_sensor.canReadLine() << "\n";*/
+    QTimer timer1;
 
-    char buf[1200];
-    char nucleoData[203];
-    QString buff;
-    static QByteArray byteArray;
-    uint8_t numRead = 0;
-    uint8_t byteCounter =0;
-    QElapsedTimer elapsed_timer;
+    int soC = 0;
+    int speed = 0;
+    bool turnLeft = true;
 
-    w.setSoC(0);
-    w.setTemp(0);
-    w.setVoltage(0);
-    QApplication::processEvents();
-
-    while(s_sensor.isOpen())
+    QObject::connect(&timer1, &QTimer::timeout, [&]()
     {
-        s_sensor.setReadBufferSize(200);
+        turnLeft = turnLeft == false;
+        soC = soC + 1;
+        speed = speed + 1;
+        w.setSoC(soC);
+        w.setTemp(speed);
+        w.setVoltage(speed);
+        w.turn(turnLeft);
+        w.setMPPT(turnLeft);
 
-        elapsed_timer.start();
-        numRead = s_sensor.read(buf,1);
-
-        if((uint8_t)buf[0]==254)
-        {
-            nucleoData[0]=buf[0];
-            buf[0]=0;
-            numRead=s_sensor.read(buf,11);
-            byteCounter = byteCounter + numRead+1;
-            for (int i = 1; i <= numRead; i++) {
-                nucleoData[byteCounter-numRead+i]=buf[i];
-                buf[i] = 0;
-            }
-
-            if(byteCounter == 12  && (uint8_t)nucleoData[0]==254 && (uint8_t)nucleoData[11]==255 )//change to 202 for start and stop byte
-            {
-                for (int i = 0; i < byteCounter; i++) {
-                    QTextStream(stdout) << (uint8_t)nucleoData[i]<<"  ";
-                }
-                Sleeper::sleep(1);
-                w.setSoC(nucleoData[2]);
-                w.setTemp(nucleoData[3]);
-                w.setVoltage(nucleoData[4]);
-                QApplication::processEvents();
-
-
-                byteCounter =0;
-            }
+        if (turnLeft) {
+            w.headlightsOn();
+            w.hazardOff();
         }
-        else if((uint8_t)buf[0]==252)
-        {
-            nucleoData[0]=buf[0];
-            buf[0]=0;
-            numRead=s_sensor.read(buf,2);
-            byteCounter = byteCounter + numRead+1;
-            for (int i = 1; i <= numRead; i++) {
-                nucleoData[byteCounter-numRead+i]=buf[i];
-                buf[i] = 0;
-
-            }
-
-            if(byteCounter == 3  && (uint8_t)nucleoData[0]==252 && (uint8_t)nucleoData[2]==253 )//change to 202 for start and stop byte
-            {
-
-
-                for (int i = 0; i < byteCounter; i++) {
-                    QTextStream(stdout) << (uint8_t)nucleoData[i]<<"  ";
-
-
-                }
-                Sleeper::sleep(1);
-
-                QString test = QString::number((uint8_t)nucleoData[1]);
-                w.setSoC(nucleoData[2]);
-                QApplication::processEvents();
-                byteCounter =0;
-            }
+        else {
+            w.headlightsOff();
+            w.hazardOn();
         }
-    }
+    });
+
+    timer1.start(100);
+
+
+
+
+
+
     return a.exec();
 }
