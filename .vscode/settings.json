@@ -1,5 +1,7 @@
 {
+    "clang-format.executable": "C:/Program Files/LLVM/bin/clang-format.exe", // This is local PATH
     "cmake.buildDirectory": "${workspaceFolder}/build/target",
+    "editor.formatOnSave": true,
     "terminal.integrated.cwd": ".",
     "terminal.integrated.defaultProfile.windows": "Git Bash"
 }
