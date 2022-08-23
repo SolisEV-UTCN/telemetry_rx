@@ -1,5 +1,5 @@
 
-class Main{
-    Main() {}
-    ~Main() {}
+class Main {
+  Main() {}
+  ~Main() {}
 };
