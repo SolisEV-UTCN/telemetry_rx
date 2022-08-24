@@ -37,8 +37,8 @@ MainWindow::MainWindow(QWidget *parent)
 
   ui->scrollArea->setLayout(&layout);
 
-  QPixmap pix_turn_on("C:/Qt/Projects/turnLights/Icon_TurnLeft_ON.png");
-  QPixmap pix_turn_off("C:/Qt/Projects/turnLights/Icon_TurnLeft_OFF.png");
+  QPixmap pix_turn_on("../resource/Icon_TurnLeft_ON.png");
+  QPixmap pix_turn_off("../resource/Icon_TurnLeft_OFF.png");
 
   QImage img_turn_right = pix_turn_off.toImage().mirrored(true, true);
 
@@ -71,10 +71,10 @@ MainWindow::MainWindow(QWidget *parent)
 
   // settsetTemphe hazard bar, with the hazard sign, headlights, and more
 
-  QPixmap pix_panel("C:/Qt/Projects/turnLights/BottomPanel.png");
-  QPixmap pix_hazard("C:/Qt/Projects/turnLights/hazard.png");
-  QPixmap pix_alt_hazard("C:/Qt/Projects/turnLights/hazard2.png");
-  QPixmap pix_headlight("C:/Qt/Projects/turnLights/headlight.png");
+  QPixmap pix_panel("../resource/BottomPanel.png");
+  QPixmap pix_hazard("../resource/hazard.png");
+  QPixmap pix_alt_hazard("../resource/hazard2.png");
+  QPixmap pix_headlight("../resource/headlight.png");
   ui->hazardBar->setFixedHeight(50);
   ui->hazardBar->setFixedWidth(1000);
   ui->hazardBar->setPixmap(pix_panel);
@@ -118,7 +118,7 @@ void MainWindow::openSerialPort() {
 
 void MainWindow::turn(bool direction) {
 
-  QPixmap pix_turn_on("C:/Qt/Projects/turnLights/Icon_TurnLeft_ON.png");
+  QPixmap pix_turn_on("../resource/Icon_TurnLeft_ON.png");
 
   QImage img_turn_right = pix_turn_on.toImage().mirrored(true, true);
 
@@ -134,7 +134,7 @@ void MainWindow::turn(bool direction) {
 }
 
 void MainWindow::noTurn() {
-  QPixmap pix_turn_off("C:/Qt/Projects/turnLights/Icon_TurnLeft_OFF.png");
+  QPixmap pix_turn_off("../resource/Icon_TurnLeft_OFF.png");
 
   QImage img_turn_right = pix_turn_off.toImage().mirrored(true, true);
 
@@ -154,9 +154,10 @@ void MainWindow::setSoC(int soC) {
     pal.setColor(QPalette::Base, Qt::green);
 
     if (soC > 70)
-      ui->progressBar->setStyleSheet("QProgressBar::chunk {background:  "
-                                     "rgb(0,255,0)}"); // pal.setColor(QPalette::Base,
-                                                       // Qt::green);
+      ui->progressBar->setStyleSheet(
+          "QProgressBar::chunk {background:  "
+          "rgb(0,255,0)}"); // pal.setColor(QPalette::Base,
+                            // Qt::green);
     else if (soC > 30)
       ui->progressBar->setStyleSheet(
           "QProgressBar::chunk {background:  rgb(255,255,0)}");
