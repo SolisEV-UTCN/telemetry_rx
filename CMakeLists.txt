@@ -30,13 +30,13 @@ target_link_libraries(speedometer PRIVATE
   Qt6::Quick
 )
 
-add_executable(soils 
+add_executable(solis 
   ${SOURCE_PATH}/mainwindow.ui
   ${SOURCE_PATH}/mainwindow.h
   ${SOURCE_PATH}/mainwindow.cpp
   ${SOURCE_PATH}/main.cpp
 )
-target_link_libraries(soils PRIVATE
+target_link_libraries(solis PRIVATE
   speedometer
   Qt6::Core
   Qt6::Concurrent
@@ -49,7 +49,7 @@ target_link_libraries(soils PRIVATE
   Qt6::Widgets
 )
 
-set_target_properties(soils PROPERTIES
+set_target_properties(solis PROPERTIES
   WIN32_EXECUTABLE ON
   VS_SOLUTION_DEPLOY ON
 )
