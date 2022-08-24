@@ -14,23 +14,24 @@ Make sure the following are included inside your PATH:
 1. Make sure you have all prerequisites
 2. Create new project
 
-`git clone https://github.com/VorobiovM/solis_dashboard.git` 3. Create make files
+   `git clone https://github.com/VorobiovM/solis_dashboard.git` 
+3. Create make files
 
-For development with Visual Studio:
-
-`cmake --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -Sc:<PATH_TO_PROJECT> -Bc:<PATH_TO_PROJECT>/build/target -G "Visual Studio 16 2019" -T host=x86 -A x64`
-
-For single executable:
-
-`cmake --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -Sc:<PATH_TO_PROJECT> -Bc:<PATH_TO_PROJECT>/build/target -G Ninja`
+   For development with Visual Studio:
+   
+   `cmake --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -Sc:<PATH_TO_PROJECT> -Bc:<PATH_TO_PROJECT>/build/target -G "Visual Studio 16 2019" -T host=x86 -A x64`
+   
+   For single executable:
+   
+   `cmake --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -Sc:<PATH_TO_PROJECT> -Bc:<PATH_TO_PROJECT>/build/target -G Ninja`
 
 4. Build project
 
-`cmake --build <PATH_TO_PROJECT>/build/target --config [Debug/Release/MinSizeRel/RelWithDebInfo] --target solis -j 10`
-
-**NOTE:** Use single config ex.: --config Debug
-
-**NOTE:** When in doubt use Debug config
+   `cmake --build <PATH_TO_PROJECT>/build/target --config [Debug/Release/MinSizeRel/RelWithDebInfo] --target solis -j 10`
+   
+   **NOTE:** Use single config ex.: --config Debug
+   
+   **NOTE:** When in doubt use *Debug* config
 
 ## :star:Collaborators
 
