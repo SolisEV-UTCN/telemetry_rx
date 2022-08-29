@@ -13,3 +13,4 @@
 
 # Built src
 build/*
+!build/qt6/host/qt-build-host.sh

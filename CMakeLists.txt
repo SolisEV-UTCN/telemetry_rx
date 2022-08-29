@@ -49,7 +49,9 @@ target_link_libraries(solis PRIVATE
   Qt6::Widgets
 )
 
-set_target_properties(solis PROPERTIES
-  WIN32_EXECUTABLE ON
-  VS_SOLUTION_DEPLOY ON
-)
+if (WIN32)
+  set_target_properties(solis PROPERTIES
+    WIN32_EXECUTABLE ON
+    VS_SOLUTION_DEPLOY ON
+  )
+endif()
