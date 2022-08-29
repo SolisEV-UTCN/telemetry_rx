@@ -4,7 +4,7 @@ include_guard(GLOBAL)
 set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_PROCESSOR arm)
 
-set(TARGET_SYSROOT /path/to/your/sysroot)
+set(TARGET_SYSROOT ./sysroot)
 set(CMAKE_SYSROOT ${TARGET_SYSROOT})
 
 set(ENV{PKG_CONFIG_PATH} $PKG_CONFIG_PATH:/usr/lib/aarch64-linux-gnu/pkgconfig)
@@ -35,7 +35,7 @@ function(cmake_initialize_per_config_variable _PREFIX _DOCSTRING)
   if(_PREFIX MATCHES "CMAKE_(C|CXX|ASM)_FLAGS")
     set(CMAKE_${CMAKE_MATCH_1}_FLAGS_INIT "${QT_COMPILER_FLAGS}")
 
-    foreach(config DEBUG RELEASE MINSIZEREL RELWITHDEBINFO)
+    foreach(config RELEASE)
       if(DEFINED QT_COMPILER_FLAGS_${config})
         set(CMAKE_${CMAKE_MATCH_1}_FLAGS_${config}_INIT "${QT_COMPILER_FLAGS_${config}}")
       endif()

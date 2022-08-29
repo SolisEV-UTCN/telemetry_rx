@@ -14,3 +14,6 @@
 # Built src
 build/*
 !build/qt6/host/qt-build-host.sh
+
+# Raspberry system
+sysroot/
