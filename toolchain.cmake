@@ -4,7 +4,7 @@ include_guard(GLOBAL)
 set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_PROCESSOR arm)
 
-set(TARGET_SYSROOT ./sysroot)
+set(TARGET_SYSROOT /home/misha/solis/sysroot)
 set(CMAKE_SYSROOT ${TARGET_SYSROOT})
 
 set(ENV{PKG_CONFIG_PATH} $PKG_CONFIG_PATH:/usr/lib/aarch64-linux-gnu/pkgconfig)

@@ -9,16 +9,10 @@
 #include <QPixmap>
 #include <QVideoWidget>
 
-class Sleeper : public QThread {
-public:
-  static void usleep(unsigned long usecs) { QThread::usleep(usecs); }
-  static void msleep(unsigned long msecs) { QThread::msleep(msecs); }
-  static void sleep(unsigned long secs) { QThread::sleep(secs); }
-};
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow),
-      m_serial(new QSerialPort(this)) {
+      m_serial(new QSerialPort(this))
+{
   ui->setupUi(this);
 
   connect(m_serial, &QSerialPort::readyRead, this, &MainWindow::readData);
@@ -105,7 +99,8 @@ MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::modifyNumber(int num) { ui->voltageNum->display(num); }
 
-void MainWindow::openSerialPort() {
+void MainWindow::openSerialPort()
+{
 
   m_serial->setPortName("COM4");
   m_serial->setBaudRate(QSerialPort::Baud9600);
@@ -116,7 +111,8 @@ void MainWindow::openSerialPort() {
   m_serial->open(QIODevice::ReadWrite);
 }
 
-void MainWindow::turn(bool direction) {
+void MainWindow::turn(bool direction)
+{
 
   QPixmap pix_turn_on("../resource/Icon_TurnLeft_ON.png");
 
@@ -133,7 +129,8 @@ void MainWindow::turn(bool direction) {
     ui->rightLabel->setPixmap(QPixmap().fromImage(img_turn_right));
 }
 
-void MainWindow::noTurn() {
+void MainWindow::noTurn()
+{
   QPixmap pix_turn_off("../resource/Icon_TurnLeft_OFF.png");
 
   QImage img_turn_right = pix_turn_off.toImage().mirrored(true, true);
@@ -145,8 +142,10 @@ void MainWindow::noTurn() {
   ui->rightLabel->setFixedHeight(40);
 }
 
-void MainWindow::setSoC(int soC) {
-  if (soC >= 0 && soC <= 100) {
+void MainWindow::setSoC(int soC)
+{
+  if (soC >= 0 && soC <= 100)
+  {
 
     ui->progressBar->setValue(soC);
 
@@ -181,45 +180,55 @@ void MainWindow::setTemp(int temp) { ui->tempNum->display(temp); }
 
 void MainWindow::setVoltage(int voltage) { ui->voltageNum->display(voltage); }
 
-void MainWindow::setMPPT(bool isOn) {
+void MainWindow::setMPPT(bool isOn)
+{
 
   // QFont mpptFont = ui->mpptLabel->font();
 
-  if (isOn) {
+  if (isOn)
+  {
     ui->mpptLabel->setText("MPPT\n ON");
     ui->mpptLabel->setStyleSheet("QLabel{color: rgb(0,130,0);}");
   }
 
-  else {
+  else
+  {
     ui->mpptLabel->setText("MPPT\n OFF");
     ui->mpptLabel->setStyleSheet("QLabel{color: black;}");
   }
 }
 
-void MainWindow::readData() {
+void MainWindow::readData()
+{
   char nucleoData[203];
   int byteCounter = 0;
   QByteArray data = m_serial->read(1);
   QByteArray data1 = data;
 
-  if (data1.size() > 0) {
+  if (data1.size() > 0)
+  {
     unsigned int j = data1.at(0);
 
-    if ((uint8_t)j == 254) {
+    if ((uint8_t)j == 254)
+    {
 
       data = m_serial->read(11);
       data1 = data;
-      if (data1.size() > 0) {
+      if (data1.size() > 0)
+      {
         byteCounter = data1.size() + byteCounter + 1;
-        for (int i = 0; i < data1.size(); i++) {
+        for (int i = 0; i < data1.size(); i++)
+        {
           nucleoData[byteCounter - data1.size() + 1] = data1.at(i);
         }
 
         if (byteCounter == 12 && (uint8_t)j == 254 &&
-            (uint8_t)data1.at(10) == 255) {
+            (uint8_t)data1.at(10) == 255)
+        {
           QTextStream(stdout) << (uint8_t)j << "  ";
           nucleoData[0] = (uint8_t)j;
-          for (int i = 0; i < byteCounter - 1; i++) {
+          for (int i = 0; i < byteCounter - 1; i++)
+          {
 
             nucleoData[i] = (uint8_t)data1.at(i);
             QTextStream(stdout) << (uint8_t)nucleoData[i] << "  ";
@@ -230,16 +239,19 @@ void MainWindow::readData() {
           setTemp((uint8_t)nucleoData[1]);
         }
       }
-
-    } else if ((uint8_t)j == 252) {
+    }
+    else if ((uint8_t)j == 252)
+    {
 
       nucleoData[0] = j;
       data = m_serial->read(2);
       data1 = data;
-      if (data1.size() > 0) {
+      if (data1.size() > 0)
+      {
         byteCounter = data1.size() + byteCounter + 1;
 
-        for (int i = 0; i < data1.size(); i++) {
+        for (int i = 0; i < data1.size(); i++)
+        {
           nucleoData[byteCounter - data1.size() + 1] = data1.at(i);
         }
 
@@ -247,7 +259,8 @@ void MainWindow::readData() {
             (uint8_t)data1.at(1) == 253)
           QTextStream(stdout) << (uint8_t)j << "  ";
         nucleoData[0] = (uint8_t)j;
-        for (int i = 0; i < byteCounter - 1; i++) {
+        for (int i = 0; i < byteCounter - 1; i++)
+        {
 
           nucleoData[i] = (uint8_t)data1.at(i);
           QTextStream(stdout) << (uint8_t)nucleoData[i] << "  ";

@@ -5,6 +5,10 @@
 # Script follows here:
 
 ~/solis/libs/qt6/configure \
+ -release \
+ -opengl es2 \
+ -nomake examples \
+ -nomake tests \
  -skip qt3d \
  -skip qt5compact \
  -skip qtcanvas3d \
@@ -42,16 +46,38 @@
  -skip qtwebsockets \
  -skip qtwebview \
  -skip qtxmlpatterns \
- -release \
- -opengl es2 \
- -nomake examples \
- -nomake tests \
- -qt-host-path ~/solis/build/qt6/host \
- -extprefix ~/solis/build/qt6/rasp \
+ -no-feature-accessibility \
+ -no-feature-appstore-compliant \
+ -no-feature-pdf \
+ -no-feature-qtpdf-build \
+ -no-feature-qtpdf-quick-build \
+ -no-feature-qtpdf-widgets-build \
+ -no-feature-qtwebengine-build \
+ -no-feature-qtwebengine-core-build \
+ -no-feature-qtwebengine-quick-build \
+ -no-feature-qtwebengine-widgets-build \
+ -no-feature-translation \
+ -no-feature-webengine-developer-build \
+ -no-feature-webengine-embedded-build \
+ -no-feature-webengine-extensions \
+ -no-feature-webengine-full-debug-info \
+ -no-feature-webengine-jumbo-build \
+ -no-feature-webengine-kerberos \
+ -no-feature-webengine-native-spellchecker \
+ -no-feature-webengine-pepper-plugins \
+ -no-feature-webengine-printing-and-pdf \
+ -no-feature-webengine-proprietary-codecs \
+ -no-feature-webengine-sanitizer \
+ -no-feature-webengine-spellchecker \
+ -no-feature-webengine-webchannel \
+ -no-feature-webengine-webrtc \
+ -no-feature-webengine-webrtc-pipewire \
+ -qt-host-path /usr/local/Qt-6.2.4 \
+ -extprefix /home/misha/solis/build/qt6/rasp \
  -prefix /usr/local/qt6 \
  -device linux-rasp-pi4-aarch64 \
  -device-option CROSS_COMPILE=aarch64-linux-gnu- -- \
- -DCMAKE_TOOLCHAIN_FILE=$HOME/solis/toolchain.cmake \
+ -DCMAKE_TOOLCHAIN_FILE=/home/misha/solis/toolchain.cmake \
  -DQT_FEATURE_xcb=ON \
  -DFEATURE_xcb_xlib=ON \
  -DQT_FEATURE_xlib=ON

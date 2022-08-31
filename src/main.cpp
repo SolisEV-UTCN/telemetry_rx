@@ -1,15 +1,10 @@
 #include "mainwindow.h"
 
 #include <QApplication>
-#include <QDebug>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QSerialPort>
 #include <QSerialPortInfo>
-#include <QThread>
-#include <QThreadPool>
-#include <QTimer>
-#include <QtConcurrent>
 
 int main(int argc, char *argv[]) {
   QApplication a(argc, argv);
