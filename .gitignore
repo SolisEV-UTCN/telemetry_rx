@@ -17,3 +17,6 @@ build/*
 
 # Raspberry system
 sysroot/
+
+# User CMake settings
+CMakeList.txt.user
