@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resource/battery.svg</file>
+        <file>resource/lightning.svg</file>
+        <file>resource/thermometer.svg</file>
+    </qresource>
+</RCC>

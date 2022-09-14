@@ -1,248 +1,565 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>dashboard_window</class>
+ <widget class="QMainWindow" name="dashboard_window">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1471</width>
-    <height>826</height>
+    <width>800</width>
+    <height>480</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>480</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>800</width>
+    <height>480</height>
+   </size>
   </property>
   <property name="font">
    <font>
-    <pointsize>16</pointsize>
+    <family>Roboto Mono</family>
+    <pointsize>18</pointsize>
+    <kerning>false</kerning>
    </font>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Dashboard</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <widget class="QScrollArea" name="scrollArea">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>20</y>
-      <width>801</width>
-      <height>551</height>
-     </rect>
+  <widget class="QWidget" name="central_layout">
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>0</number>
     </property>
-    <property name="widgetResizable">
-     <bool>true</bool>
+    <property name="topMargin">
+     <number>0</number>
     </property>
-    <widget class="QWidget" name="scrollAreaWidgetContents">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>799</width>
-       <height>549</height>
-      </rect>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QLabel" name="leftLabel">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>60</y>
-      <width>63</width>
-      <height>20</height>
-     </rect>
+    <property name="rightMargin">
+     <number>0</number>
     </property>
-    <property name="text">
-     <string>TextLabel</string>
+    <property name="bottomMargin">
+     <number>0</number>
     </property>
-   </widget>
-   <widget class="QLabel" name="rightLabel">
-    <property name="geometry">
-     <rect>
-      <x>1370</x>
-      <y>60</y>
-      <width>63</width>
-      <height>20</height>
-     </rect>
+    <property name="horizontalSpacing">
+     <number>0</number>
     </property>
-    <property name="text">
-     <string>TextLabel</string>
+    <property name="verticalSpacing">
+     <number>2</number>
     </property>
-   </widget>
-   <widget class="QProgressBar" name="progressBar">
-    <property name="geometry">
-     <rect>
-      <x>1180</x>
-      <y>162</y>
-      <width>231</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>16</pointsize>
-     </font>
-    </property>
-    <property name="value">
-     <number>24</number>
-    </property>
-   </widget>
-   <widget class="QLabel" name="soCLabel">
-    <property name="geometry">
-     <rect>
-      <x>1210</x>
-      <y>220</y>
-      <width>161</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="hazardBar">
-    <property name="geometry">
-     <rect>
-      <x>360</x>
-      <y>750</y>
-      <width>63</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="hazardLabel">
-    <property name="geometry">
-     <rect>
-      <x>590</x>
-      <y>760</y>
-      <width>63</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="headlightsLabel">
-    <property name="geometry">
-     <rect>
-      <x>730</x>
-      <y>760</y>
-      <width>63</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="mpptLabel">
-    <property name="geometry">
-     <rect>
-      <x>870</x>
-      <y>760</y>
-      <width>63</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-   </widget>
-   <widget class="QGroupBox" name="moduleBox">
-    <property name="geometry">
-     <rect>
-      <x>1210</x>
-      <y>330</y>
-      <width>211</width>
-      <height>171</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Module Data</string>
-    </property>
-    <widget class="QGroupBox" name="voltageBox">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>91</width>
-       <height>141</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Voltage</string>
-     </property>
-     <widget class="QLCDNumber" name="voltageNum">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>40</y>
-        <width>71</width>
-        <height>61</height>
-       </rect>
+    <item row="3" column="1">
+     <widget class="QWidget" name="speedometer" native="true">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QWidget" name="widget" native="true"/>
+       </item>
+       <item>
+        <spacer name="speed_spacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Minimum</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <spacer name="bottom_left">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
       </property>
-      <property name="styleSheet">
-       <string notr="true">QLCDNumber{
-    color: rgb(255,255,255);    
-    background-color: rgb(0, 0, 0);
-}</string>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
       </property>
-      <property name="digitCount">
-       <number>3</number>
+     </spacer>
+    </item>
+    <item row="1" column="2">
+     <widget class="QWidget" name="temperature" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>113</width>
+        <height>135</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>113</width>
+        <height>135</height>
+       </size>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,2">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QWidget" name="temp_layout" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>32</width>
+           <height>0</height>
+          </size>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QGraphicsView" name="temp_icon"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="temp_info" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="high_temp_label">
+            <property name="text">
+             <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p style=&quot;line-height:0.9;&quot;&gt;##ID&lt;br&gt;99C&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::RichText</enum>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+            </property>
+            <property name="textInteractionFlags">
+             <set>Qt::NoTextInteraction</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="low_temp_label">
+            <property name="text">
+             <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p style=&quot;line-height:0.9;&quot;&gt;##ID&lt;br&gt;99C&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::RichText</enum>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+            </property>
+            <property name="textInteractionFlags">
+             <set>Qt::NoTextInteraction</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <spacer name="top_right">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Fixed</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="2" column="2">
+     <widget class="QWidget" name="voltage_steps" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>113</width>
+        <height>135</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>113</width>
+        <height>135</height>
+       </size>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,2">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QWidget" name="volt_layout" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>32</width>
+           <height>0</height>
+          </size>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QGraphicsView" name="volt_icon"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="volt_info" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="high_volt_info">
+            <property name="text">
+             <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p style=&quot;line-height:0.9;&quot;&gt;##ID&lt;br&gt;99C&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::RichText</enum>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+            </property>
+            <property name="textInteractionFlags">
+             <set>Qt::NoTextInteraction</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="low_volt_info">
+            <property name="lineWidth">
+             <number>1</number>
+            </property>
+            <property name="text">
+             <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p style=&quot;line-height:0.9;&quot;&gt;##ID&lt;br&gt;99C&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::RichText</enum>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+            </property>
+            <property name="indent">
+             <number>-1</number>
+            </property>
+            <property name="textInteractionFlags">
+             <set>Qt::NoTextInteraction</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="1" rowspan="3">
+     <widget class="QVideoWidget" name="video_screen" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>800</width>
+        <height>480</height>
+       </size>
       </property>
      </widget>
-    </widget>
-    <widget class="QGroupBox" name="tempBox">
-     <property name="geometry">
-      <rect>
-       <x>109</x>
-       <y>20</y>
-       <width>91</width>
-       <height>141</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Temperature</string>
-     </property>
-     <widget class="QLCDNumber" name="tempNum">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>40</y>
-        <width>71</width>
-        <height>61</height>
-       </rect>
+    </item>
+    <item row="2" column="0">
+     <widget class="QWidget" name="power_consumption" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>113</width>
+        <height>135</height>
+       </size>
       </property>
-      <property name="styleSheet">
-       <string notr="true">QLCDNumber{
-    color: rgb(255,255,255);    
-    background-color: rgb(0, 0, 0);
-}qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(0, 0, 0, 255), stop:0.33 rgba(0, 0, 0, 255), stop:0.34 rgba(255, 30, 30, 255), stop:0.66 rgba(255, 0, 0, 255), stop:0.67 rgba(255, 255, 0, 255), stop:1 rgba(255, 255, 0, 255))</string>
+      <property name="maximumSize">
+       <size>
+        <width>113</width>
+        <height>135</height>
+       </size>
       </property>
-      <property name="smallDecimalPoint">
-       <bool>false</bool>
-      </property>
-      <property name="digitCount">
-       <number>3</number>
-      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,2">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QSvgWidget" name="test_icon" native="true"/>
+       </item>
+       <item>
+        <widget class="QWidget" name="widget_8" native="true"/>
+       </item>
+      </layout>
      </widget>
-    </widget>
-   </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1471</width>
-     <height>34</height>
-    </rect>
-   </property>
+    </item>
+    <item row="3" column="2">
+     <spacer name="bottom_right">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="0" column="0">
+     <spacer name="top_left">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Fixed</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="1" column="0">
+     <widget class="QWidget" name="state_of_charge" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>113</width>
+        <height>135</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>113</width>
+        <height>135</height>
+       </size>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QWidget" name="battery_layout" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QGraphicsView" name="battery_icon"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="battery_info" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QLabel" name="battery_label">
+            <property name="text">
+             <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;001%&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::RichText</enum>
+            </property>
+            <property name="scaledContents">
+             <bool>false</bool>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignHCenter|Qt::AlignTop</set>
+            </property>
+            <property name="textInteractionFlags">
+             <set>Qt::NoTextInteraction</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QVideoWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">qvideowidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QSvgWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">qsvgwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

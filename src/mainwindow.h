@@ -1,19 +1,21 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-
 #include <QCamera>
+#include <QGraphicsSvgItem>
+#include <QMainWindow>
 #include <QMediaCaptureSession>
 #include <QMediaDevices>
+#include <QPainter>
 #include <QSerialPort>
+#include <QSvgRenderer>
 #include <QVideoWidget>
 #include <QWidget>
 
 QT_BEGIN_NAMESPACE
 class QLabel;
 namespace Ui {
-class MainWindow;
+class dashboard_window;
 }
 QT_END_NAMESPACE
 
@@ -26,36 +28,40 @@ public:
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
 
-  void modifyNumber(int num);
-  void turn(bool direction);
-  void noTurn();
-  void setSoC(int soC);
-  void headlightsOn();
-  void headlightsOff();
-  void hazardOn();
-  void hazardOff();
-  void setTemp(int temp);
-  void setVoltage(int voltage);
-  void setMPPT(bool isOn);
+  // Setters
+  void setStateOfCharge(short);
+  void setTemperatures(short, short, short, short);
+  void setVoltageSteps(short, float, short, float);
+  void setSpeed(short);
+  void setSlowPowerConsumption(float);
+  void setFastPowerConsumption(float);
+  // Serial communication
   void openSerialPort();
-  void closeSerialPort();
-  void about();
-  void writeData(const QByteArray &data);
   void readData();
+  void startTimer();
 
-  void handleError(QSerialPort::SerialPortError error);
+public slots:
+  void reset();
 
 private:
-  Ui::MainWindow *ui;
-  QCamera *camera;
-  QMediaCaptureSession *mediaCaptureSession;
-  QVideoWidget *videoWidget;
-  void showStatusMessage(const QString &message);
-
-  Ui::MainWindow *m_ui = nullptr;
-  QLabel *m_status = nullptr;
-  Console *m_console = nullptr;
-  SettingsDialog *m_settings = nullptr;
+  Ui::dashboard_window *ui;
+  QCamera *m_camera = nullptr;
+  QMediaCaptureSession *m_media_session = nullptr;
   QSerialPort *m_serial = nullptr;
+  QSvgRenderer *m_renderer = new QSvgRenderer();
+  QVideoWidget *m_video_widget = nullptr;
+
+  // Colors
+  QColor m_dark_green = 0x2c9977;
+  QColor m_light_green = 0x73c05c;
+  QColor m_yellow = 0xffcc3f;
+  QColor m_orange = 0xff6a40;
+  QColor m_red = 0xff4099;
+  QColor m_dark_gray = 0x333333;
+  QColor m_light_gray = 0x555555;
+  QColor m_dark_blue = 0x177bbd;
+  QColor m_light_blue = 0x33b5e5;
+  QColor m_off_black = 0x1c1c1c;
+  QColor m_off_white = 0xaaaaaa;
 };
 #endif // MAINWINDOW_H
