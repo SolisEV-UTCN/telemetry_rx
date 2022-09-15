@@ -2,7 +2,6 @@
 
 #include <QApplication>
 #include <QGuiApplication>
-#include <QQmlApplicationEngine>
 #include <QScreen>
 #include <QSerialPort>
 #include <QSerialPortInfo>
@@ -16,8 +15,6 @@ int main(int argc, char *argv[]) {
       QSettings::NativeFormat);
   settings.setValue("dashboard_window",
                     QCoreApplication::applicationFilePath().replace('/', '\\'));
-  QQmlApplicationEngine engine;
-  const QUrl url(QStringLiteral("qrc:/main.qml"));
   MainWindow w;
   w.show();
   w.startTimer();

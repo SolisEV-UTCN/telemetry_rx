@@ -77,23 +77,24 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QWidget" name="widget" native="true"/>
-       </item>
-       <item>
-        <spacer name="speed_spacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+        <widget class="QLabel" name="speed_label">
+         <property name="font">
+          <font>
+           <family>Roboto Mono</family>
+           <pointsize>24</pointsize>
+           <kerning>false</kerning>
+          </font>
          </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Minimum</enum>
+         <property name="text">
+          <string notr="true">N/A km/h</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
+         <property name="alignment">
+          <set>Qt::AlignHCenter|Qt::AlignTop</set>
          </property>
-        </spacer>
+         <property name="textInteractionFlags">
+          <set>Qt::NoTextInteraction</set>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -149,7 +150,7 @@
            <height>0</height>
           </size>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <layout class="QVBoxLayout" name="verticalLayout_6">
           <property name="spacing">
            <number>0</number>
           </property>
@@ -166,7 +167,10 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="QGraphicsView" name="temp_icon"/>
+           <widget class="QGraphicsView" name="high_temp_icon"/>
+          </item>
+          <item>
+           <widget class="QGraphicsView" name="low_temp_icon"/>
           </item>
          </layout>
         </widget>
@@ -190,15 +194,15 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="QLabel" name="high_temp_label">
+           <widget class="QLabel" name="high_temp_label_id">
             <property name="text">
-             <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p style=&quot;line-height:0.9;&quot;&gt;##ID&lt;br&gt;99C&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string notr="true">##ID</string>
             </property>
             <property name="textFormat">
-             <enum>Qt::RichText</enum>
+             <enum>Qt::PlainText</enum>
             </property>
             <property name="alignment">
-             <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="textInteractionFlags">
              <set>Qt::NoTextInteraction</set>
@@ -206,15 +210,41 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="low_temp_label">
+           <widget class="QLabel" name="high_temp_label_value">
             <property name="text">
-             <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p style=&quot;line-height:0.9;&quot;&gt;##ID&lt;br&gt;99C&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string notr="true">99°C</string>
             </property>
             <property name="textFormat">
-             <enum>Qt::RichText</enum>
+             <enum>Qt::PlainText</enum>
+            </property>
+            <property name="textInteractionFlags">
+             <set>Qt::NoTextInteraction</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="low_temp_label_id">
+            <property name="text">
+             <string notr="true">##ID</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::PlainText</enum>
             </property>
             <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+            <property name="textInteractionFlags">
+             <set>Qt::NoTextInteraction</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="low_temp_label_value">
+            <property name="text">
+             <string notr="true">10°C</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::PlainText</enum>
             </property>
             <property name="textInteractionFlags">
              <set>Qt::NoTextInteraction</set>
@@ -281,7 +311,7 @@
            <height>0</height>
           </size>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <layout class="QVBoxLayout" name="verticalLayout_5">
           <property name="spacing">
            <number>0</number>
           </property>
@@ -298,7 +328,10 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="QGraphicsView" name="volt_icon"/>
+           <widget class="QGraphicsView" name="high_volt_icon"/>
+          </item>
+          <item>
+           <widget class="QGraphicsView" name="low_volt_icon"/>
           </item>
          </layout>
         </widget>
@@ -322,15 +355,15 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="QLabel" name="high_volt_info">
+           <widget class="QLabel" name="high_volt_label_id">
             <property name="text">
-             <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p style=&quot;line-height:0.9;&quot;&gt;##ID&lt;br&gt;99C&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string notr="true">##ID</string>
             </property>
             <property name="textFormat">
-             <enum>Qt::RichText</enum>
+             <enum>Qt::PlainText</enum>
             </property>
             <property name="alignment">
-             <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="textInteractionFlags">
              <set>Qt::NoTextInteraction</set>
@@ -338,21 +371,44 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="low_volt_info">
+           <widget class="QLabel" name="high_volt_label_value">
+            <property name="text">
+             <string notr="true">4.10</string>
+            </property>
+            <property name="textInteractionFlags">
+             <set>Qt::NoTextInteraction</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="low_volt_label_id">
             <property name="lineWidth">
              <number>1</number>
             </property>
             <property name="text">
-             <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p style=&quot;line-height:0.9;&quot;&gt;##ID&lt;br&gt;99C&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string notr="true">##ID</string>
             </property>
             <property name="textFormat">
-             <enum>Qt::RichText</enum>
+             <enum>Qt::PlainText</enum>
             </property>
             <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="indent">
              <number>-1</number>
+            </property>
+            <property name="textInteractionFlags">
+             <set>Qt::NoTextInteraction</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="low_volt_label_value">
+            <property name="text">
+             <string notr="true">4.09</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::PlainText</enum>
             </property>
             <property name="textInteractionFlags">
              <set>Qt::NoTextInteraction</set>
@@ -401,7 +457,7 @@
         <height>135</height>
        </size>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,2">
+      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,4">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -418,10 +474,118 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QSvgWidget" name="test_icon" native="true"/>
+        <widget class="QWidget" name="power_layout" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QGraphicsView" name="power_avg_icon">
+            <property name="maximumSize">
+             <size>
+              <width>38</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGraphicsView" name="power_inst_icon">
+            <property name="maximumSize">
+             <size>
+              <width>38</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
        <item>
-        <widget class="QWidget" name="widget_8" native="true"/>
+        <widget class="QWidget" name="power_info" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout_8">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="power_avg_label">
+            <property name="text">
+             <string notr="true">0.51</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::PlainText</enum>
+            </property>
+            <property name="textInteractionFlags">
+             <set>Qt::NoTextInteraction</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="power_avg">
+            <property name="text">
+             <string notr="true">kW</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::PlainText</enum>
+            </property>
+            <property name="textInteractionFlags">
+             <set>Qt::NoTextInteraction</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="power_inst_label">
+            <property name="text">
+             <string notr="true">0.50</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::PlainText</enum>
+            </property>
+            <property name="textInteractionFlags">
+             <set>Qt::NoTextInteraction</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="power_inst">
+            <property name="text">
+             <string notr="true">kW</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::PlainText</enum>
+            </property>
+            <property name="textInteractionFlags">
+             <set>Qt::NoTextInteraction</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -493,7 +657,44 @@
            <height>0</height>
           </size>
          </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>120</height>
+          </size>
+         </property>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>8</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QSvgWidget" name="battery_icon" native="true">
+            <property name="maximumSize">
+             <size>
+              <width>56</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="battery_info" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
           <property name="spacing">
            <number>0</number>
           </property>
@@ -509,15 +710,6 @@
           <property name="bottomMargin">
            <number>0</number>
           </property>
-          <item>
-           <widget class="QGraphicsView" name="battery_icon"/>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QWidget" name="battery_info" native="true">
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
            <widget class="QLabel" name="battery_label">
             <property name="text">

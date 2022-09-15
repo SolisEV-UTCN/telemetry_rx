@@ -1,7 +1,15 @@
 <RCC>
     <qresource prefix="/">
-        <file>resource/battery.svg</file>
-        <file>resource/lightning.svg</file>
-        <file>resource/thermometer.svg</file>
+        <file>resource/battery_020.svg</file>
+        <file>resource/battery_040.svg</file>
+        <file>resource/battery_060.svg</file>
+        <file>resource/battery_080.svg</file>
+        <file>resource/battery_100.svg</file>
+        <file>resource/temp_high.svg</file>
+        <file>resource/temp_low.svg</file>
+        <file>resource/volt_high.svg</file>
+        <file>resource/volt_low.svg</file>
+        <file>resource/power_avg.svg</file>
+        <file>resource/power_inst.svg</file>
     </qresource>
 </RCC>
