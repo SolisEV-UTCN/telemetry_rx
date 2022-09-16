@@ -187,7 +187,7 @@ void MainWindow::updateLabels(const SerialBuffer &data) {
     this->setTemperatures(data.LowCellTempId, data.LowCellTemp, data.HighCellTempId, data.HighCellTemp);
     this->setStateOfCharge(data.PackSOC);
     this->setSpeed(data.Speed);
-    float power = (float)data.PackCurrent * 0.0001f * (float)data.PackVoltage * 0.0001f;
+    float power = (float)data.PackCurrent * (float)data.PackVoltage;
     this->setSlowPowerConsumption(power);
     power_average->append(power);
     if (power_average->size() == 3000) {

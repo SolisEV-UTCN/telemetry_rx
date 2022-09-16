@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.23)
-project(solis VERSION 1.1.0 LANGUAGES CXX)
+project(solis VERSION 1.1.1 LANGUAGES CXX)
 
 set(BUILD_PATH "./build")
 set(SOURCE_PATH "./src")
