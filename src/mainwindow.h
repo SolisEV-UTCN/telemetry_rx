@@ -3,6 +3,7 @@
 
 #include <QCamera>
 #include <QGraphicsSvgItem>
+#include <QtMath>
 #include <QMainWindow>
 #include <QMediaCaptureSession>
 #include <QMediaDevices>
@@ -11,6 +12,8 @@
 #include <QSvgRenderer>
 #include <QVideoWidget>
 #include <QWidget>
+
+#include "helper.h"
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -29,19 +32,16 @@ public:
   ~MainWindow();
 
   // Setters
-  void setStateOfCharge(short);
-  void setTemperatures(short, short, short, short);
-  void setVoltageSteps(short, float, short, float);
-  void setSpeed(short);
+  void setStateOfCharge(uint8_t);
+  void setTemperatures(uint8_t, uint8_t, uint8_t, uint8_t);
+  void setVoltageSteps(uint8_t, uint16_t, uint8_t, uint16_t);
+  void setSpeed(uint8_t);
   void setSlowPowerConsumption(float);
   void setFastPowerConsumption(float);
+  void updateLabels(const SerialBuffer&);
   // Serial communication
   void openSerialPort();
-  void readData();
-  void startTimer();
-
-public slots:
-  void reset();
+  void readSerial();
 
 private:
   Ui::dashboard_window *ui;
@@ -49,6 +49,7 @@ private:
   QMediaCaptureSession *m_media_session = nullptr;
   QSerialPort *m_serial = nullptr;
   QVideoWidget *m_video_widget = nullptr;
+  QList<float> *power_average = new QList<float>(3000);
 
   // Colors
   const QColor m_dark_green = 0x2c9977;

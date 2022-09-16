@@ -17,8 +17,9 @@ int main(int argc, char *argv[]) {
                     QCoreApplication::applicationFilePath().replace('/', '\\'));
   MainWindow w;
   w.show();
-  w.startTimer();
+//  w.startTimer();
   w.openSerialPort();
-  w.readData();
+//  w.readData();
+//  w.readSerial();
   return a.exec();
 }

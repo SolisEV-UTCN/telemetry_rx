@@ -1,11 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "helper.h"
 
-#include <QTimer>
-
-float PowerSum;
-uint8_t powerCounter;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::dashboard_window),
@@ -105,7 +100,7 @@ MainWindow::MainWindow(QWidget *parent)
   ui->power_inst_icon->scene()->addItem(inst_power_svg);
 
   // Conenctors
-  connect(m_serial, &QSerialPort::readyRead, this, &MainWindow::readData);
+  connect(m_serial, &QSerialPort::readyRead, this, &MainWindow::readSerial);
 }
 
 MainWindow::~MainWindow() {
@@ -118,28 +113,30 @@ void MainWindow::openSerialPort() {
   m_serial->setPortName("COM2");
   m_serial->setBaudRate(QSerialPort::Baud9600);
   m_serial->setDataBits(QSerialPort::Data8);
-  m_serial->setParity(QSerialPort::NoParity);
+  m_serial->setParity(QSerialPort::EvenParity);
   m_serial->setStopBits(QSerialPort::OneStop);
   m_serial->setFlowControl(QSerialPort::NoFlowControl);
-  m_serial->open(QIODevice::ReadWrite);
+  m_serial->open(QIODevice::ReadOnly);
 }
 
-void MainWindow::setStateOfCharge(short state_of_charge) {
+void MainWindow::setStateOfCharge(uint8_t state_of_charge) {
+  // Normalize
+  float charge = (float)state_of_charge / 2;
   QPalette pal = QPalette();
   // Update battery SVG path and stroke colors
-  if (state_of_charge > 80) {
+  if (charge > 80.0f) {
     // Light green color
     ui->battery_icon->load(rezolve_link(Battery::FULL));
     pal.setColor(QPalette::Text, m_light_green);
-  } else if (state_of_charge > 60) {
+  } else if (charge > 60.0f) {
     // Light green color
     ui->battery_icon->load(rezolve_link(Battery::PARTIAL_80));
     pal.setColor(QPalette::Text, m_light_green);
-  } else if (state_of_charge > 40) {
+  } else if (charge > 40.0f) {
     // Yellow color
     ui->battery_icon->load(rezolve_link(Battery::PARTIAL_60));
     pal.setColor(QPalette::Text, m_yellow);
-  } else if (state_of_charge > 20) {
+  } else if (charge > 20.0f) {
     // Orange color
     ui->battery_icon->load(rezolve_link(Battery::PARTIAL_40));
     pal.setColor(QPalette::Text, m_orange);
@@ -149,122 +146,84 @@ void MainWindow::setStateOfCharge(short state_of_charge) {
     pal.setColor(QPalette::Text, m_red);
   }
   // Set state of charge label
-  QString number = QStringLiteral("%1\%").arg(state_of_charge, 3, 10, QLatin1Char('0'));
-  ui->battery_label->setText(number);
+  int num = qFloor(charge);
+  QString text = QStringLiteral("%1").arg(num, 3, 10, QLatin1Char('0'));
+  ui->battery_label->setText(text + "%");
   ui->battery_label->setPalette(pal);
 }
 
-void MainWindow::setTemperatures(short l_id, short l_temp, short h_id, short h_temp) {
-    ui->low_temp_label_id->setText("##" + QString::number(l_id));
-    ui->low_temp_label_value->setText(QString::number(l_temp) + "°C");
-    ui->high_temp_label_id->setText("##" + QString::number(h_id));
-    ui->high_temp_label_value->setText(QString::number(h_temp) + "°C");
+void MainWindow::setTemperatures(uint8_t l_id, uint8_t l_temp, uint8_t h_id, uint8_t h_temp) {
+    ui->low_temp_label_id->setText("##" + QString::number((int)l_id));
+    ui->low_temp_label_value->setText(QString::number((int)l_temp) + "°C");
+    ui->high_temp_label_id->setText("##" + QString::number((int)h_id));
+    ui->high_temp_label_value->setText(QString::number((int)h_temp) + "°C");
 }
 
-void MainWindow::setVoltageSteps(short l_id, float l_volt, short h_id, float h_volt) {
-    ui->low_volt_label_id->setText("##" + QString::number(l_id));
-    ui->low_volt_label_value->setText(QString::number(l_volt));
+void MainWindow::setVoltageSteps(uint8_t l_id, uint16_t l_volt, uint8_t h_id, uint16_t h_volt) {
+    // Normalize
+    float voltage = (float)l_volt * 0.0001f;
+    ui->low_volt_label_id->setText("##" + QString::number((int)l_id));
+    ui->low_volt_label_value->setText(QString::number(voltage, 'f', 2));
+    // Normalize
+    voltage = (float)h_volt * 0.0001f;
     ui->high_volt_label_id->setText("##" + QString::number(h_id));
-    ui->high_volt_label_value->setText(QString::number(h_volt));
+    ui->high_volt_label_value->setText(QString::number(voltage, 'f', 2));
 }
 
-void MainWindow::setSpeed(short speed) {
+void MainWindow::setSpeed(uint8_t speed) {
     ui->speed_label->setText(QString::number(speed) + " km/h");
 }
 
 void MainWindow::setSlowPowerConsumption(float power) {
-    ui->power_avg_label->setText(QString::number(power));
+    ui->power_avg_label->setText(QString::number(power, 'f', 2));
 }
 
 void MainWindow::setFastPowerConsumption(float power) {
-    ui->power_inst_label->setText(QString::number(power));
+    ui->power_inst_label->setText(QString::number(power, 'f', 2));
 }
 
-void MainWindow::reset() { QTextStream(stdout) << "\n"; }
-
-void MainWindow::startTimer() {
-  QTimer *timer = new QTimer(this);
-  connect(timer, SIGNAL(timeout()), this, SLOT(reset()));
-  timer->start(5000);
-}
-
-void MainWindow::readData() {
-  char nucleoData[203];
-  int byteCounter = 0;
-  QByteArray data = m_serial->read(1);
-  QByteArray data1 = data;
-  if (data1.size() > 0) {
-    unsigned int j = data1.at(0);
-    if ((uint8_t)j == 254) {
-      data = m_serial->read(16);
-      data1 = data;
-      if (data1.size() > 0) {
-        byteCounter = data1.size() + byteCounter + 1;
-        for (int i = 0; i < data1.size(); i++) {
-          nucleoData[byteCounter - data1.size() + 1] = data1.at(i);
+void MainWindow::updateLabels(const SerialBuffer &data) {
+    this->setVoltageSteps(data.LowCellVoltageId, data.LowCellVoltage, data.HighCellVoltageId, data.HighCellVoltage);
+    this->setTemperatures(data.LowCellTempId, data.LowCellTemp, data.HighCellTempId, data.HighCellTemp);
+    this->setStateOfCharge(data.PackSOC);
+    this->setSpeed(data.Speed);
+    float power = (float)data.PackCurrent * 0.0001f * (float)data.PackVoltage * 0.0001f;
+    this->setSlowPowerConsumption(power);
+    power_average->append(power);
+    if (power_average->size() == 3000) {
+        float sum = 0;
+        for (size_t i = 0; i < 3000; ++i) {
+            sum += power_average->at(i);
+            power = sum / 3000;
+            this->setFastPowerConsumption(power);
         }
-        if (byteCounter == 17 && (uint8_t)j == 254 &&
-            (uint8_t)data1.at(15) == 255) {
-          QTextStream(stdout) << (uint8_t)j << "  ";
-          nucleoData[0] = (uint8_t)j;
-          for (int i = 0; i < byteCounter - 1; i++) {
-            nucleoData[i] = (uint8_t)data1.at(i);
-            QTextStream(stdout) << (uint8_t)nucleoData[i] << "  ";
-          }
-          QTextStream(stdout) << "\n";
-          uint8_t HighTemp = (uint8_t)nucleoData[0];
-          uint8_t InternalTemp = (uint8_t)nucleoData[1];
-          uint8_t LowCellVoltageLsb = (uint8_t)nucleoData[2];
-          uint8_t LowCellVoltageMsb = (uint8_t)nucleoData[3];
-          uint8_t HighCellVoltageLsb = (uint8_t)nucleoData[4];
-          uint8_t HighCellVoltageMsb = (uint8_t)nucleoData[5];
-          uint8_t LowCellVoltageId = (uint8_t)nucleoData[6];
-          uint8_t HighCellVoltageId = (uint8_t)nucleoData[7];
-          uint8_t PackSOC = (uint8_t)nucleoData[8];
-          uint8_t RelayState = (uint8_t)nucleoData[9];
-          uint8_t PackAvgTemp = (uint8_t)nucleoData[10];
-          uint8_t LowCellTemp = (uint8_t)nucleoData[11];
-          uint8_t HighCellTemp = (uint8_t)nucleoData[12];
-          uint8_t LowCellTempId = (uint8_t)nucleoData[13];
-          uint8_t HighCellTempId = (uint8_t)nucleoData[14];
-          uint16_t LowCellVoltage = ((uint16_t)LowCellVoltageMsb << 8) | LowCellVoltageLsb;
-          uint16_t HighCellVoltage = ((uint16_t)HighCellVoltageMsb << 8) | HighCellVoltageLsb;
-          byteCounter = 0;
-          this->setVoltageSteps(LowCellVoltageId, LowCellVoltage, HighCellVoltageId, HighCellVoltage);
-          this->setTemperatures(LowCellTempId, LowCellTemp, HighCellTempId,HighCellTemp);
-          this->setStateOfCharge(PackSOC);
-        }
-      }
-
-    } else if ((uint8_t)j == 252) {
-      nucleoData[0] = j;
-      data = m_serial->read(7);
-      data1 = data;
-      if (data1.size() > 0) {
-        byteCounter = data1.size() + byteCounter + 1;
-        for (int i = 0; i < data1.size(); i++) {
-          nucleoData[byteCounter - data1.size() + 1] = data1.at(i);
-        }
-        if (byteCounter == 8 && (uint8_t)j == 252 &&
-            (uint8_t)data1.at(6) == 253)
-          QTextStream(stdout) << (uint8_t)j << "  ";
-        nucleoData[0] = (uint8_t)j;
-        for (int i = 0; i < byteCounter - 1; i++) {
-          nucleoData[i] = (uint8_t)data1.at(i);
-          QTextStream(stdout) << (uint8_t)nucleoData[i] << "  ";
-        }
-        uint8_t PackCurrentLsb = (uint8_t)nucleoData[0];
-        uint8_t PackCurrentMsb = (uint8_t)nucleoData[1];
-        uint8_t PackVoltageLsb = (uint8_t)nucleoData[2];
-        uint8_t PackVoltageMsb = (uint8_t)nucleoData[3];
-        uint8_t FrameCount = (uint8_t)nucleoData[4];
-        uint8_t Speed = (uint8_t)nucleoData[5];
-        uint16_t PackCurrent = ((uint16_t)PackCurrentMsb << 8) | PackCurrentLsb;
-        uint16_t PackVoltage = ((uint16_t)PackVoltageMsb << 8) | PackVoltageLsb;
-        QTextStream(stdout) << "\n";
-        byteCounter = 0;
-        this->setSpeed(Speed);
-      }
     }
+}
+
+void MainWindow::readSerial() {
+  const QByteArray serial_prefix = QByteArray::fromHex("FFFF");
+  QByteArray serial_read = m_serial->read(sizeof(SerialBuffer) + 1);
+  QString print = (serial_read.startsWith(serial_prefix)) ? "true" : "false";
+  QTextStream(stdout) << print;
+  if (!serial_read.isEmpty() && serial_read.startsWith(serial_prefix)) {
+      SerialBuffer data;
+      data.HighTemp = (uint8_t)serial_read[2];
+      data.InternalTemp = (uint8_t)serial_read[3];
+      data.LowCellVoltage = ((uint16_t)serial_read[4] << 8) | serial_read[5];
+      data.HighCellVoltage = ((uint16_t)serial_read[6] << 8) | serial_read[7];
+      data.LowCellVoltageId = (uint8_t)serial_read[8];
+      data.HighCellVoltageId = (uint8_t)serial_read[9];
+      data.PackSOC = (uint8_t)serial_read[10];
+      data.RelayState = (uint8_t)serial_read[11];
+      data.PackAvgTemp = (uint8_t)serial_read[12];
+      data.LowCellTemp = (uint8_t)serial_read[13];
+      data.HighCellTemp = (uint8_t)serial_read[14];
+      data.LowCellTempId = (uint8_t)serial_read[15];
+      data.HighCellTempId = (uint8_t)serial_read[16];
+      data.PackCurrent = ((uint16_t)serial_read[17] << 8) | serial_read[18];
+      data.PackVoltage = ((uint16_t)serial_read[19] << 8) | serial_read[20];
+      data.FrameCount = (uint8_t)serial_read[21];
+      data.Speed = (uint8_t)serial_read[22];
+      this->updateLabels(data);
   }
 }

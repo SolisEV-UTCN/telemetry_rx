@@ -561,7 +561,7 @@
           <item>
            <widget class="QLabel" name="power_inst_label">
             <property name="text">
-             <string notr="true">0.50</string>
+             <string notr="true">N/A</string>
             </property>
             <property name="textFormat">
              <enum>Qt::PlainText</enum>
