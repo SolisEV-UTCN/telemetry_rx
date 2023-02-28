@@ -1,42 +1,25 @@
-# Solis: Dashboard
+# Telemetry system
 
-## :clipboard:Prerequisites
+**Telemetry system** is divided into two variants: _Plug&Play_ and _xBee_.
 
-Make sure the following are included inside your PATH:
+### Plug&Play
 
-- CMake 3.23.0
-- Ninja 1.11.0
-- Qt 6.3.0
-- Visual Studio 2019 (optional)
+**Plug&Play** is designed using third-party components. Its main goal is to
+quickly develop entire telemetry system. List of third-party components:
 
-## :dvd:Installation
+- [Kvaser Ethercan HS](https://www.kvaser.com/product/kvaser-ethercan-hs/#/!)
+- [Loco5AC](https://dl.ui.com/qsg/Loco5AC/Loco5AC_EN.html)
 
-1. Make sure you have all prerequisites
-2. Create new project
+Substantial drawback of this system is big power consumption (~7W). Once _xBee_
+variant is complete this _Plug&Play_ could be used as a redundancy system.
 
-   `git clone https://github.com/VorobiovM/solis_dashboard.git` 
-3. Create make files
+### xBee
 
-   For development with Visual Studio:
-   
-   `cmake --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -Sc:<PATH_TO_PROJECT> -Bc:<PATH_TO_PROJECT>/build/target -G "Visual Studio 16 2019" -T host=x86 -A x64`
-   
-   For single executable:
-   
-   `cmake --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -Sc:<PATH_TO_PROJECT> -Bc:<PATH_TO_PROJECT>/build/target -G Ninja`
+**xBee** is a student made telemetry variant. It is designed to use the least
+possible amount of power, whilst satisfying regulations enforced by tournament
+organizers. List of components:
 
-4. Build project
+- [STM32F103](https://www.st.com/en/microcontrollers-microprocessors/stm32f103.html)
 
-   `cmake --build <PATH_TO_PROJECT>/build/target --config [Debug/Release/MinSizeRel/RelWithDebInfo] --target solis -j 10`
-   
-   **NOTE:** Use single config ex.: --config Debug
-   
-   **NOTE:** When in doubt use *Debug* config
-
-## :star:Collaborators
-
-- Blaj Matei
-- Kasler Mada
-- Muresan Alex
-- Nemeth Raymond
-- Vorobiov Misha
+This variant has a limited bandwidth, but it still satisfies current telemetry
+system needs.
