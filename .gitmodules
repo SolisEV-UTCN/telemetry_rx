@@ -1,6 +1,0 @@
-[submodule "libs/ninja"]
-	path = libs/ninja
-	url = git@github.com:ninja-build/ninja.git
-[submodule "libs/qt6"]
-	path = libs/qt6
-	url = git://code.qt.io/qt/qt5.git

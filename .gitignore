@@ -15,8 +15,8 @@
 build/*
 !build/qt6/host/qt-build-host.sh
 
-# Raspberry system
-sysroot/
+# Virtual environment
+venv/
 
 # User CMake settings
 CMakeList.txt.user
