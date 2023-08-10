@@ -8,5 +8,6 @@
   "terminal.integrated.cwd": ".",
   "terminal.integrated.defaultProfile.windows": "Git Bash",
   "cmake.configureOnOpen": true,
-  "cmake.sourceDirectory": "${workspaceFolder}/src/plug&play"
+"cmake.sourceDirectory": "${workspaceFolder}/src/plug&play",
+"python.analysis.typeCheckingMode": "basic"
 }

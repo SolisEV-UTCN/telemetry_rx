@@ -1,1 +1,2 @@
-influxdb-client[async]
+influxdb-client[async]>=1.37
+pyusb>=1.2

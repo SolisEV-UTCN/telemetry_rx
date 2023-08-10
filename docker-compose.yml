@@ -1,27 +1,51 @@
 version: "3.9"
 services:
-  influx:
-    container_name: influx_v2
-    image: influxdb:latest
-    ports:
-      - 8080:8086
-    volumes:
-      - $PWD/src:/home/influxdb/scripts:rw          # Main script
-      - $PWD/templates:/home/influxdb/templates:rw  # InfluxDB dashboards
-      - influx-data:/var/lib/influxdb2
-    devices:
-      - /dev/ttyUSB0:/dev/ttyUSB0
-    restart: "unless-stopped"
+  core:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: solis_rx
+    depends_on:
+      - influx
+    # devices:  # Comment out if using can or test_can adapters
+    #   - /dev/ttyUSB0:/dev/ttyUSB0
     environment:
-      DOCKER_INFLUXDB_INIT_MODE: setup
-      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUX_USERNAME}
-      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUX_PASSWORD}
-      DOCKER_INFLUXDB_INIT_ORG: ${INFLUX_ORG}
+    # Modify this value in the environment file (.env).
+      # Valid adapters are: 
+      #  can - Use CAN adapter to read data (P&P)
+      #  usb - Use USB adapter to read data (xBee)
+      #  test_can - Mock CAN adapter to run test
+      #  test_usb - Mock USB adapter to run test
+      TUCN_INPUT_ADAPTER: ${TUCN_INPUT_ADAPTER}
       DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUX_TOKEN}
-      DOCKER_INFLUXDB_INIT_BUCKET: garbage
-      INFLUXDB_HTTP_AUTH_ENABLED: false
+      DOCKER_INFLUXDB_INIT_ORG: ${INFLUX_ORG}
+    networks:
+      - solis-network
+    restart: unless-stopped
     stdin_open: true  # docker run -i
     tty: true         # docker run -t
-volumes:
-  influx-data:
-    name: "influx_db"
+    # volumes:
+    #   - type: bind
+    #     source: ./build/cache
+    #     target: /usr/src/app/log
+  influx:
+    container_name: influx_v2
+    environment:
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUX_TOKEN}
+      DOCKER_INFLUXDB_INIT_BUCKET: garbage
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_ORG: ${INFLUX_ORG}
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUX_PASSWORD}
+      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUX_USERNAME}
+      INFLUXDB_HTTP_AUTH_ENABLED: false
+    hostname: database
+    image: influxdb:2.7.1-alpine
+    networks:
+      - solis-network
+    ports:
+      - 8080:8086
+    restart: on-failure
+    volumes:
+      - ./build/influxdb:/var/lib/influxdb2      # Persistance storage
+networks:
+  solis-network:

@@ -43,3 +43,4 @@ src-stm/*
 
 # Sensitive information
 config.ini
+*.log
