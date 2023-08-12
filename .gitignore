@@ -17,6 +17,7 @@ build/*
 !build/qt6/host/qt-build-host.sh
 
 # Virtual environment
+__pycache__
 venv/
 
 # User CMake settings

@@ -1,4 +1,11 @@
 {
+  "[json]": {
+    "editor.quickSuggestions": {
+        "strings": true
+    },
+    "editor.tabSize": 2,
+    "editor.suggest.insertMode": "replace"
+  },
   "clang-format.executable": "C:/Program Files/LLVM/bin/clang-format.exe", // This is local PATH
   "cmake.buildDirectory": "${workspaceFolder}/build/target",
   "editor.detectIndentation": false,
@@ -8,6 +15,6 @@
   "terminal.integrated.cwd": ".",
   "terminal.integrated.defaultProfile.windows": "Git Bash",
   "cmake.configureOnOpen": true,
-"cmake.sourceDirectory": "${workspaceFolder}/src/plug&play",
-"python.analysis.typeCheckingMode": "basic"
+  "cmake.sourceDirectory": "${workspaceFolder}/src/plug&play",
+  "python.analysis.typeCheckingMode": "basic"
 }

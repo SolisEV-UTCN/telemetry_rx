@@ -2,18 +2,18 @@ import logging
 from typing import Tuple
 
 from classes.message import Message
-from adapters.dev_usb import UsbAdapter
+from helpers.paterns import Adapter
 
 
-class TestUsbAdapter(UsbAdapter):
+class CanAdapter(Adapter):
     def __init__(self):
         pass
 
     async def init_device(self) -> bool:
-        logging.error("Test USB adapter is not implemented")
+        logging.error("CAN adapter is not implemented")
         return False
     
     async def read_data(self) -> Tuple[bool, Message]:
         """Reads input medium"""
-        logging.error("Test USB adapter is not implemented")
+        logging.error("CAN adapter is not implemented")
         return (False, Message("INVALID", "garbage", ["INVALID,intel,uint,0,1"]))

@@ -1,12 +1,19 @@
 import logging
-from typing import Generator
+from typing import Tuple
 
 from classes.message import Message
-from adapters.can import CanAdapter
+from adapters.dev_can import CanAdapter
 
 
 class TestCanAdapter(CanAdapter):
-    def get_point_list(self) -> Generator[Message, None, None]:
-        """Returns list of points"""
-        logging.info("Test USB adapter selected")
-        yield Message("garbage", 999)
+    def __init__(self):
+        pass
+
+    async def init_device(self) -> bool:
+        logging.error("Test CAN adapter is not implemented")
+        return False
+    
+    async def read_data(self) -> Tuple[bool, Message]:
+        """Reads input medium"""
+        logging.error("Test CAN adapter is not implemented")
+        return (False, Message("INVALID", "garbage", ["INVALID,intel,uint,0,1"]))

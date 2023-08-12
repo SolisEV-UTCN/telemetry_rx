@@ -7,8 +7,8 @@ services:
     container_name: solis_rx
     depends_on:
       - influx
-    # devices:  # Comment out if using can or test_can adapters
-    #   - /dev/ttyUSB0:/dev/ttyUSB0
+    devices:  # Comment out if using can or test_can adapters
+      - /dev/ttyUSB0:/dev/ttyUSB0
     environment:
     # Modify this value in the environment file (.env).
       # Valid adapters are: 

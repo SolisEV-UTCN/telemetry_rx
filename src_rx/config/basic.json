@@ -1,136 +1,265 @@
 {
   "BMU": {
     "HeartbeatSerialNumber": {
-      "can_id": 1536,
-      "cast_type": "custom",
-      "custom_type": ["uint_32", "int_32"]
+      "can_id": "600",
+      "fields": [
+        "device_id,intel,uint,0,32",
+        "serial_number,intel,int,32,32"
+      ]
     },
     "PackStateOfCharge": {
-      "can_id": 1780,
-      "cast_type": "float_32"
+      "can_id": "6F4",
+      "fields": [
+        "soc_ah,intel,float,0,32",
+        "soc_percent,intel,float,32,32"
+      ]
     },
     "BalanceStateOfCharge": {
-      "can_id": 1781,
-      "cast_type": "float_32"
+      "can_id": "6F5",
+      "fields": [
+        "balance_soc_ah,intel,float,0,32",
+        "balance_soc_percent,intel,float,32,32"
+      ]
     },
     "ChargerControlInformation": {
-      "can_id": 1782,
-      "cast_type": "int_16"
+      "can_id": "6F6",
+      "fields": [
+        "charging_cell_voltage_error,intel,int,0,16",
+        "cell_temperature_margin,intel,int,16,16,0.1",
+        "discharging_cell_voltage,intel,int,32,16",
+        "total_pack_capacity,intel,int,48,16"
+      ]
     },
     "PrechargeStatus": {
-      "can_id": 1783,
-      "cast_type": "custom",
-      "custom_type": ["uint_8", "uint_8", "uint_16", "uint_8", "uint_16", "uint_8"]
+      "can_id": "6F7",
+      "fields": [
+        "precharge_contactor_driver_status,intel,uint,0,8",
+        "precharge_state,intel,uint,8,8",
+        "contactor_12v_supply_v4_bmu,intel,uint,16,16",
+        "precharge_timer_elapsed,intel,uint,32,8",
+        "unused_16,intel,uint,40,16",
+        "precharge_timer_counter,intel,uint,56,8"
+      ]
     },
     "MinMaxCellVoltage": {
-      "can_id": 1784,
-      "cast_type": "custom",
-      "custom_type": ["uint_16", "uint_16", "uint_8", "uint_8", "uint_8", "uint_8"]
+      "can_id": "6F8",
+      "fields": [
+        "minimum_cell_voltage,intel,uint,0,16",
+        "maximum_cell_voltage,intel,uint,16,16",
+        "minimum_cell_voltage_cmu,intel,uint,32,8",
+        "minimum_cell_voltage_cell_no,intel,uint,40,8",
+        "maximum_cell_voltage_cmu,intel,uint,48,8",
+        "maximum_cell_voltage_cell_no,intel,uint,56,8"
+      ]
     },
     "MinMaxCellTemp": {
-      "can_id": 1785,
-      "cast_type": "custom",
-      "custom_type": ["uint_16", "uint_16", "uint_8", "uint_8", "uint_8", "uint_8"]
+      "can_id": "6F9",
+      "fields": [
+        "min_cell_temp,intel,uint,0,16,0.1",
+        "max_cell_temp,intel,uint,16,16,0.1",
+        "min_cell_temp_cmu,intel,uint,32,8",
+        "unused_8_1,intel,uint,40,8",
+        "max_cell_temp_cmu,intel,uint,48,8",
+        "unused_8_2,intel,uint,56,8"
+      ]
     },
     "PackVoltageCurrent": {
-      "can_id": 1786,
-      "cast_type": "int_32"
+      "can_id": "6FA",
+      "fields": [
+        "voltage,intel,uint,0,32",
+        "current,intel,int,32,32"
+      ]
     },
     "BatteryPackStatus": {
-      "can_id": 1787,
-      "cast_type": "custom",
-      "custom_type": ["uint_16", "uint_16", "uint_8", "uint_8", "uint_16"]
+      "can_id": "6FB",
+      "fields": [
+        "voltage_threshold_rising,intel,uint,0,16",
+        "voltage_threshold_falling,intel,uint,16,16",
+        "status_flag,intel,uint,32,8",
+        "bms_cmu_count,intel,uint,40,8",
+        "bms_bmu_firmware_build_no,intel,uint,48,16"
+      ]
     },
     "FanStatus": {
-      "can_id": 1788,
-      "cast_type": "uint_16"
+      "can_id": "6FC",
+      "fields": [
+        "fan_speed_0,intel,uint,0,16",
+        "fan_speed_1,intel,uint,16,16",
+        "fan_and_contactors_current,intel,uint,32,16",
+        "cmu_current,intel,uint,48,16"
+      ]
     },
     "ExtendedPackStatus": {
-      "can_id": 1789,
-      "cast_type": "custom",
-      "custom_type": ["uint_32", "uint_8", "uint_8", "uint_16"]
+      "can_id": "6FD",
+      "fields": [
+        "extended_status_flag,intel,uint,0,32",
+        "bmu_hardware_version,intel,uint,32,8",
+        "bmu_model_id,intel,uint,40,8",
+        "unused_16,intel,uint,48,16"
+      ]
     }
   },
   "DCU": {
     "IDInfo": {
-      "can_id": 500,
-      "cast_type": "uint_32"
+      "can_id": "500",
+      "fields": [
+        "tritium_id,intel,uint,0,32",
+        "serial_number,intel,uint,32,32"
+      ]
     },
     "Drive": {
-      "can_id": 501,
-      "cast_type": "float_32"
+      "can_id": "501",
+      "fields": [
+        "setpoint_motor_velocity,intel,float,0,32",
+        "setpoint_motor_current,intel,float,32,32,100"
+      ]
     },
     "Power": {
-      "can_id": 502,
-      "cast_type": "float_32"
+      "can_id": "502",
+      "fields": [
+        "reserved,intel,float,0,32",
+        "serpoint_bus_current,intel,float,32,32,100"
+      ]
     },
     "Reset": {
-      "can_id": 503,
-      "cast_type": "custom",
-      "custom_type": ["float_32", "int_32"]
+      "can_id": "503",
+      "fields": [
+        "unused_1,intel,float,0,32",
+        "unused_2,intel,int,32,32"
+      ]
     },
     "Switch": {
-      "can_id": 505,
-      "cast_type": "uint_8"
+      "can_id": "505",
+      "fields": [
+        "mode_reverse,intel,uint,0,1",
+        "mode_neutral,intel,uint,1,1",
+        "mode_regen,intel,uint,2,1",
+        "mode_drive,intel,uint,3,1",
+        "ignition_accesories,intel,uint,4,1",
+        "ignition_run,intel,uint,5,1",
+        "ignition_start,intel,uint,6,1",
+        "brake,intel,uint,7,1",
+        "charge_port,intel,uint,8,1",
+        "flags,intel,uint,48,8",
+        "state,intel,uint,56,8"
+      ]
     }
   },
   "INVERTOR": {
     "IDInfo": {
-      "can_id": 128,
-      "cast_type": "uint_32"
+      "can_id": "080",
+      "fields": [
+        "tritium_id,intel,uint,0,32",
+        "serial_number,intel,uint,32,32"
+      ]
     },
     "Status": {
-      "can_id": 129,
-      "cast_type": "custom",
-      "custom_type": ["uint_16", "uint_16", "uint_16", "uint_8", "uint_8"]
+      "can_id": "081",
+      "fields": [
+        "limit_flags,intel,uint,0,16",
+        "error_flags,intel,uint,16,16",
+        "active_motor,intel,uint,32,16",
+        "tx_error_count,intel,uint,48,8",
+        "rx_error_count,intel,uint,56,8"
+      ]
     },
     "CANBus": {
-      "can_id": 130,
-      "cast_type": "float_32"
+      "can_id": "082",
+      "fields": [
+        "bus_voltage,intel,float,0,32",
+        "bus_current,intel,float,32,32"
+      ]
     },
     "Velocity": {
-      "can_id": 131,
-      "cast_type": "float_32"
+      "can_id": "083",
+      "fields": [
+        "motor_velocity,intel,float,0,32",
+        "vehicle_velocity,intel,float,32,32"
+      ]
     },
     "PhaseCurrent": {
-      "can_id": 132,
-      "cast_type": "float_32"
+      "can_id": "084",
+      "fields": [
+        "phase_current_b,intel,float,0,32",
+        "phase_current_c,intel,float,32,32"
+      ]
     },
     "VoltageVector": {
-      "can_id": 133,
-      "cast_type": "float_32"
+      "can_id": "085",
+      "fields": [
+        "vq,intel,float,0,32",
+        "vd,intel,float,32,32"
+      ]
     },
     "CurrentVector": {
-      "can_id": 134,
-      "cast_type": "float_32"
+      "can_id": "086",
+      "fields": [
+        "iq,intel,float,0,32",
+        "id,intel,float,32,32"
+      ]
     },
     "BackEMFVector": {
-      "can_id": 135,
-      "cast_type": "float_32"
+      "can_id": "087",
+      "fields": [
+        "b_emfq,intel,float,0,32",
+        "b_emfd,intel,float,32,32"
+      ]
     },
     "RailVoltage_1": {
-      "can_id": 136,
-      "cast_type": "float_32"
+      "can_id": "088",
+      "fields": [
+        "reserved_supply_15v,intel,float,0,32",
+        "supply_15v,intel,float,32,32"
+      ]
     },
     "RailVoltage_2": {
-      "can_id": 137,
-      "cast_type": "float_32"
+      "can_id": "089",
+      "fields": [
+        "supply_1v9,intel,float,0,32",
+        "supply_3v3,intel,float,32,32"
+      ]
+    },
+    "Reserved0A": {
+      "can_id": "08A",
+      "fields": [
+        "reserved_0a0,intel,float,0,32",
+        "reserved_0a1,intel,float,32,32"
+      ]
     },
     "MotorTemperature": {
-      "can_id": 139,
-      "cast_type": "float_32"
+      "can_id": "08B",
+      "fields": [
+        "motor_temp,intel,float,0,32",
+        "heatsink_temp,intel,float,32,32"
+      ]
     },
     "uPTemperature": {
-      "can_id": 140,
-      "cast_type": "float_32"
+      "can_id": "08C",
+      "fields": [
+        "dsp_board_temp,intel,float,0,32",
+        "reserved_dsp_board_temp,intel,float,32,32"
+      ]
+    },
+    "Reserved0D": {
+      "can_id": "08D",
+      "fields": [
+        "reserved_0d0,intel,float,0,32",
+        "reserved_0d1,intel,float,32,32"
+      ]
     },
     "Reset": {
-      "can_id": 142,
-      "cast_type": "float_32"
+      "can_id": "08E",
+      "fields": [
+        "odometer,intel,float,0,32",
+        "dc_bus_ah,intel,float,32,32"
+      ]
     },
     "SlipSpeed": {
-      "can_id": 151,
-      "cast_type": "float_32"
+      "can_id": "097",
+      "fields": [
+        "slip_speed,intel,float,0,32",
+        "reserved_slip_speed,intel,float,32,32"
+      ]
     }
   }
 }
