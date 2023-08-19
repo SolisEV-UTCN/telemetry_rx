@@ -1,49 +1,85 @@
 import logging
-from typing import Tuple
+import struct
+from typing import Iterable
 
-import usb.core
+import serial
 
 from classes.message import Message
 from classes.parser import Parser
-from helpers.paterns import Adapter
+from helpers.patterns import Adapter, State
 
 
-DEVICE_VENDOR  = 0x0403
-DEVICE_PRODUCT = 0x6001
 
 class UsbAdapter(Adapter):
     def __init__(self):
-        self.device: usb.core.Device
+        self.device = serial.Serial()
 
-    async def init_device(self) -> bool:
-        dev = usb.core.find(idVendor=DEVICE_VENDOR, idProduct=DEVICE_PRODUCT)
-        
-        if isinstance(dev, usb.core.Device):
-            self.device = dev
-            self.device.set_configuration()
-            logging.info(f"Device {DEVICE_VENDOR}:{DEVICE_PRODUCT} found")
-            return True
+    def init_device(self) -> State:
+        try:
+            self.device = serial.Serial(
+                port="/dev/ttyUSB0",
+                baudrate=57600,
+                bytesize=serial.EIGHTBITS,
+                parity=serial.PARITY_NONE,
+                stopbits=serial.STOPBITS_ONE,
+                timeout=None
+            )
+        except serial.PortNotOpenError:
+            logging.error("Port is in use!")
+            return State.CLOSE
+        except serial.SerialException:
+            logging.warn("Something went wrong, reconnecting...")
+            return State.INIT
+        logging.debug(f"Device data:\n{self.device}")
+        return State.COMM
+    
+    def deinit_device(self):
+        self.device.close()
 
-        return False
-
-    async def read_data(self) -> Tuple[bool, Message]:
+    def read_data(self) -> Iterable[Message]:
         """Returns list of points"""
-        if self.device is None:
-            return (False, Message("INVALID", "garbage", ["INVALID,intel,uint,0,1"]))
-        
         # Read serial stream
-        byte_stream = self.device.read(0, 12, 10)
-        can_id = int(bytearray(byte_stream[:4]), base=16)
-        can_data = bytearray(byte_stream[4:])
+        while self.device.in_waiting != 0:
+            payload = self.device.read()
 
+            if payload != b"\xfe":
+                continue
+
+            payload = self.device.read(10)
+            termination = self.device.read()
+
+            if termination != b"\x7f":
+                continue
+
+            logging.debug(f"Input buffer remaining bytes {self.device.in_waiting}")
+            
+            # Cast CAN Id as 16bit value
+            can_id = (payload[0] << 8) + payload[1]
+
+            message = self.parse_data(can_id, payload[2:])
+
+            yield message
+    
+    def parse_data(self, id: int, byte_stream: bytes) -> Message:
         # Map input to JSON
-        if can_id in Parser().messages:
-            message = Parser().messages[can_id]
+        if id in Parser().messages:
+            message = Parser().messages[id]
         else:
-            logging.warn(f"Received unknown message with id {can_id}")
-            message = Message(f"UNKNOWN_{can_id}", "garbage", ["UNKNOWN_1,intel,uint,0,32","UNKNOWN_2,intel,uint,32,32"])
+            logging.warn(f"Received unknown message with {hex(id)} ID")
+            return Message(f"UNKNOWN_{hex(id)}")
 
-        # Serialize data
-        await message.convert_bytes(can_data)
+        message.data.clear()
+        values = struct.unpack(message.fmt, byte_stream)
 
-        return (True, message)
+        for field_name, data in zip(message.field_names, values):
+            cast = field_name.split(",")
+            name = cast[0]
+            factor = 1
+            offset = 0
+            if len(cast) > 1:
+                factor = float(cast[1])
+            if len(cast) > 2:
+                offset = int(cast[2])
+            message.append(name, data, offset, factor)
+        
+        return message

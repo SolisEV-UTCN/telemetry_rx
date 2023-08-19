@@ -1,265 +1,369 @@
 {
   "BMU": {
-    "HeartbeatSerialNumber": {
+    "BMU_Heartbeat": {
       "can_id": "600",
-      "fields": [
-        "device_id,intel,uint,0,32",
-        "serial_number,intel,int,32,32"
-      ]
+      "field_names": [
+        "bmu_device_id",
+        "bmu_serial_number"
+      ],
+      "field_struct": "<2I"
     },
-    "PackStateOfCharge": {
+    "CMU1_Status": {
+      "can_id": "601",
+      "field_names": [
+        "cmu1_serial_number",
+        "cmu1_pcb_temperature",
+        "cmu1_cell_temperature"
+      ],
+      "field_struct": "<I2h"
+    },
+    "CMU1_Voltages_1": {
+      "can_id": "602",
+      "field_names": [
+        "cmu1_cell_0",
+        "cmu1_cell_1",
+        "cmu1_cell_2",
+        "cmu1_cell_3"
+      ],
+      "field_struct": "<4h"
+    },
+    "CMU1_Voltages_2": {
+      "can_id": "603",
+      "field_names": [
+        "cmu1_cell_4",
+        "cmu1_cell_5",
+        "cmu1_cell_6",
+        "cmu1_cell_7"
+      ],
+      "field_struct": "<4h"
+    },
+    "CMU2_Status": {
+      "can_id": "604",
+      "field_names": [
+        "cmu2_serial_number",
+        "cmu2_pcb_temperature",
+        "cmu2_cell_temperature"
+      ],
+      "field_struct": "<I2h"
+    },
+    "CMU2_Voltages_1": {
+      "can_id": "605",
+      "field_names": [
+        "cmu2_cell_0",
+        "cmu2_cell_1",
+        "cmu2_cell_2",
+        "cmu2_cell_3"
+      ],
+      "field_struct": "<4h"
+    },
+    "CMU2_Voltages_2": {
+      "can_id": "606",
+      "field_names": [
+        "cmu2_cell_4",
+        "cmu2_cell_5",
+        "cmu2_cell_6",
+        "cmu2_cell_7"
+      ],
+      "field_struct": "<4h"
+    },
+    "CMU3_Status": {
+      "can_id": "607",
+      "field_names": [
+        "cmu3_serial_number",
+        "cmu3_pcb_temperature",
+        "cmu3_cell_temperature"
+      ],
+      "field_struct": "<I2h"
+    },
+    "CMU3_Voltages_1": {
+      "can_id": "608",
+      "field_names": [
+        "cmu3_cell_0",
+        "cmu3_cell_1",
+        "cmu3_cell_2",
+        "cmu3_cell_3"
+      ],
+      "field_struct": "<4h"
+    },
+    "CMU3_Voltages_2": {
+      "can_id": "609",
+      "field_names": [
+        "cmu3_cell_4",
+        "cmu3_cell_5",
+        "cmu3_cell_6",
+        "cmu3_cell_7"
+      ],
+      "field_struct": "<4h"
+    },
+    "CMU4_Status": {
+      "can_id": "60A",
+      "field_names": [
+        "cmu4_serial_number",
+        "cmu4_pcb_temperature",
+        "cmu4_cell_temperature"
+      ],
+      "field_struct": "<I2h"
+    },
+    "CMU4_Voltages_1": {
+      "can_id": "60B",
+      "field_names": [
+        "cmu4_cell_0",
+        "cmu4_cell_1",
+        "cmu4_cell_2",
+        "cmu4_cell_3"
+      ],
+      "field_struct": "<4h"
+    },
+    "CMU4_Voltages_2": {
+      "can_id": "60C",
+      "field_names": [
+        "cmu4_cell_4",
+        "cmu4_cell_5",
+        "cmu4_cell_6",
+        "cmu4_cell_7"
+      ],
+      "field_struct": "<4h"
+    },
+    "Pack_SOC": {
       "can_id": "6F4",
-      "fields": [
-        "soc_ah,intel,float,0,32",
-        "soc_percent,intel,float,32,32"
-      ]
+      "field_names": [
+        "bmu_soc",
+        "bmu_soc_percent"
+      ],
+      "field_struct": "<2f"
     },
-    "BalanceStateOfCharge": {
+    "Pack_Balance_SOC": {
       "can_id": "6F5",
-      "fields": [
-        "balance_soc_ah,intel,float,0,32",
-        "balance_soc_percent,intel,float,32,32"
-      ]
+      "field_names": [
+        "bmu_balance_soc",
+        "bmu_balance_soc_percent"
+      ],
+      "field_struct": "<2f"
     },
-    "ChargerControlInformation": {
+    "Charger_Control_Information": {
       "can_id": "6F6",
-      "fields": [
-        "charging_cell_voltage_error,intel,int,0,16",
-        "cell_temperature_margin,intel,int,16,16,0.1",
-        "discharging_cell_voltage,intel,int,32,16",
-        "total_pack_capacity,intel,int,48,16"
-      ]
+      "field_names": [
+        "charger_charging_cell_voltage_error",
+        "charger_cell_temperature_margin,0.1",
+        "charger_discharging_cell_voltage",
+        "charger_total_pack_capacity"
+      ],
+      "field_struct": "<4h"
     },
-    "PrechargeStatus": {
+    "Pre-charge_Status": {
       "can_id": "6F7",
-      "fields": [
-        "precharge_contactor_driver_status,intel,uint,0,8",
-        "precharge_state,intel,uint,8,8",
-        "contactor_12v_supply_v4_bmu,intel,uint,16,16",
-        "precharge_timer_elapsed,intel,uint,32,8",
-        "unused_16,intel,uint,40,16",
-        "precharge_timer_counter,intel,uint,56,8"
-      ]
+      "field_names": [
+        "precharge_contactor_driver_status",
+        "precharge_state",
+        "precharge_supply_voltage",
+        "precharge_timer",
+        "precharge_timer_counter"
+      ],
+      "field_struct": "<2BH2x2B"
     },
-    "MinMaxCellVoltage": {
+    "Cell_Voltage": {
       "can_id": "6F8",
-      "fields": [
-        "minimum_cell_voltage,intel,uint,0,16",
-        "maximum_cell_voltage,intel,uint,16,16",
-        "minimum_cell_voltage_cmu,intel,uint,32,8",
-        "minimum_cell_voltage_cell_no,intel,uint,40,8",
-        "maximum_cell_voltage_cmu,intel,uint,48,8",
-        "maximum_cell_voltage_cell_no,intel,uint,56,8"
-      ]
+      "field_names": [
+        "bmu_min_cell_voltage",
+        "bmu_max_cell_voltage",
+        "bmu_min_cmu",
+        "bmu_min_cell_no",
+        "bmu_max_cmu",
+        "bmu_max_cell_no"
+      ],
+      "field_struct": "<2H4B"
     },
-    "MinMaxCellTemp": {
+    "Cell_Temperature": {
       "can_id": "6F9",
-      "fields": [
-        "min_cell_temp,intel,uint,0,16,0.1",
-        "max_cell_temp,intel,uint,16,16,0.1",
-        "min_cell_temp_cmu,intel,uint,32,8",
-        "unused_8_1,intel,uint,40,8",
-        "max_cell_temp_cmu,intel,uint,48,8",
-        "unused_8_2,intel,uint,56,8"
-      ]
+      "field_names": [
+        "bmu_min_cell_temp,0.1",
+        "bmu_max_cell_temp,0.1",
+        "bmu_min_cell_temp_cmu",
+        "bmu_max_cell_temp_cmu"
+      ],
+      "field_struct": "<2HBxBx"
     },
-    "PackVoltageCurrent": {
+    "Battery_Pack": {
       "can_id": "6FA",
-      "fields": [
-        "voltage,intel,uint,0,32",
-        "current,intel,int,32,32"
-      ]
+      "field_names": [
+        "bms_voltage",
+        "bms_current"
+      ],
+      "field_struct": "<Ii"
     },
-    "BatteryPackStatus": {
+    "Battery_Pack_Status": {
       "can_id": "6FB",
-      "fields": [
-        "voltage_threshold_rising,intel,uint,0,16",
-        "voltage_threshold_falling,intel,uint,16,16",
-        "status_flag,intel,uint,32,8",
-        "bms_cmu_count,intel,uint,40,8",
-        "bms_bmu_firmware_build_no,intel,uint,48,16"
-      ]
+      "field_names": [
+        "bms_voltage_threshold_rising",
+        "bms_voltage_threshold_falling",
+        "bms_status",
+        "bms_cmu_count",
+        "bms_bmu_firmware_build_no"
+      ],
+      "field_struct": "<2H2BH"
     },
-    "FanStatus": {
+    "Battery_Pack_Fan_Status": {
       "can_id": "6FC",
-      "fields": [
-        "fan_speed_0,intel,uint,0,16",
-        "fan_speed_1,intel,uint,16,16",
-        "fan_and_contactors_current,intel,uint,32,16",
-        "cmu_current,intel,uint,48,16"
-      ]
+      "field_names": [
+        "bms_fan_speed_0",
+        "bms_fan_speed_1",
+        "bms_fan_consumption",
+        "bms_cmu_consumption"
+      ],
+      "field_struct": "<4H"
     },
-    "ExtendedPackStatus": {
+    "Extended_Battery_Pack_Status": {
       "can_id": "6FD",
-      "fields": [
-        "extended_status_flag,intel,uint,0,32",
-        "bmu_hardware_version,intel,uint,32,8",
-        "bmu_model_id,intel,uint,40,8",
-        "unused_16,intel,uint,48,16"
-      ]
+      "field_names": [
+        "bms_extended_status_flag",
+        "bms_bmu_hardware_version",
+        "bms_bmu_model_id"
+      ],
+      "field_struct": "<I2B2x"
     }
   },
-  "DCU": {
-    "IDInfo": {
-      "can_id": "500",
-      "fields": [
-        "tritium_id,intel,uint,0,32",
-        "serial_number,intel,uint,32,32"
-      ]
-    },
-    "Drive": {
+  "Dashboard": {
+    "Motor_Drive": {
       "can_id": "501",
-      "fields": [
-        "setpoint_motor_velocity,intel,float,0,32",
-        "setpoint_motor_current,intel,float,32,32,100"
-      ]
+      "field_names": [
+        "command_motor_velocity",
+        "command_motor_current"
+      ],
+      "field_struct": "<2f"
     },
-    "Power": {
+    "Motor_Power": {
       "can_id": "502",
-      "fields": [
-        "reserved,intel,float,0,32",
-        "serpoint_bus_current,intel,float,32,32,100"
-      ]
+      "field_names": [
+        "command_bus_current"
+      ],
+      "field_struct": "<4xf"
     },
-    "Reset": {
+    "Motor_Reset": {
       "can_id": "503",
-      "fields": [
-        "unused_1,intel,float,0,32",
-        "unused_2,intel,int,32,32"
-      ]
+      "field_names": [
+      ],
+      "field_struct": "<8x"
     },
-    "Switch": {
-      "can_id": "505",
-      "fields": [
-        "mode_reverse,intel,uint,0,1",
-        "mode_neutral,intel,uint,1,1",
-        "mode_regen,intel,uint,2,1",
-        "mode_drive,intel,uint,3,1",
-        "ignition_accesories,intel,uint,4,1",
-        "ignition_run,intel,uint,5,1",
-        "ignition_start,intel,uint,6,1",
-        "brake,intel,uint,7,1",
-        "charge_port,intel,uint,8,1",
-        "flags,intel,uint,48,8",
-        "state,intel,uint,56,8"
-      ]
+    "AUX_States": {
+      "can_id": "510",
+      "field_names": [
+        "aux_flags"
+      ],
+      "field_struct": "<B7x"
     }
   },
   "INVERTOR": {
-    "IDInfo": {
-      "can_id": "080",
-      "fields": [
-        "tritium_id,intel,uint,0,32",
-        "serial_number,intel,uint,32,32"
-      ]
+    "INV_Identification_Information": {
+      "can_id": "400",
+      "field_names": [
+        "inv_prohelion_id",
+        "inv_serial_number"
+      ],
+      "field_struct": "<2I"
     },
-    "Status": {
-      "can_id": "081",
-      "fields": [
-        "limit_flags,intel,uint,0,16",
-        "error_flags,intel,uint,16,16",
-        "active_motor,intel,uint,32,16",
-        "tx_error_count,intel,uint,48,8",
-        "rx_error_count,intel,uint,56,8"
-      ]
+    "INV_Status": {
+      "can_id": "401",
+      "field_names": [
+        "inv_limit_flags",
+        "inv_error_flags",
+        "inv_active_motor",
+        "inv_tx_error_count",
+        "inv_rx_error_count"
+      ],
+      "field_struct": "<3H2B"
     },
-    "CANBus": {
-      "can_id": "082",
-      "fields": [
-        "bus_voltage,intel,float,0,32",
-        "bus_current,intel,float,32,32"
-      ]
+    "INV_Bus_Measurement": {
+      "can_id": "402",
+      "field_names": [
+        "bus_voltage",
+        "bus_current"
+      ],
+      "field_struct": "<2f"
     },
     "Velocity": {
-      "can_id": "083",
-      "fields": [
-        "motor_velocity,intel,float,0,32",
-        "vehicle_velocity,intel,float,32,32"
-      ]
+      "can_id": "403",
+      "field_names": [
+        "motor_velocity",
+        "vehicle_velocity"
+      ],
+      "field_struct": "<2f"
     },
-    "PhaseCurrent": {
-      "can_id": "084",
-      "fields": [
-        "phase_current_b,intel,float,0,32",
-        "phase_current_c,intel,float,32,32"
-      ]
+    "INV_Phase_Currents": {
+      "can_id": "404",
+      "field_names": [
+        "inv_phase_b_current",
+        "inv_phase_c_current"
+      ],
+      "field_struct": "<2f"
     },
-    "VoltageVector": {
-      "can_id": "085",
-      "fields": [
-        "vq,intel,float,0,32",
-        "vd,intel,float,32,32"
-      ]
+    "INV_Voltage_Vector": {
+      "can_id": "405",
+      "field_names": [
+        "inv_vq",
+        "inv_vd"
+      ],
+      "field_struct": "<2f"
     },
-    "CurrentVector": {
-      "can_id": "086",
-      "fields": [
-        "iq,intel,float,0,32",
-        "id,intel,float,32,32"
-      ]
+    "INV_Current_Vector": {
+      "can_id": "406",
+      "field_names": [
+        "inv_iq",
+        "inv_id"
+      ],
+      "field_struct": "<2f"
     },
-    "BackEMFVector": {
-      "can_id": "087",
-      "fields": [
-        "b_emfq,intel,float,0,32",
-        "b_emfd,intel,float,32,32"
-      ]
+    "INV_Back_EMF_Vector": {
+      "can_id": "407",
+      "field_names": [
+        "inv_back_emfq",
+        "inv_back_emfd"
+      ],
+      "field_struct": "<2f"
     },
-    "RailVoltage_1": {
-      "can_id": "088",
-      "fields": [
-        "reserved_supply_15v,intel,float,0,32",
-        "supply_15v,intel,float,32,32"
-      ]
+    "INV_Voltage_Rail_1": {
+      "can_id": "408",
+      "field_names": [
+        "inv_supply_15v"
+      ],
+      "field_struct": "<4xf"
     },
-    "RailVoltage_2": {
-      "can_id": "089",
-      "fields": [
-        "supply_1v9,intel,float,0,32",
-        "supply_3v3,intel,float,32,32"
-      ]
+    "INV_Voltage_Rail_2": {
+      "can_id": "409",
+      "field_names": [
+        "inv_supply_19v",
+        "inv_supply_33v"
+      ],
+      "field_struct": "<2f"
     },
-    "Reserved0A": {
-      "can_id": "08A",
-      "fields": [
-        "reserved_0a0,intel,float,0,32",
-        "reserved_0a1,intel,float,32,32"
-      ]
+    "INV_Temperature": {
+      "can_id": "40B",
+      "field_names": [
+        "inv_motor_temp",
+        "inv_heatsink_temp"
+      ],
+      "field_struct": "<2f"
     },
-    "MotorTemperature": {
-      "can_id": "08B",
-      "fields": [
-        "motor_temp,intel,float,0,32",
-        "heatsink_temp,intel,float,32,32"
-      ]
+    "INV_DSP_Temperature": {
+      "can_id": "40C",
+      "field_names": [
+        "inv_dsp_board_temp"
+      ],
+      "field_struct": "<f4x"
     },
-    "uPTemperature": {
-      "can_id": "08C",
-      "fields": [
-        "dsp_board_temp,intel,float,0,32",
-        "reserved_dsp_board_temp,intel,float,32,32"
-      ]
+    "INV_Odometer": {
+      "can_id": "40E",
+      "field_names": [
+        "odometer",
+        "inv_dc_bus_ah"
+      ],
+      "field_struct": "<2f"
     },
-    "Reserved0D": {
-      "can_id": "08D",
-      "fields": [
-        "reserved_0d0,intel,float,0,32",
-        "reserved_0d1,intel,float,32,32"
-      ]
-    },
-    "Reset": {
-      "can_id": "08E",
-      "fields": [
-        "odometer,intel,float,0,32",
-        "dc_bus_ah,intel,float,32,32"
-      ]
-    },
-    "SlipSpeed": {
-      "can_id": "097",
-      "fields": [
-        "slip_speed,intel,float,0,32",
-        "reserved_slip_speed,intel,float,32,32"
-      ]
+    "INV_Slip_Speed": {
+      "can_id": "417",
+      "field_names": [
+        "inv_slip_speed"
+      ],
+      "field_struct": "<4xf"
     }
   }
 }

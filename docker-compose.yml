@@ -10,24 +10,22 @@ services:
     devices:  # Comment out if using can or test_can adapters
       - /dev/ttyUSB0:/dev/ttyUSB0
     environment:
-    # Modify this value in the environment file (.env).
+    # Modify this values in the environment file (.env).
       # Valid adapters are: 
       #  can - Use CAN adapter to read data (P&P)
       #  usb - Use USB adapter to read data (xBee)
       #  test_can - Mock CAN adapter to run test
       #  test_usb - Mock USB adapter to run test
       TUCN_INPUT_ADAPTER: ${TUCN_INPUT_ADAPTER}
+      # Valid run modes are: 
+      #  debug
+      #  release
+      TUCN_RUN_MODE: ${TUCN_RUN_MODE}
       DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUX_TOKEN}
       DOCKER_INFLUXDB_INIT_ORG: ${INFLUX_ORG}
     networks:
       - solis-network
     restart: unless-stopped
-    stdin_open: true  # docker run -i
-    tty: true         # docker run -t
-    # volumes:
-    #   - type: bind
-    #     source: ./build/cache
-    #     target: /usr/src/app/log
   influx:
     container_name: influx_v2
     environment:
@@ -46,6 +44,22 @@ services:
       - 8080:8086
     restart: on-failure
     volumes:
-      - ./build/influxdb:/var/lib/influxdb2      # Persistance storage
+      - ./build/influxdb:/var/lib/influxdb2  # Persistence storage
+  grafana:
+    container_name: grafana
+    depends_on:
+      - influx
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${INFLUX_PASSWORD}
+      GF_SECURITY_ADMIN_USER: ${INFLUX_USERNAME}
+    hostname: interface
+    image: grafana/grafana-oss:10.0.3
+    networks:
+      - solis-network
+    ports:
+      - 3000:3000
+    restart: on-failure
+    volumes:
+      - ./build/grafana:/var/lib/grafana  # Persistence storage
 networks:
   solis-network:

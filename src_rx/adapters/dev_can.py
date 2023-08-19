@@ -2,7 +2,7 @@ import logging
 from typing import Tuple
 
 from classes.message import Message
-from helpers.paterns import Adapter
+from helpers.patterns import Adapter
 
 
 class CanAdapter(Adapter):

@@ -7,7 +7,8 @@ from classes.message import Message
 
 
 CAN_ID = "can_id"
-CAST_TYPE = "fields"
+CAST_NAMES = "field_names"
+CAST_TYPE = "field_struct"
 
 __slots__ = "path", "buckets", "messages"
 class Parser(object):
@@ -24,9 +25,10 @@ class Parser(object):
             for bucket, messages in config_file.items():
                 self.buckets.append(bucket)
                 for name, message in messages.items():
-                    id = message[CAN_ID]
-                    recipe = message[CAST_TYPE]
-                    self.messages.update({id: Message(name, bucket, recipe)})
+                    id = int(message[CAN_ID], 16)
+                    fields = message[CAST_NAMES]
+                    fmt = message[CAST_TYPE]
+                    self.messages.update({id: Message(name, bucket, fields, fmt)})
 
         logging.info(f"Found {len(self.buckets)} buckets")
         for index, bucket in enumerate(self.buckets):
