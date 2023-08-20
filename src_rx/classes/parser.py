@@ -15,39 +15,35 @@ class Parser(object):
     buckets: List[str]
     messages: Dict[int, Message]
 
-    def read_file(self, path: Path):
-        logging.info(f"Loading config JSON from: {path}")
-        self.buckets = []
-        self.messages = {}
+    @staticmethod
+    def read_file(path: Path):
+        logging.info(f"Loading config JSON from: {path}.")
+        Parser.buckets = []
+        Parser.messages = {}
 
         with open(path) as file:
             config_file = json.load(file, cls=json.JSONDecoder)
             for bucket, messages in config_file.items():
-                self.buckets.append(bucket)
+                Parser.buckets.append(bucket)
                 for name, message in messages.items():
                     id = int(message[CAN_ID], 16)
                     fields = message[CAST_NAMES]
                     fmt = message[CAST_TYPE]
-                    self.messages.update({id: Message(name, bucket, fields, fmt)})
+                    Parser.messages.update({id: Message(name, bucket, fields, fmt)})
 
-        logging.info(f"Found {len(self.buckets)} buckets")
-        for index, bucket in enumerate(self.buckets):
+        logging.info(f"Found {len(Parser.buckets)} buckets.")
+        for index, bucket in enumerate(Parser.buckets):
             logging.debug(f"Bucket #{index + 1}: {bucket}")
 
-        logging.info(f"Found {len(self.messages.keys())} CAN messages")
-        for can_id, message in self.messages.items():
+        logging.info(f"Found {len(Parser.messages.keys())} CAN messages.")
+        for can_id, message in Parser.messages.items():
             logging.debug(f"CAN 0x{can_id}: {message.name}")
 
-    def iter_buckets(self) -> Iterable[str]:
-        for bucket in self.buckets:
+    @staticmethod
+    def iter_buckets() -> Iterable[str]:
+        for bucket in Parser.buckets:
             yield bucket
 
-    def iter_messages(self) -> Dict[int, Message]:
-        return self.messages
-    
-    # Private methods
-    _instance = None
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super(Parser, cls).__new__(cls)
-        return cls._instance
+    @staticmethod
+    def iter_messages() -> Dict[int, Message]:
+        return Parser.messages

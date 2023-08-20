@@ -6,7 +6,6 @@ import sys
 from influxdb_client import InfluxDBClient, WriteOptions, WritePrecision
 from influxdb_client.client.util.multiprocessing_helper import MultiprocessingWriter
 
-from classes.message import Message
 from classes.parser import Parser
 from helpers.patterns import Adapter, State
 import adapters.dev_can
@@ -19,36 +18,41 @@ PWD = Path(__file__).parent.absolute()
 CAN_MAPPING = Path(PWD, "config", "basic.json")
 ENTRYPOINT = "http://database:8086"
 
-def main_loop(reader: Adapter):
-    # Connect asynchronously to InfluxDb
-    with MultiprocessingWriter(url=ENTRYPOINT,
-                               token=os.environ["DOCKER_INFLUXDB_INIT_ADMIN_TOKEN"],
-                               org=os.environ["DOCKER_INFLUXDB_INIT_ORG"],
-                               write_options=WriteOptions(batch_size=20)
-                               ) as writer:
+def main_loop(reader: Adapter, token: str, org: str):
+    # Write points in batches to InfluxDb
+    with MultiprocessingWriter(
+        url=ENTRYPOINT,
+        token=token,
+        org=org,
+        write_options=WriteOptions(batch_size=20)
+    ) as writer:
+        
+        # State machine
         state = State.INIT
-
-        # Main application loop. State machine
         while True:
+            # Initialization state
             if state is State.INIT:
-                # Try to connect
                 state = reader.init_device()
 
+            # Communication state
             elif state is State.COMM:
-                # Read data
-                message : Message
-                for message in reader.read_data():
-                    # Write data if read correctly
-                    writer.write(bucket=message.bucket, record=message.to_point(), write_precision=WritePrecision.US)
+                state, message = reader.read_data()
+                if message is not None:
+                    writer.write(
+                        bucket=message.bucket,
+                        record=message.to_point(),
+                        write_precision=WritePrecision.US
+                    )
 
+            # Deinitialization state
             elif state is State.CLOSE:
-                # Clear ports
                 reader.deinit_device()
-                logging.info("Closing application")
+                logging.info("Closing application.")
                 break
 
+            # Unknown state
             else:
-                logging.error(f"Tried to enter unimplemented state {state}")
+                logging.error(f"Tried to enter an unimplemented state - {state}.")
                 state = State.CLOSE
 
 
@@ -60,7 +64,8 @@ if __name__ == "__main__":
     root = logging.getLogger()
 
     # Enable debug info
-    if os.environ["TUCN_RUN_MODE"] == "debug":
+    debug_info = os.environ.get("TUCN_RUN_MODE", "debug")
+    if debug_info == "debug":
         handler.setLevel(logging.DEBUG)
         root.setLevel(logging.DEBUG)
     else:
@@ -68,45 +73,47 @@ if __name__ == "__main__":
         root.setLevel(logging.INFO)
     root.addHandler(handler)
 
-    # Container information
-    root.debug("Environment variables:")
-    try:
-        root.debug(f"{os.environ['TUCN_INPUT_ADAPTER']}")
-        root.debug(f"{os.environ['DOCKER_INFLUXDB_INIT_ADMIN_TOKEN']}")
-        root.debug(f"{os.environ['DOCKER_INFLUXDB_INIT_ORG']}")
-    except KeyError:
-        root.warn(f"Missing an environment variable, using the default variables")
-        os.environ.update({"TUCN_INPUT_ADAPTER": "usb"})
-        os.environ.update({"DOCKER_INFLUXDB_INIT_ADMIN_TOKEN": "mJFrzAhQE_kk3gQGX3qcHe2c5I_CLGeyN2PseCEWs5IBQl4tB27zJOVWuQfIFwT8M5SDcrt9-Drv0mE5DvqBdw=="})
-        os.environ.update({"DOCKER_INFLUXDB_INIT_ORG": "solis"})
+    # Default environment variables
+    adapter = os.environ.get("TUCN_INPUT_ADAPTER", "usb")
+    logging.debug(f"TUCN_INPUT_ADAPTER={adapter}")
+
+    token = os.environ.get("DOCKER_INFLUXDB_INIT_ADMIN_TOKEN", "")
+    logging.debug(f"DOCKER_INFLUXDB_INIT_ADMIN_TOKEN={token}")
+    
+    org = os.environ.get("DOCKER_INFLUXDB_INIT_ORG", "solis")
+    logging.debug(f"DOCKER_INFLUXDB_INIT_ORG={org}")
     
     # Read JSON configuration file
-    Parser().read_file(CAN_MAPPING)
+    Parser.read_file(CAN_MAPPING)
 
     # Select adapter for data reader
-    if os.environ["TUCN_INPUT_ADAPTER"] == "usb":
-        logging.info("USB adapter selected")
+    if adapter == "usb":
+        logging.info("USB adapter selected.")
         reader = adapters.dev_usb.UsbAdapter()
-    elif os.environ["TUCN_INPUT_ADAPTER"] == "can":
-        logging.info("CAN adapter selected")
+
+    elif adapter == "can":
+        logging.info("CAN adapter selected.")
         reader = adapters.dev_can.CanAdapter()
-    elif os.environ["TUCN_INPUT_ADAPTER"] == "test_usb":
-        logging.info("Test USB adapter selected")
+
+    elif adapter == "test_usb":
+        logging.info("Test USB adapter selected.")
         reader = adapters.test_usb.TestUsbAdapter()
-    elif os.environ["TUCN_INPUT_ADAPTER"] == "test_can":
-        logging.info("Test CAN adapter selected")
+
+    elif adapter == "test_can":
+        logging.info("Test CAN adapter selected.")
         reader = adapters.test_can.TestCanAdapter()
+        
     else:
         reader = Adapter()
 
     # Bucket API is not exposed in async InfluxDB client
-    with InfluxDBClient(url=ENTRYPOINT, token=os.environ["DOCKER_INFLUXDB_INIT_ADMIN_TOKEN"], org=os.environ["DOCKER_INFLUXDB_INIT_ORG"]) as influxdb_client:
+    with InfluxDBClient(url=ENTRYPOINT, token=token, org=org) as influxdb_client:
         # Create buckets if they don't exist
         buckets_api = influxdb_client.buckets_api()
-        for bucket in Parser().iter_buckets():
+        for bucket in Parser.iter_buckets():
             if not buckets_api.find_bucket_by_name(bucket):
-                logging.debug(f"Creating {bucket} bucket")
+                logging.debug(f"Creating {bucket} bucket.")
                 buckets_api.create_bucket(bucket_name=bucket)
 
     # Threaded loop
-    main_loop(reader)
+    main_loop(reader, token, org)

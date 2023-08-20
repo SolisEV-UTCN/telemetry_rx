@@ -25,12 +25,12 @@ services:
       DOCKER_INFLUXDB_INIT_ORG: ${INFLUX_ORG}
     networks:
       - solis-network
-    restart: unless-stopped
+    restart: on-failure
   influx:
     container_name: influx_v2
     environment:
       DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUX_TOKEN}
-      DOCKER_INFLUXDB_INIT_BUCKET: garbage
+      DOCKER_INFLUXDB_INIT_BUCKET: UNKNOWN
       DOCKER_INFLUXDB_INIT_MODE: setup
       DOCKER_INFLUXDB_INIT_ORG: ${INFLUX_ORG}
       DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUX_PASSWORD}
@@ -44,7 +44,7 @@ services:
       - 8080:8086
     restart: on-failure
     volumes:
-      - ./build/influxdb:/var/lib/influxdb2  # Persistence storage
+      - influxdb_storage:/var/lib/influxdb2  # Persistence storage
   grafana:
     container_name: grafana
     depends_on:
@@ -60,6 +60,11 @@ services:
       - 3000:3000
     restart: on-failure
     volumes:
-      - ./build/grafana:/var/lib/grafana  # Persistence storage
+      - grafana_storage:/var/lib/grafana  # Persistence storage
 networks:
   solis-network:
+volumes:
+  influxdb_storage:
+    name: "influxdb_persitence_storage"
+  grafana_storage:
+    name: "grafana_persitence_storage"

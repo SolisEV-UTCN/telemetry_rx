@@ -11,7 +11,7 @@ class Field(object):
 
 __slots__ = "name", "bucket", "recipe", "data"
 class Message(object):
-    def __init__(self, name: str, bucket="garbage", field_names=None, fmt="<8B") -> None:
+    def __init__(self, name: str, bucket="UNKNOWN", field_names=None, fmt="<8B") -> None:
         self.name = name
         self.bucket = bucket
         self.field_names = []
