@@ -1,20 +1,20 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file    stm32f1xx_it.c
-  * @brief   Interrupt Service Routines.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2023 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file    stm32f1xx_it.c
+ * @brief   Interrupt Service Routines.
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2023 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
@@ -31,7 +31,10 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+# define DMA_BUFFER_SIZE 72
+# define DMA_MAX_OFFSET 6
+# define UART_MSG_LEN 12
+# define CAN_MSG_LEN 8
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -41,7 +44,9 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-
+static uint8_t dma_buffer[DMA_BUFFER_SIZE] = { 0 };
+static uint8_t *const p_buffer = (uint8_t*) &dma_buffer;
+static uint8_t dma_offset = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -57,6 +62,7 @@
 /* External variables --------------------------------------------------------*/
 extern CAN_HandleTypeDef hcan;
 extern TIM_HandleTypeDef htim2;
+extern DMA_HandleTypeDef hdma_usart1_tx;
 extern UART_HandleTypeDef huart1;
 /* USER CODE BEGIN EV */
 
@@ -74,9 +80,8 @@ void NMI_Handler(void)
 
   /* USER CODE END NonMaskableInt_IRQn 0 */
   /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
-  while (1)
-  {
-  }
+	while (1) {
+	}
   /* USER CODE END NonMaskableInt_IRQn 1 */
 }
 
@@ -201,16 +206,57 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
+  * @brief This function handles DMA1 channel4 global interrupt.
+  */
+void DMA1_Channel4_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Channel4_IRQn 0 */
+
+  /* USER CODE END DMA1_Channel4_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_usart1_tx);
+  /* USER CODE BEGIN DMA1_Channel4_IRQn 1 */
+
+  /* USER CODE END DMA1_Channel4_IRQn 1 */
+}
+
+/**
   * @brief This function handles USB low priority or CAN RX0 interrupts.
   */
 void USB_LP_CAN1_RX0_IRQHandler(void)
 {
   /* USER CODE BEGIN USB_LP_CAN1_RX0_IRQn 0 */
-
+	uint8_t can_data[CAN_MSG_LEN];
+	uint32_t can_id;
+	CAN_RxHeaderTypeDef header;
   /* USER CODE END USB_LP_CAN1_RX0_IRQn 0 */
   HAL_CAN_IRQHandler(&hcan);
   /* USER CODE BEGIN USB_LP_CAN1_RX0_IRQn 1 */
+	// TODO add second FIFO in case of bottleneck
+	HAL_CAN_GetRxMessage(&hcan, CAN_RX_FIFO0, &header, can_data);
 
+	// Fill DMA buffer
+	can_id = header.StdId;
+	// @formatter:off
+  	dma_buffer[dma_offset * UART_MSG_LEN + 0]  = 0xFE;  // Begin padding
+  	dma_buffer[dma_offset * UART_MSG_LEN + 1]  = (can_id & 0xFF00) >> 8;
+  	dma_buffer[dma_offset * UART_MSG_LEN + 2]  = (can_id & 0x00FF) >> 0;
+  	dma_buffer[dma_offset * UART_MSG_LEN + 3]  = can_data[0];
+  	dma_buffer[dma_offset * UART_MSG_LEN + 4]  = can_data[1];
+  	dma_buffer[dma_offset * UART_MSG_LEN + 5]  = can_data[2];
+  	dma_buffer[dma_offset * UART_MSG_LEN + 6]  = can_data[3];
+  	dma_buffer[dma_offset * UART_MSG_LEN + 7]  = can_data[4];
+  	dma_buffer[dma_offset * UART_MSG_LEN + 8]  = can_data[5];
+  	dma_buffer[dma_offset * UART_MSG_LEN + 9]  = can_data[6];
+  	dma_buffer[dma_offset * UART_MSG_LEN + 10] = can_data[7];
+  	dma_buffer[dma_offset * UART_MSG_LEN + 11] = 0x7F;  // End padding
+  		// @formatter:on
+
+	// Increment DMA offset
+	if (++dma_offset == DMA_MAX_OFFSET) {
+		dma_offset = 0;
+		HAL_UART_Transmit_DMA(&huart1, p_buffer, DMA_BUFFER_SIZE);
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	}
   /* USER CODE END USB_LP_CAN1_RX0_IRQn 1 */
 }
 

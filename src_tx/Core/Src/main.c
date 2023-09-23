@@ -1,4 +1,4 @@
-n/* USER CODE BEGIN Header */
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file           : main.c
@@ -21,8 +21,7 @@ n/* USER CODE BEGIN Header */
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#define START_B 0x01
-#define END_B 0x00
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,20 +44,16 @@ n/* USER CODE BEGIN Header */
 TIM_HandleTypeDef htim2;
 
 UART_HandleTypeDef huart1;
+DMA_HandleTypeDef hdma_usart1_tx;
 
 /* USER CODE BEGIN PV */
-CAN_RxHeaderTypeDef RxHeader;
 
-uint8_t RxData[8];
-uint32_t countCAN = 0;
-uint32_t countUART = 0;
-uint32_t countCANf = 0;
-uint8_t data[12];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_CAN_Init(void);
 static void MX_TIM2_Init(void);
@@ -69,110 +64,6 @@ static void MX_TIM2_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart){
-	countUART++;
-}
-
-void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
-{
-	countCAN++;
-	HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &RxHeader, RxData);
-	uint32_t canID = RxHeader.ExtId;
-	switch(canID){
-		// Pack total voltage
-		case 0x18FF28F4:
-			countCANf++;
-			//data[1] = (uint8_t)((canID & 0xFF000000) >> 32);
-			//data[2] = (uint8_t)((canID & 0x00FF0000) >> 16);
-			data[1] = 0x18;
-			data[2] = 0xFF;
-			data[3] = RxData[3];
-			data[4] = END_B;
-			HAL_UART_Transmit_IT (&huart1, data, 5);
-			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-			break;
-		// Temperatures
-		case 0x18B428F4: //Electric cart temps id
-			countCANf++;
-			data[1] = 0x18;
-			data[2] = 0xB4;
-			data[3] = RxData[0];
-			data[4] = RxData[1];
-			data[5] = RxData[2];
-			data[6] = RxData[3];
-			data[7] = RxData[4];
-			data[8] = RxData[5];
-			data[9] = END_B;
-			HAL_UART_Transmit_IT (&huart1, data, 10);
-			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-			break;
-		// Voltages c1-c4
-		case 0x18C828F4:
-			countCANf++;
-			data[1] = 0x18;
-			data[2] = 0xC8;
-			data[3] = RxData[0];
-			data[4] = RxData[1];
-			data[5] = RxData[2];
-			data[6] = RxData[3];
-			data[7] = RxData[4];
-			data[8] = RxData[5];
-			data[9] = RxData[6];
-			data[10] = RxData[7];
-			data[11] = END_B;
-			HAL_UART_Transmit_IT (&huart1, data, 12);
-			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-			break;
-		// Voltages c5-c8
-		case 0x18C928F4:
-			countCANf++;
-			data[1] = 0x18;
-			data[2] = 0xC9;
-			data[3] = RxData[0];
-			data[4] = RxData[1];
-			data[5] = RxData[2];
-			data[6] = RxData[3];
-			data[7] = RxData[4];
-			data[8] = RxData[5];
-			data[9] = RxData[6];
-			data[10] = RxData[7];
-			data[11] = END_B;
-			HAL_UART_Transmit_IT (&huart1, data, 12);
-			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-			break;
-		// Voltages c9-c12
-		case 0x18CA28F4:
-			countCANf++;
-			data[1] = 0x18;
-			data[2] = 0xCA;
-			data[3] = RxData[0];
-			data[4] = RxData[1];
-			data[5] = RxData[2];
-			data[6] = RxData[3];
-			data[7] = RxData[4];
-			data[8] = RxData[5];
-			data[9] = RxData[6];
-			data[10] = RxData[7];
-			data[11] = END_B;
-			HAL_UART_Transmit_IT (&huart1, data, 12);
-			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-			break;
-		// Voltages c13-c14
-		case 0x18CB28F4:
-			countCANf++;
-			data[1] = 0x18;
-			data[2] = 0xCB;
-			data[3] = RxData[0];
-			data[4] = RxData[1];
-			data[5] = RxData[2];
-			data[6] = RxData[3];
-			data[7] = END_B;
-			HAL_UART_Transmit_IT (&huart1, data, 8);
-			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-			break;
-		// Pack current
-	}
-}
 /* USER CODE END 0 */
 
 /**
@@ -182,7 +73,6 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	data[0]=START_B;
 
   /* USER CODE END 1 */
 
@@ -204,6 +94,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_USART1_UART_Init();
   MX_CAN_Init();
   MX_TIM2_Init();
@@ -396,6 +287,22 @@ static void MX_USART1_UART_Init(void)
   /* USER CODE BEGIN USART1_Init 2 */
 
   /* USER CODE END USART1_Init 2 */
+
+}
+
+/**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA1_Channel4_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel4_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel4_IRQn);
 
 }
 
