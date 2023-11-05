@@ -16,7 +16,7 @@ import adapters.test_usb
 
 PWD = Path(__file__).parent.absolute()
 CAN_MAPPING = Path(PWD, "config", "basic.json")
-ENTRYPOINT = "http://database:8086"
+ENTRYPOINT = "http://127.0.0.1:8086"
 
 def main_loop(reader: Adapter, token: str, org: str):
     # Write points in batches to InfluxDb

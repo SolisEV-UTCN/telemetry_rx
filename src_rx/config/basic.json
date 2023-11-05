@@ -12,28 +12,28 @@
       "can_id": "601",
       "field_names": [
         "cmu1_serial_number",
-        "cmu1_pcb_temperature",
-        "cmu1_cell_temperature"
+        "cmu1_pcb_temperature,0.1",
+        "cmu1_cell_temperature,0.1"
       ],
       "field_struct": "<I2h"
     },
     "CMU1_Voltages_1": {
       "can_id": "602",
       "field_names": [
-        "cmu1_cell_0",
-        "cmu1_cell_1",
-        "cmu1_cell_2",
-        "cmu1_cell_3"
+        "cmu1_cell_0,0.001",
+        "cmu1_cell_1,0.001",
+        "cmu1_cell_2,0.001",
+        "cmu1_cell_3,0.001"
       ],
       "field_struct": "<4h"
     },
     "CMU1_Voltages_2": {
       "can_id": "603",
       "field_names": [
-        "cmu1_cell_4",
-        "cmu1_cell_5",
-        "cmu1_cell_6",
-        "cmu1_cell_7"
+        "cmu1_cell_4,0.001",
+        "cmu1_cell_5,0.001",
+        "cmu1_cell_6,0.001",
+        "cmu1_cell_7,0.001"
       ],
       "field_struct": "<4h"
     },
@@ -41,28 +41,28 @@
       "can_id": "604",
       "field_names": [
         "cmu2_serial_number",
-        "cmu2_pcb_temperature",
-        "cmu2_cell_temperature"
+        "cmu2_pcb_temperature,0.1",
+        "cmu2_cell_temperature,0.1"
       ],
       "field_struct": "<I2h"
     },
     "CMU2_Voltages_1": {
       "can_id": "605",
       "field_names": [
-        "cmu2_cell_0",
-        "cmu2_cell_1",
-        "cmu2_cell_2",
-        "cmu2_cell_3"
+        "cmu2_cell_0,0.001",
+        "cmu2_cell_1,0.001",
+        "cmu2_cell_2,0.001",
+        "cmu2_cell_3,0.001"
       ],
       "field_struct": "<4h"
     },
     "CMU2_Voltages_2": {
       "can_id": "606",
       "field_names": [
-        "cmu2_cell_4",
-        "cmu2_cell_5",
-        "cmu2_cell_6",
-        "cmu2_cell_7"
+        "cmu2_cell_4,0.001",
+        "cmu2_cell_5,0.001",
+        "cmu2_cell_6,0.001",
+        "cmu2_cell_7,0.001"
       ],
       "field_struct": "<4h"
     },
@@ -70,28 +70,28 @@
       "can_id": "607",
       "field_names": [
         "cmu3_serial_number",
-        "cmu3_pcb_temperature",
-        "cmu3_cell_temperature"
+        "cmu3_pcb_temperature,0.1",
+        "cmu3_cell_temperature,0.1"
       ],
       "field_struct": "<I2h"
     },
     "CMU3_Voltages_1": {
       "can_id": "608",
       "field_names": [
-        "cmu3_cell_0",
-        "cmu3_cell_1",
-        "cmu3_cell_2",
-        "cmu3_cell_3"
+        "cmu3_cell_0,0.001",
+        "cmu3_cell_1,0.001",
+        "cmu3_cell_2,0.001",
+        "cmu3_cell_3,0.001"
       ],
       "field_struct": "<4h"
     },
     "CMU3_Voltages_2": {
       "can_id": "609",
       "field_names": [
-        "cmu3_cell_4",
-        "cmu3_cell_5",
-        "cmu3_cell_6",
-        "cmu3_cell_7"
+        "cmu3_cell_4,0.001",
+        "cmu3_cell_5,0.001",
+        "cmu3_cell_6,0.001",
+        "cmu3_cell_7,0.001"
       ],
       "field_struct": "<4h"
     },
@@ -99,28 +99,28 @@
       "can_id": "60A",
       "field_names": [
         "cmu4_serial_number",
-        "cmu4_pcb_temperature",
-        "cmu4_cell_temperature"
+        "cmu4_pcb_temperature,0.1",
+        "cmu4_cell_temperature,0.1"
       ],
       "field_struct": "<I2h"
     },
     "CMU4_Voltages_1": {
       "can_id": "60B",
       "field_names": [
-        "cmu4_cell_0",
-        "cmu4_cell_1",
-        "cmu4_cell_2",
-        "cmu4_cell_3"
+        "cmu4_cell_0,0.001",
+        "cmu4_cell_1,0.001",
+        "cmu4_cell_2,0.001",
+        "cmu4_cell_3,0.001"
       ],
       "field_struct": "<4h"
     },
     "CMU4_Voltages_2": {
       "can_id": "60C",
       "field_names": [
-        "cmu4_cell_4",
-        "cmu4_cell_5",
-        "cmu4_cell_6",
-        "cmu4_cell_7"
+        "cmu4_cell_4,0.001",
+        "cmu4_cell_5,0.001",
+        "cmu4_cell_6,0.001",
+        "cmu4_cell_7,0.001"
       ],
       "field_struct": "<4h"
     },
@@ -244,6 +244,13 @@
       ],
       "field_struct": "<8x"
     },
+    "Motor_Swtich": {
+     "can_id": "505",
+     "field_names": [
+	"switch_state"
+     ],
+     "field_struct": "<H6x"
+    },
     "AUX_States": {
       "can_id": "510",
       "field_names": [
@@ -364,6 +371,50 @@
         "inv_slip_speed"
       ],
       "field_struct": "<4xf"
+    }
+  },
+  "MPPT": {
+    "MPPT1_Power_Measurements": {
+      "can_id": "200",
+      "field_names": [
+	"input_front_voltage",
+	"input_front_current",
+	"output_front_voltage",
+	"output_front_current"
+      ],
+      "field_struct": "<4h"
+    },
+    "MPPT1_Status": {
+      "can_id": "201",
+      "field_names": [
+	"mppt_front_mode",
+	"mppt_front_fault",
+	"mppt_front_enabled",
+	"mppt_front_ambient",
+	"mppt_front_heatsink"
+      ],
+      "field_struct": "<3B2b3x"
+    },
+    "MPPT2_Power_Measurements": {
+      "can_id": "210",
+      "field_names": [
+	"input_back_voltage",
+	"input_back_current",
+	"output_back_voltage",
+	"output_back_current"
+      ],
+      "field_struct": "<4h"
+    },
+    "MPPT2_Status": {
+      "can_id": "211",
+      "field_names": [
+	"mppt_back_mode",
+	"mppt_back_fault",
+	"mppt_back_enabled",
+	"mppt_back_ambient",
+	"mppt_back_heatsink"
+      ],
+      "field_struct": "<3B2b3x"
     }
   }
 }
