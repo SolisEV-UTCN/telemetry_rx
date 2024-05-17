@@ -33,7 +33,7 @@ class UsbAdapter(Adapter):
             logging.error("Could not establish serial communication. To see more info, enable debug flag.")
             logging.debug(e)
             return State.CLOSE
-    
+
     def deinit_device(self):
         self.device.close()
 
@@ -42,27 +42,28 @@ class UsbAdapter(Adapter):
         # Check if input buffer is empty
         if self.device.in_waiting is 0:
             return State.COMM, None
-        
-        # Check if start byte is padded correctly
-        start_byte = self.device.read()
-        if start_byte != b"\xfe":
+
+        # Read UART message
+        payload = self.device.read(11)
+
+        # Validate payload length
+        if len(payload) != 11:
+            logging.warn("Received partial message!")
             return State.COMM, None
 
-        payload = self.device.read(10)
-
-        # Check if stop byte is padded correctly
-        stop_byte = self.device.read()
-        if stop_byte != b"\x7f":
+        # Validate payload using CRC-8
+        if not UsbAdapter.validate_message_with_crc(payload):
+            logging.warn("Received message is corrupted")
             return State.COMM, None
 
         logging.debug(f"Read {payload.hex(' ').upper()}, {self.device.in_waiting} bytes remain in input buffer.")
-        
+
         # Cast STD CAN ID from first 2 bytes
         can_id = (payload[0] << 8) + payload[1]
-        message = self.parse_data(can_id, payload[2:])
+        message = self.parse_data(can_id, payload[2:11])
 
         return State.COMM, message
-    
+
     def parse_data(self, id: int, byte_stream: bytes) -> Message:
         # Get message formatter
         if id in Parser.messages:
@@ -86,5 +87,46 @@ class UsbAdapter(Adapter):
             if len(cast) > 2:
                 offset = int(cast[2])
             message.append(name, data, offset, factor)
-        
+
         return message
+
+    @staticmethod
+    def crc8(data: bytes, poly: int = 0x07) -> int:
+        """
+        Calculate the CRC-8 of the input data using the specified polynomial.
+        
+        :param data: The input data as a bytes object.
+        :param poly: The polynomial to use for CRC calculation. Default is 0x07.
+        :return: The calculated CRC-8 value.
+        """
+        crc = 0
+        for byte in data:
+            crc ^= byte
+            for _ in range(8):
+                if crc & 0x80:
+                    crc = (crc << 1) ^ poly
+                else:
+                    crc <<= 1
+                crc &= 0xFF  # Ensure crc remains within 8-bit value
+        return crc
+
+    @staticmethod
+    def validate_message_with_crc(received_message: bytes) -> bool:
+        """
+        Validate a received message with a CRC-8 checksum.
+        
+        :param received_message: The received message as a bytes object, including the CRC byte.
+        :return: True if the message is valid, False otherwise.
+        """
+        if len(received_message) < 2:
+            return False  # Message is too short to contain data and CRC
+
+        # Split the message and CRC
+        message = received_message[:-1]
+        received_crc = received_message[-1]
+
+        # Calculate the CRC of the message
+        calculated_crc = UsbAdapter.crc8(message)
+
+        # Compare the received CRC with the calculated CRC
+        return received_crc == calculated_crc

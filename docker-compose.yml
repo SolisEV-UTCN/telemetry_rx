@@ -1,31 +1,31 @@
 version: "3.9"
 services:
   core:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: solis_rx
-    depends_on:
-      - influx
-    devices:  # Comment out if using can or test_can adapters
-      - /dev/ttyUSB0:/dev/ttyUSB0
-    environment:
-    # Modify this values in the environment file (.env).
-      # Valid adapters are: 
-      #  can - Use CAN adapter to read data (P&P)
-      #  usb - Use USB adapter to read data (xBee)
-      #  test_can - Mock CAN adapter to run test
-      #  test_usb - Mock USB adapter to run test
-      TUCN_INPUT_ADAPTER: ${TUCN_INPUT_ADAPTER}
-      # Valid run modes are: 
-      #  debug
-      #  release
-      TUCN_RUN_MODE: ${TUCN_RUN_MODE}
-      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUX_TOKEN}
-      DOCKER_INFLUXDB_INIT_ORG: ${INFLUX_ORG}
-    networks:
-      - solis-network
-    restart: on-failure
+   build:
+     context: .
+     dockerfile: Dockerfile
+   container_name: solis_rx
+   depends_on:
+     - influx
+  #  devices:  # Comment out if using can or test_can adapters
+  #    - /dev/ttyUSB0:/dev/ttyUSB0
+   environment:
+   # Modify this values in the environment file (.env).
+     # Valid adapters are: 
+     #  can - Use CAN adapter to read data (P&P)
+     #  usb - Use USB adapter to read data (xBee)
+     #  test_can - Mock CAN adapter to run test
+     #  test_usb - Mock USB adapter to run test
+     TUCN_INPUT_ADAPTER: ${TUCN_INPUT_ADAPTER}
+     # Valid run modes are: 
+     #  debug
+     #  release
+     TUCN_RUN_MODE: ${TUCN_RUN_MODE}
+     DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUX_TOKEN}
+     DOCKER_INFLUXDB_INIT_ORG: ${INFLUX_ORG}
+   networks:
+     - solis-network
+   restart: on-failure
   influx:
     container_name: influx_v2
     environment:
@@ -37,7 +37,7 @@ services:
       DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUX_USERNAME}
       INFLUXDB_HTTP_AUTH_ENABLED: false
     hostname: database
-    image: influxdb:2.7.1-alpine
+    image: influxdb:2.7.5-alpine
     networks:
       - solis-network
     ports:
