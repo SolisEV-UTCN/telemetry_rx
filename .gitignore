@@ -13,35 +13,4 @@
 *.vsix
 
 # Built src
-build/*
-!build/qt6/host/qt-build-host.sh
-
-# Virtual environment
-__pycache__
-venv/
-
-# User CMake settings
-CMakeList.txt.user
-
-# Kvaser built files
-*.txe
-
-# CanKing backups
-*.BAK
-
-# Certificates
-*.cer
-
-# Storage files
-*.bolt
-*.sqlite
-
-# STM default directories
-src-stm/*
-!src-stm/Core
-!src-stm/Drivers
-!src-stm/*.ioc
-
-# Sensitive information
-config.ini
-*.log
+dist/*

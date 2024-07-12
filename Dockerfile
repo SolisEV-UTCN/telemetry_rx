@@ -1,13 +1,15 @@
-FROM python:3.11-bookworm
+FROM python:3.12-alpine
 
 WORKDIR /usr/src/app
 
 RUN apt-get update
-RUN apt-get install -y libusb-1.0.0
+RUN apt-get install -y libusb-1.0.0 pipx
 
-COPY --chmod=644 src_rx/requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+COPY --chmod=755 src/ ./
+RUN pipx install hatch
 
-COPY --chmod=755 src_rx/ ./
+RUN hatch build
 
-CMD python main.py
+RUN pipx install --force .
+
+CMD pipx run --spec . start_telemetry

@@ -1,10 +1,9 @@
-version: "3.9"
 services:
   core:
    build:
      context: .
      dockerfile: Dockerfile
-   container_name: solis_rx
+   container_name: telemetry_rx
    depends_on:
      - influx
   #  devices:  # Comment out if using can or test_can adapters
@@ -12,17 +11,16 @@ services:
    environment:
    # Modify this values in the environment file (.env).
      # Valid adapters are: 
-     #  can - Use CAN adapter to read data (P&P)
-     #  usb - Use USB adapter to read data (xBee)
-     #  test_can - Mock CAN adapter to run test
-     #  test_usb - Mock USB adapter to run test
-     TUCN_INPUT_ADAPTER: ${TUCN_INPUT_ADAPTER}
+     #  TCP - Use TCP adapter to read data (Ubiquiti)
+     #  USB - Use USB adapter to read data (xBee, GSM)
+     INPUT_ADAPTER: ${INPUT_ADAPTER}
      # Valid run modes are: 
      #  debug
      #  release
-     TUCN_RUN_MODE: ${TUCN_RUN_MODE}
-     DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUX_TOKEN}
-     DOCKER_INFLUXDB_INIT_ORG: ${INFLUX_ORG}
+     RUN_MODE: ${RUN_MODE}
+     INFLUX_BUCKET: ${INFLUX_BUCKET}
+     INFLUX_TOKEN: ${INFLUX_TOKEN}
+     INFLUX_ORG: ${INFLUX_ORG}
    networks:
      - solis-network
    restart: on-failure
@@ -37,7 +35,7 @@ services:
       DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUX_USERNAME}
       INFLUXDB_HTTP_AUTH_ENABLED: false
     hostname: database
-    image: influxdb:2.7.5-alpine
+    image: influxdb:2.7-alpine
     networks:
       - solis-network
     ports:
@@ -53,7 +51,7 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: ${INFLUX_PASSWORD}
       GF_SECURITY_ADMIN_USER: ${INFLUX_USERNAME}
     hostname: interface
-    image: grafana/grafana-oss:10.0.3
+    image: grafana/grafana-oss:11.1.0
     networks:
       - solis-network
     ports:

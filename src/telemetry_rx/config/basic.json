@@ -240,16 +240,15 @@
     },
     "Motor_Reset": {
       "can_id": "503",
-      "field_names": [
-      ],
+      "field_names": [],
       "field_struct": "<8x"
     },
     "Motor_Swtich": {
-     "can_id": "505",
-     "field_names": [
-	"switch_state"
-     ],
-     "field_struct": "<H6x"
+      "can_id": "505",
+      "field_names": [
+        "switch_state"
+      ],
+      "field_struct": "<H6x"
     },
     "AUX_States": {
       "can_id": "510",
@@ -377,42 +376,42 @@
     "MPPT1_Power_Measurements": {
       "can_id": "200",
       "field_names": [
-	"input_front_voltage",
-	"input_front_current",
-	"output_front_voltage",
-	"output_front_current"
+        "input_front_voltage",
+        "input_front_current",
+        "output_front_voltage",
+        "output_front_current"
       ],
       "field_struct": "<4h"
     },
     "MPPT1_Status": {
       "can_id": "201",
       "field_names": [
-	"mppt_front_mode",
-	"mppt_front_fault",
-	"mppt_front_enabled",
-	"mppt_front_ambient",
-	"mppt_front_heatsink"
+        "mppt_front_mode",
+        "mppt_front_fault",
+        "mppt_front_enabled",
+        "mppt_front_ambient",
+        "mppt_front_heatsink"
       ],
       "field_struct": "<3B2b3x"
     },
     "MPPT2_Power_Measurements": {
       "can_id": "210",
       "field_names": [
-	"input_back_voltage",
-	"input_back_current",
-	"output_back_voltage",
-	"output_back_current"
+        "input_back_voltage",
+        "input_back_current",
+        "output_back_voltage",
+        "output_back_current"
       ],
       "field_struct": "<4h"
     },
     "MPPT2_Status": {
       "can_id": "211",
       "field_names": [
-	"mppt_back_mode",
-	"mppt_back_fault",
-	"mppt_back_enabled",
-	"mppt_back_ambient",
-	"mppt_back_heatsink"
+        "mppt_back_mode",
+        "mppt_back_fault",
+        "mppt_back_enabled",
+        "mppt_back_ambient",
+        "mppt_back_heatsink"
       ],
       "field_struct": "<3B2b3x"
     }
