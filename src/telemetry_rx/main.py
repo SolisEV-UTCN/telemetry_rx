@@ -57,7 +57,9 @@ def _configure_adapter() -> Adapter:
 
 def _init_influx(reader: Adapter) -> None:
     # Get API token
-    token = os.environ.get("INFLUX_TOKEN", "").lower()
+    token = os.environ.get("INFLUX_TOKEN_FILE", "/run/secrets/influx_token").lower()
+    logging.debug(f"INFLUX_TOKEN_FILE={token}")
+    token = open(Path(token), "rt").readline().strip()
     logging.debug(f"INFLUX_TOKEN={token}")
 
     # Get ORG info

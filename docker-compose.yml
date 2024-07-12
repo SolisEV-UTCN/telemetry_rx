@@ -1,38 +1,41 @@
 services:
   core:
-   build:
-     context: .
-     dockerfile: Dockerfile
-   container_name: telemetry_rx
-   depends_on:
-     - influx
-  #  devices:  # Comment out if using can or test_can adapters
-  #    - /dev/ttyUSB0:/dev/ttyUSB0
-   environment:
-   # Modify this values in the environment file (.env).
-     # Valid adapters are:
-     #  TCP - Use TCP adapter to read data (Ubiquiti)
-     #  USB - Use USB adapter to read data (xBee, GSM)
-     INPUT_ADAPTER: ${INPUT_ADAPTER}
-     # Valid run modes are:
-     #  debug
-     #  release
-     RUN_MODE: ${RUN_MODE}
-     INFLUX_BUCKET: ${INFLUX_BUCKET}
-     INFLUX_TOKEN: ${INFLUX_TOKEN}
-     INFLUX_ORG: ${INFLUX_ORG}
-   networks:
-     - solis-network
-   restart: on-failure
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: telemetry_rx
+    depends_on:
+      - influx
+    #  devices:  # Comment out if using can or test_can adapters
+    #    - /dev/ttyUSB0:/dev/ttyUSB0
+    environment:
+      # Modify this values in the environment file (.env).
+      # Valid adapters are:
+      #  TCP - Use TCP adapter to read data (Ubiquiti)
+      #  USB - Use USB adapter to read data (xBee, GSM)
+      INPUT_ADAPTER: ${INPUT_ADAPTER}
+      # Valid run modes are:
+      #  debug
+      #  release
+      RUN_MODE: ${RUN_MODE}
+      INFLUX_BUCKET: ${INFLUX_BUCKET}
+      INFLUX_TOKEN_FILE: /run/secrets/influx_token
+      INFLUX_ORG: ${INFLUX_ORG}
+    networks:
+      - solis-network
+    restart: unless-stopped
+    secrets:
+      - influx_token
+
   influx:
     container_name: influx_v2
     environment:
-      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUX_TOKEN}
-      DOCKER_INFLUXDB_INIT_BUCKET: UNKNOWN
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN_FILE: /run/secrets/influx_token
+      DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUX_BUCKET}
       DOCKER_INFLUXDB_INIT_MODE: setup
       DOCKER_INFLUXDB_INIT_ORG: ${INFLUX_ORG}
-      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUX_PASSWORD}
-      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUX_USERNAME}
+      DOCKER_INFLUXDB_INIT_PASSWORD_FILE: /run/secrets/influx_password
+      DOCKER_INFLUXDB_INIT_USERNAME_FILE: /run/secrets/influx_username
       INFLUXDB_HTTP_AUTH_ENABLED: false
     hostname: database
     image: influxdb:2.7-alpine
@@ -42,23 +45,32 @@ services:
       - 8080:8086
     restart: on-failure
     volumes:
-      - influxdb_storage:/var/lib/influxdb2  # Persistence storage
+      - influxdb_storage:/var/lib/influxdb2 # Persistence storage
+    secrets:
+      - influx_username
+      - influx_password
+      - influx_token
+
   grafana:
     container_name: grafana
     depends_on:
       - influx
     environment:
-      GF_SECURITY_ADMIN_PASSWORD: ${INFLUX_PASSWORD}
-      GF_SECURITY_ADMIN_USER: ${INFLUX_USERNAME}
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/influx_password
+      GF_SECURITY_ADMIN_USER__FILE: /run/secrets/influx_username
     hostname: interface
     image: grafana/grafana-oss:11.1.0
     networks:
       - solis-network
     ports:
       - 3000:3000
-    restart: on-failure
+    restart: unless-stopped
     volumes:
-      - grafana_storage:/var/lib/grafana  # Persistence storage
+      - grafana_storage:/var/lib/grafana # Persistence storage
+    secrets:
+      - influx_username
+      - influx_password
+
 networks:
   solis-network:
 volumes:
@@ -66,3 +78,11 @@ volumes:
     name: "influxdb_persitence_storage"
   grafana_storage:
     name: "grafana_persitence_storage"
+
+secrets:
+  influx_username:
+    file: influx_username.txt
+  influx_password:
+    file: influx_password.txt
+  influx_token:
+    file: influx_token.txt
