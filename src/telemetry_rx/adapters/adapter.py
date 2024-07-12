@@ -6,7 +6,7 @@ from collections.abc import Iterator
 from pathlib import Path
 
 import cantools
-from crc import Calculator, Crc32
+from crc import Calculator, Configuration
 from influxdb_client import Point
 
 from classes import AppState
@@ -17,6 +17,13 @@ PATH_DBC = Path(PWD, "config", "solis_ev4.dbc")
 
 class Adapter(ABC):
     """Variation point for InfluxDB input"""
+
+    CRC_CONF = Configuration(
+        width=32,
+        polynomial=0x04C11DB7,
+        init_value=0xFFFFFFFF,
+        final_xor_value=0x0,
+    )
 
     def __init__(self):
         self.device = None
@@ -36,7 +43,7 @@ class Adapter(ABC):
         pass
 
     def validate_crc(self, expected_crc: int, data: bytes) -> bool:
-        calc = Calculator(Crc32.BZIP2, optimized=True)
+        calc = Calculator(Adapter.CRC_CONF, optimized=True)
         crc = calc.checksum(data)
         logging.debug(f"Calculated/Expected CRCs: {crc}/{expected_crc}")
         return expected_crc == crc

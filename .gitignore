@@ -14,3 +14,6 @@
 
 # Built src
 dist/*
+
+# Ruff
+.ruff_cache

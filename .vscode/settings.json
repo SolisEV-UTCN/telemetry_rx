@@ -1,10 +1,13 @@
 {
   "[json]": {
     "editor.quickSuggestions": {
-        "strings": true
+      "strings": true
     },
     "editor.tabSize": 2,
     "editor.suggest.insertMode": "replace"
   },
-  "python.analysis.typeCheckingMode": "basic"
+  "[python]": {
+    "editor.tabSize": 4,
+    "editor.formatOnSave": false
+  }
 }
