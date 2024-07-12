@@ -16,7 +16,7 @@ ENTRYPOINT = "http://127.0.0.1:8086"
 
 
 def _init_logger(debug=False) -> None:
-    """ Format logger to be pretty. """
+    """Format logger to be pretty."""
     # Logger scaffolding
     formatter = logging.Formatter("[{levelname}]{filename}:{message}", style="{")
     handler = logging.StreamHandler(sys.stdout)
@@ -34,7 +34,7 @@ def _init_logger(debug=False) -> None:
 
 
 def _configure_adapter() -> Adapter:
-    """  Select adapter to medium where the data will arrive. """
+    """Select adapter to medium where the data will arrive."""
     # Default environment variables
     adapter = os.environ.get("INPUT_ADAPTER", "USB").upper()
     logging.debug(f"INPUT_ADAPTER={adapter}")
@@ -75,11 +75,11 @@ def _init_influx(reader: Adapter) -> None:
         if not buckets_api.find_bucket_by_name(bucket):
             logging.info(f"Creating {bucket} bucket.")
             buckets_api.create_bucket(bucket_name=bucket)
-    
+
     # Write points in batches to InfluxDb
     with MultiprocessingWriter(url=ENTRYPOINT, token=token, org=org, write_options=WriteOptions(batch_size=5000)) as writer:
         _main_loop(reader, writer, bucket)
-        
+
 
 def _main_loop(reader: Adapter, writer: MultiprocessingWriter, bucket: str):
     # State machine
@@ -108,7 +108,7 @@ def _main_loop(reader: Adapter, writer: MultiprocessingWriter, bucket: str):
 
 
 def start():
-    """ Main script. """
+    """Main script."""
     debug = os.environ.get("RUN_MODE", "release").lower()
     if debug == "release":
         debug = False

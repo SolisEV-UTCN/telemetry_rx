@@ -5,7 +5,7 @@ import serial
 
 def slow_frame(ser: serial.Serial):
     value = random.randint(17, 99)
-    msg = bytearray(b"\xFE")
+    msg = bytearray(b"\xfe")
     msg.append(value)  # high temp
     msg.append(value)  # internal temp
     msg.append(value)  # LSB low voltage
@@ -56,9 +56,7 @@ def fast_frame(ser: serial.Serial):
 
 
 if __name__ == "__main__":
-    ser = serial.Serial(
-        "COM1", baudrate=9600, timeout=0, parity=serial.PARITY_EVEN, rtscts=1
-    )
+    ser = serial.Serial("COM1", baudrate=9600, timeout=0, parity=serial.PARITY_EVEN, rtscts=1)
     sch = sched.scheduler()
     sch.enter(5, 1, fast_frame, argument=(ser,))
     sch.enter(10, 1, fast_frame, argument=(ser,))

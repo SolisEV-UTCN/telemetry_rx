@@ -17,12 +17,11 @@ PATH_DBC = Path(PWD, "config", "solis_ev4.dbc")
 
 class Adapter(ABC):
     """Variation point for InfluxDB input"""
+
     def __init__(self):
         self.device = None
         self.tmp_dir = tempfile.gettempdir()
-        self.dbc = cantools.db.load_file(
-            PATH_DBC, database_format="dbc", encoding="cp1252", cache_dir=self.tmp_dir
-        )
+        self.dbc = cantools.db.load_file(PATH_DBC, database_format="dbc", encoding="cp1252", cache_dir=self.tmp_dir)
 
     @abstractmethod
     def init_device(self) -> AppState:
@@ -51,8 +50,10 @@ class Adapter(ABC):
             return None
 
         signals = message.decode_simple(data)
-        signals.update({
-            "measurement": message.senders[0],
-            "time": time.time(),
-        })
+        signals.update(
+            {
+                "measurement": message.senders[0],
+                "time": time.time(),
+            }
+        )
         return Point.from_dict(signals)

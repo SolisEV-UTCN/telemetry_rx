@@ -28,7 +28,7 @@ ___EDIT:___ Plug&Play has a very large power consumption. Further development is
 
 ## xBee - Escort car antenna
 
-On the escort vehicle, __xBee__ should be located at the height of the windshield.  
+On the escort vehicle, __xBee__ should be located at the height of the windshield.
 Its purpose is to read data from the __challanger antenna__ and store it in InfluxDB.
 
 ### Usage
@@ -64,7 +64,7 @@ Its purpose is to read data from the __challanger antenna__ and store it in Infl
 
 #### Stop process:
 
-To stop the app, run the following commands in container's bash `exit`.  
+To stop the app, run the following commands in container's bash `exit`.
 If you started docker in detached mode `docker compose down`.
 
 ### Ports
@@ -77,7 +77,7 @@ The services in the app run on the following ports:
 
 
 > If docker container is running as a detached process, you can connect to it by running following commands in bash:
-> 
+>
 > ```
 > docker container ls
 > docker container attach <CONTAINER_ID>

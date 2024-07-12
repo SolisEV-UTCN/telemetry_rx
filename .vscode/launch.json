@@ -1,18 +1,10 @@
 {
     "configurations": [
         {
-            "name": "Python: Main file",
+            "name": "Start telemetry",
             "type": "debugpy",
             "request": "launch",
-            "program": "src_rx/main.py",
-            "console": "integratedTerminal",
-            "justMyCode": true
-        },
-        {
-            "name": "Python: Upload script",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "scripts/upload.py",
+            "program": "src/telemetry_rx/main.py",
             "console": "integratedTerminal",
             "justMyCode": true
         }

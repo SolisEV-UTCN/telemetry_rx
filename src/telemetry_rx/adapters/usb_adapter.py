@@ -14,6 +14,8 @@ MESSAGE_CNT = 20
 COM_PORT = "/dev/ttyUSB0"
 
 __slots__ = "device"
+
+
 class UsbAdapter(Adapter):
     def __init__(self):
         super().__init__()
@@ -26,7 +28,7 @@ class UsbAdapter(Adapter):
                 bytesize=serial.EIGHTBITS,
                 parity=serial.PARITY_EVEN,
                 stopbits=serial.STOPBITS_ONE,
-                timeout=None
+                timeout=None,
             )
             logging.info(f"Established connection on {self.device.port}.")
             logging.debug(
@@ -49,7 +51,7 @@ class UsbAdapter(Adapter):
         self.device.close()
 
     def read_data(self) -> Iterator[Point]:
-        """ Reads serial input and converts bytestream to a Point. """
+        """Reads serial input and converts bytestream to a Point."""
         byte_size = MESSAGE_LEN * MESSAGE_CNT
         while True:
             # Read UART bytestream

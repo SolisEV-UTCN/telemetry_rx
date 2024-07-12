@@ -10,11 +10,11 @@ services:
   #    - /dev/ttyUSB0:/dev/ttyUSB0
    environment:
    # Modify this values in the environment file (.env).
-     # Valid adapters are: 
+     # Valid adapters are:
      #  TCP - Use TCP adapter to read data (Ubiquiti)
      #  USB - Use USB adapter to read data (xBee, GSM)
      INPUT_ADAPTER: ${INPUT_ADAPTER}
-     # Valid run modes are: 
+     # Valid run modes are:
      #  debug
      #  release
      RUN_MODE: ${RUN_MODE}
