@@ -6,8 +6,9 @@ services:
     container_name: telemetry_rx
     depends_on:
       - influx
-    #  devices:  # Comment out if using can or test_can adapters
-    #    - /dev/ttyUSB0:/dev/ttyUSB0
+    devices:
+      # Comment out if using TCP adapter
+      - /dev/ttyUSB0:/dev/ttyUSB0
     environment:
       # Modify this values in the environment file (.env).
       # Valid adapters are:
@@ -71,18 +72,19 @@ services:
       - influx_username
       - influx_password
 
-networks:
-  solis-network:
 volumes:
   influxdb_storage:
-    name: "influxdb_persitence_storage"
+    name: "influxdb_storage"
   grafana_storage:
-    name: "grafana_persitence_storage"
+    name: "grafana_storage"
 
 secrets:
   influx_username:
-    file: influx_username.txt
+    file: secrets/influx_username.txt
   influx_password:
-    file: influx_password.txt
+    file: secrets/influx_password.txt
   influx_token:
-    file: influx_token.txt
+    file: secrets/influx_token.txt
+
+networks:
+  solis-network:

@@ -45,22 +45,27 @@ class Adapter(ABC):
     def validate_crc(self, expected_crc: int, data: bytes) -> bool:
         calc = Calculator(Adapter.CRC_CONF, optimized=True)
         crc = calc.checksum(data)
-        logging.debug(f"Calculated/Expected CRCs: {crc}/{expected_crc}")
+        if expected_crc != crc:
+            logging.debug(f"Calculated/Expected CRCs: {crc}/{expected_crc}")
         return expected_crc == crc
 
     def parse_data(self, frame_id: int, data: bytes) -> Point | None:
         # Get message formatter
         try:
             message = self.dbc.get_message_by_frame_id(frame_id)
+            logging.debug(f"Receive message {message}")
         except KeyError:
             logging.warn(f"Received unknown message with {frame_id:04X} ID.")
             return None
 
-        signals = message.decode_simple(data)
-        signals.update(
+        fields = message.decode_simple(data)
+        logging.debug(f"Parsed data: {fields}")
+
+        return Point.from_dict(
             {
-                "measurement": message.senders[0],
-                "time": time.time(),
+                "measurement": "solar_vehicle",
+                "tags": {"ecu": message.senders[0]},
+                "fields": fields,
+                "time": time.time_ns(),
             }
         )
-        return Point.from_dict(signals)

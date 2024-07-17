@@ -12,7 +12,7 @@ from telemetry_rx.classes import AppState
 
 PWD = Path(__file__).parent.absolute()
 CAN_MAPPING = Path(PWD, "config", "basic.json")
-ENTRYPOINT = "http://127.0.0.1:8086"
+ENTRYPOINT = "http://influx:8086"
 
 
 def init_logger(debug=False) -> None:
@@ -71,6 +71,7 @@ def init_influx(reader: Adapter) -> None:
     logging.debug(f"INFLUX_BUCKET={bucket}")
 
     # Create bucket if it doesn't exists
+    logging.debug(f"INFLUX_URL={ENTRYPOINT}")
     with InfluxDBClient(url=ENTRYPOINT, token=token, org=org) as influxdb_client:
         # Create buckets if they don't exist
         buckets_api = influxdb_client.buckets_api()

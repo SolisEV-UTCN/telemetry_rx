@@ -33,7 +33,7 @@ NS_ :
 
 BS_:
 
-BU_: MPPT1 MPPT2 MotorController BMU Dashboard Telemetry Auxiliary
+BU_: MPPT1 MPPT2 MotorController BMU Dashboard Telemetry Auxiliary DriverControl
 
 
 BO_ 3221225472 VECTOR__INDEPENDENT_SIG_MSG: 0 Vector__XXX
@@ -131,8 +131,8 @@ BO_ 1536 BMU_ID: 8 BMU
 
 BO_ 1537 BMU_CMU1_Status: 8 BMU
  SG_ BMU_CMU1_Serial : 0|32@1+ (1,0) [0|0] ""  Telemetry
- SG_ BMU_CMU1_PCBTemperature : 32|16@1- (10,0) [0|0] "C"  Telemetry
- SG_ BMU_CMU1_CellTemperature : 48|16@1- (10,0) [0|0] "C"  Telemetry
+ SG_ BMU_CMU1_PCBTemperature : 32|16@1- (0.1,0) [0|0] "C"  Telemetry
+ SG_ BMU_CMU1_CellTemperature : 48|16@1- (0.1,0) [0|0] "C"  Telemetry
 
 BO_ 1538 BMU_CMU1_Voltage1: 8 BMU
  SG_ BMU_CMU1_C0_Voltage : 0|16@1- (1,0) [0|0] "mV"  Telemetry
@@ -148,8 +148,8 @@ BO_ 1539 BMU_CMU1_Voltage2: 8 BMU
 
 BO_ 1540 BMU_CMU2_Status: 8 BMU
  SG_ BMU_CMU2_Status : 0|32@1+ (1,0) [0|0] ""  Telemetry
- SG_ BMU_CMU2_PCBTemperature : 32|16@1- (10,0) [0|0] "C"  Telemetry
- SG_ BMU_CMU2_CellTemperature : 48|16@1- (10,0) [0|0] "C"  Telemetry
+ SG_ BMU_CMU2_PCBTemperature : 32|16@1- (0.1,0) [0|0] "C"  Telemetry
+ SG_ BMU_CMU2_CellTemperature : 48|16@1- (0.1,0) [0|0] "C"  Telemetry
 
 BO_ 1541 BMU_CMU2_Voltage1: 8 BMU
  SG_ BMU_CMU2_C0_Voltage : 0|16@1- (1,0) [0|0] "mV"  Telemetry
@@ -165,8 +165,8 @@ BO_ 1542 BMU_CMU2_Voltage2: 8 BMU
 
 BO_ 1543 BMU_CMU3_Status: 8 BMU
  SG_ BMU_CMU3_Status : 0|32@1+ (1,0) [0|0] ""  Telemetry
- SG_ BMU_CMU3_PCBTemperature : 32|16@1- (10,0) [0|0] "C"  Telemetry
- SG_ BMU_CMU3_CellTemperature : 48|16@1- (10,0) [0|0] "C"  Telemetry
+ SG_ BMU_CMU3_PCBTemperature : 32|16@1- (0.1,0) [0|0] "C"  Telemetry
+ SG_ BMU_CMU3_CellTemperature : 48|16@1- (0.1,0) [0|0] "C"  Telemetry
 
 BO_ 1544 BMU_CMU3_Voltage1: 8 BMU
  SG_ BMU_CMU3_C0_Voltage : 0|16@1- (1,0) [0|0] "mV"  Telemetry
@@ -182,8 +182,8 @@ BO_ 1545 BMU_CMU3_Voltage2: 8 BMU
 
 BO_ 1546 BMU_CMU4_Status: 8 BMU
  SG_ BMU_CMU4_Status : 0|32@1+ (1,0) [0|0] ""  Telemetry
- SG_ BMU_CMU4_PCBTemperature : 32|16@1- (10,0) [0|0] "C"  Telemetry
- SG_ BMU_CMU4_CellTemperature : 48|16@1- (10,0) [0|0] "C"  Telemetry
+ SG_ BMU_CMU4_PCBTemperature : 32|16@1- (0.1,0) [0|0] "C"  Telemetry
+ SG_ BMU_CMU4_CellTemperature : 48|16@1- (0.1,0) [0|0] "C"  Telemetry
 
 BO_ 1547 BMU_CMU4_Voltage1: 8 BMU
  SG_ BMU_CMU4_C0_Voltage : 0|16@1- (1,0) [0|0] "mV"  Telemetry
@@ -199,8 +199,8 @@ BO_ 1548 BMU_CMU4_Voltage2: 8 BMU
 
 BO_ 1549 BMU_CMU5_Status: 8 BMU
  SG_ BMU_CMU5_Status : 0|32@1+ (1,0) [0|0] ""  Telemetry
- SG_ BMU_CMU5_PCBTemperature : 32|16@1- (10,0) [0|0] "C"  Telemetry
- SG_ BMU_CMU5_CellTemperature : 48|16@1- (10,0) [0|0] "C"  Telemetry
+ SG_ BMU_CMU5_PCBTemperature : 32|16@1- (0.1,0) [0|0] "C"  Telemetry
+ SG_ BMU_CMU5_CellTemperature : 48|16@1- (0.1,0) [0|0] "C"  Telemetry
 
 BO_ 1550 BMU_CMU5_Voltage1: 8 BMU
  SG_ BMU_CMU5_C0_Voltage : 0|16@1+ (1,0) [0|0] "mV"  Telemetry
@@ -224,7 +224,7 @@ BO_ 1781 BMU_PackBalanceStateOfCharge: 8 BMU
 
 BO_ 1782 BMU_ChargerControlInformation: 8 BMU
  SG_ BMU_ChargingCellVolError : 0|16@1- (1,0) [0|0] "mV"  Telemetry
- SG_ BMU_CellTempMargin : 16|16@1- (10,0) [0|0] "C"  Telemetry
+ SG_ BMU_CellTempMargin : 16|16@1- (0.1,0) [0|0] "C"  Telemetry
  SG_ BMU_DischargingCellVolError : 32|16@1- (1,0) [0|0] "mV"  Telemetry
  SG_ BMU_TotalPackCapacity : 48|16@1+ (1,0) [0|0] "Ah"  Telemetry
 
@@ -244,8 +244,8 @@ BO_ 1784 BMU_MinMaxVoltage: 8 BMU
  SG_ BMU_CellMaxVoltage : 56|8@1+ (1,0) [0|0] ""  Telemetry
 
 BO_ 1785 BMU_MinMaxTemperature: 8 BMU
- SG_ BMU_MinCellTemperature : 0|16@1+ (10,0) [0|0] "C"  Telemetry,Dashboard
- SG_ BMU_MaxCellTemperature : 16|16@1+ (10,0) [0|0] "C"  Telemetry,Dashboard
+ SG_ BMU_MinCellTemperature : 0|16@1+ (0.1,0) [0|0] "C"  Telemetry,Dashboard
+ SG_ BMU_MaxCellTemperature : 16|16@1+ (0.1,0) [0|0] "C"  Telemetry,Dashboard
  SG_ BMU_CMUMinTemperature : 32|8@1+ (1,0) [0|0] ""  Telemetry
  SG_ BMU_CellMinTemperature : 40|8@1+ (1,0) [0|0] ""  Telemetry
  SG_ BMU_CMUMaxTemperature : 48|8@1+ (1,0) [0|0] ""  Telemetry
@@ -296,8 +296,13 @@ BO_ 1792 AUX_Status: 1 Auxiliary
 BO_ 1793 AUX_Command: 1 Dashboard
  SG_ AUX_Command : 0|8@1+ (1,0) [0|0] ""  Telemetry,Auxiliary
 
+BO_ 1280 DC_Status: 8 DriverControl
+ SG_ DC_ID : 32|32@1+ (1,0) [0|0] ""  Telemetry
+ SG_ DC_Serial : 0|32@1+ (1,0) [0|0] ""  Telemetry
 
 
+
+CM_ BU_ DriverControl "Usually is substituted by Dashboard";
 CM_ SG_ 513 MPPT1_Mode "0 - Constant Input Voltage
 1 - Constant Input Current
 2 - Minimum Input Current

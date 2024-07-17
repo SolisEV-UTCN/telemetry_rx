@@ -52,35 +52,32 @@ class UsbAdapter(Adapter):
 
     def read_data(self) -> Iterator[Point]:
         """Reads serial input and converts bytestream to a Point."""
-        byte_size = MESSAGE_LEN * MESSAGE_CNT
         while True:
             # Read UART bytestream
             logging.debug(f"{self.device.in_waiting} bytes are in input buffer.")
-            if self.device.in_waiting < byte_size:
-                logging.debug("Input buffer was reset.")
-                self.device.reset_input_buffer()
-
-            payload = self.device.read(MESSAGE_LEN * MESSAGE_CNT)
-
-            # Validate payload length
-            if len(payload) != MESSAGE_LEN * MESSAGE_CNT:
-                logging.warn("Received partial message!")
+            payload = self.device.read(1)
+            if payload[0] != 0xFE:
                 continue
 
-            for i in range(MESSAGE_CNT):
-                frame_id, data_h, data_l, crc = self.process_bytes(payload, i * MESSAGE_LEN)
+            payload += self.device.read(MESSAGE_LEN - 1)
 
-                # Validate CRC-32 MPEG-2
-                # STM32 algorithm reverses byte order for uint32_t before calculating CRC
-                if not self.validate_crc(crc, data_h[::-1] + data_l[::-1]):
-                    continue
+            try:
+                frame_id, data_h, data_l, crc = self.process_bytes(payload)
+            except ValueError:
+                logging.debug(f"Received: {payload}")
+                continue
 
-                # Decode data
-                point = self.parse_data(frame_id, data_h + data_l)
-                if point is not None:
-                    yield point
+            # Validate CRC-32 MPEG-2
+            # STM32 algorithm reverses byte order for uint32_t before calculating CRC
+            if not self.validate_crc(crc, data_h[::-1] + data_l[::-1]):
+                continue
 
-    def process_bytes(self, data: bytes, offset: int) -> tuple[int, bytes, bytes, int]:
+            # Decode data
+            point = self.parse_data(frame_id, data_h + data_l)
+            if point is not None:
+                yield point
+
+    def process_bytes(self, data: bytes) -> tuple[int, bytes, bytes, int]:
         r"""Incoming serial data is expected to be of following structure:
         Byte[00] = Padding byte (0xFE)
         Byte[01] = CAN frame ID - 1st byte (order intel)
@@ -101,4 +98,4 @@ class UsbAdapter(Adapter):
         """
         if data[0] != 0xFE and data[15] != 0x7F:
             raise ValueError("Serial frame is corrupted")
-        return struct.unpack_from("<xH4s4sIx", data, offset)
+        return struct.unpack("<xH4s4sIx", data)

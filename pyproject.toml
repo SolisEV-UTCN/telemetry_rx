@@ -40,11 +40,9 @@ directory = "dist/"
 
 [tool.hatch.build.targets.wheel]
 include = ["telemetry_rx"]
-exclude = ["*.dbc", "*.json"]
 
 [tool.hatch.build.targets.sdist]
 include = ["telemetry_rx", "tests"]
-exclude = ["*.dbc", "*.json"]
 
 [tool.ruff]
 exclude = [

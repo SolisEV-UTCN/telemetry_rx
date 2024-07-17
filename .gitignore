@@ -27,3 +27,6 @@ venv/
 
 # PyCharm
 .idea/
+
+# Secrets
+secrets/*.txt
