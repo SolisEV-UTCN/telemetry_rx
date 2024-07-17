@@ -4,10 +4,11 @@
       "strings": true
     },
     "editor.tabSize": 2,
-    "editor.suggest.insertMode": "replace"
+    "editor.trimAutoWhitespace": true
   },
   "[python]": {
     "editor.tabSize": 4,
     "editor.formatOnSave": false
-  }
+  },
+  "files.insertFinalNewline": true
 }

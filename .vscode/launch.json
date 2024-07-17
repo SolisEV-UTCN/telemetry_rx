@@ -4,7 +4,8 @@
             "name": "Start telemetry",
             "type": "debugpy",
             "request": "launch",
-            "program": "src/telemetry_rx/main.py",
+            "program": "__main__.py",
+            "cwd": "${workspaceFolder}/src/telemetry_rx",
             "console": "integratedTerminal",
             "justMyCode": true
         }

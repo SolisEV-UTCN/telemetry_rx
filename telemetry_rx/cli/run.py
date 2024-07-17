@@ -6,8 +6,8 @@ import sys
 from influxdb_client import InfluxDBClient, WriteOptions, WritePrecision
 from influxdb_client.client.util.multiprocessing_helper import MultiprocessingWriter
 
-from adapters import Adapter, TcpAdapter, UsbAdapter
-from classes import AppState
+from telemetry_rx.adapters import Adapter, TcpAdapter, UsbAdapter
+from telemetry_rx.classes import AppState
 
 
 PWD = Path(__file__).parent.absolute()
@@ -15,7 +15,7 @@ CAN_MAPPING = Path(PWD, "config", "basic.json")
 ENTRYPOINT = "http://127.0.0.1:8086"
 
 
-def _init_logger(debug=False) -> None:
+def init_logger(debug=False) -> None:
     """Format logger to be pretty."""
     # Logger scaffolding
     formatter = logging.Formatter("[{levelname}]{filename}:{message}", style="{")
@@ -33,7 +33,7 @@ def _init_logger(debug=False) -> None:
     root.addHandler(handler)
 
 
-def _configure_adapter() -> Adapter:
+def configure_adapter() -> Adapter:
     """Select adapter to medium where the data will arrive."""
     # Default environment variables
     adapter = os.environ.get("INPUT_ADAPTER", "USB").upper()
@@ -55,7 +55,7 @@ def _configure_adapter() -> Adapter:
     return reader
 
 
-def _init_influx(reader: Adapter) -> None:
+def init_influx(reader: Adapter) -> None:
     # Get API token
     token = os.environ.get("INFLUX_TOKEN_FILE", "/run/secrets/influx_token").lower()
     logging.debug(f"INFLUX_TOKEN_FILE={token}")
@@ -79,11 +79,16 @@ def _init_influx(reader: Adapter) -> None:
             buckets_api.create_bucket(bucket_name=bucket)
 
     # Write points in batches to InfluxDb
-    with MultiprocessingWriter(url=ENTRYPOINT, token=token, org=org, write_options=WriteOptions(batch_size=5000)) as writer:
-        _main_loop(reader, writer, bucket)
+    with MultiprocessingWriter(
+        url=ENTRYPOINT,
+        token=token,
+        org=org,
+        write_options=WriteOptions(batch_size=5000),
+    ) as writer:
+        main_loop(reader, writer, bucket)
 
 
-def _main_loop(reader: Adapter, writer: MultiprocessingWriter, bucket: str):
+def main_loop(reader: Adapter, writer: MultiprocessingWriter, bucket: str):
     # State machine
     state = AppState.INIT
     while True:
@@ -107,21 +112,3 @@ def _main_loop(reader: Adapter, writer: MultiprocessingWriter, bucket: str):
         except Exception as e:
             logging.error(f"Unhandeled exception: {e}")
             state = AppState.STOP
-
-
-def start():
-    """Main script."""
-    debug = os.environ.get("RUN_MODE", "release").lower()
-    if debug == "release":
-        debug = False
-    else:
-        debug = True
-    _init_logger(debug)
-
-    adapter = _configure_adapter()
-
-    _init_influx(adapter)
-
-
-if __name__ == "__main__":
-    start()

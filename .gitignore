@@ -17,3 +17,13 @@ dist/*
 
 # Ruff
 .ruff_cache
+
+# Python cache
+**/__pycache__
+
+# Python virtual environment
+.venv/
+venv/
+
+# PyCharm
+.idea/

@@ -5,8 +5,8 @@ from collections.abc import Iterator
 import serial
 from influxdb_client import Point
 
-from adapters import Adapter
-from classes import AppState
+from telemetry_rx.adapters import Adapter
+from telemetry_rx.classes import AppState
 
 
 MESSAGE_LEN = 16

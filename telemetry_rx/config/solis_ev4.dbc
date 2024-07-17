@@ -44,10 +44,10 @@ BO_ 3221225472 VECTOR__INDEPENDENT_SIG_MSG: 0 Vector__XXX
  SG_ NewSignal_0147 : 24|8@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 512 MPPT1_Power: 8 MPPT1
- SG_ MPPT1_InputVoltage : 0|16@1- (0.01,0) [-327|327] "V"  Dashboard
- SG_ MPPT1_InputCurrent : 8|16@1- (0.0005,0) [-16|16] "A"  Dashboard
- SG_ MPPT1_OutputVoltage : 16|16@1- (0.01,0) [-327|327] "V" Vector__XXX
- SG_ MPPT1_OutputCurrent : 24|16@1- (0.0005,0) [-16|16] "A" Vector__XXX
+ SG_ MPPT1_InputVoltage : 0|16@1- (0.01,0) [-327|327] "V"  Dashboard,Telemetry
+ SG_ MPPT1_InputCurrent : 16|16@1- (0.0005,0) [-16|16] "A"  Dashboard,Telemetry
+ SG_ MPPT1_OutputVoltage : 32|16@1- (0.01,0) [-327|327] "V"  Telemetry
+ SG_ MPPT1_OutputCurrent : 48|16@1- (0.0005,0) [-16|16] "A"  Telemetry
 
 BO_ 513 MPPT1_Status: 5 MPPT1
  SG_ MPPT1_Mode : 0|8@1+ (1,0) [0|0] ""  Telemetry
@@ -58,9 +58,9 @@ BO_ 513 MPPT1_Status: 5 MPPT1
 
 BO_ 528 MPPT2_Power: 8 MPPT2
  SG_ MPPT2_InputVoltage : 0|16@1- (0.01,0) [-327|327] "V"  Telemetry,Dashboard
- SG_ MPPT2_InputCurrent : 8|16@1- (0.0005,0) [-16|16] "A"  Telemetry,Dashboard
- SG_ MPPT2_OutputVoltage : 16|16@1- (0.01,0) [-327|327] "V"  Telemetry
- SG_ MPPT2_OutputCurrent : 24|16@1- (0.0005,0) [-16|16] "A"  Telemetry
+ SG_ MPPT2_InputCurrent : 16|16@1- (0.0005,0) [-16|16] "A"  Telemetry,Dashboard
+ SG_ MPPT2_OutputVoltage : 32|16@1- (0.01,0) [-327|327] "V"  Telemetry
+ SG_ MPPT2_OutputCurrent : 48|16@1- (0.0005,0) [-16|16] "A"  Telemetry
 
 BO_ 529 MPPT2_Status: 5 MPPT2
  SG_ MPPT2_Mode : 0|8@1+ (1,0) [0|0] ""  Telemetry
