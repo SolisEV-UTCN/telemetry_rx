@@ -12,7 +12,7 @@ from influxdb_client import Point
 from telemetry_rx.classes import AppState
 
 PWD = Path(__file__).parent.parent.absolute()
-PATH_DBC = Path(PWD, "config", "solis_ev4.dbc")
+PATH_DBC = Path(PWD, "config", "Solis-EV4.dbc")
 
 
 class Adapter(ABC):

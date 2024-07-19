@@ -253,7 +253,7 @@ BO_ 1785 BMU_MinMaxTemperature: 8 BMU
 
 BO_ 1786 BMU_BatteryPack: 8 BMU
  SG_ BMU_BatteryVoltage : 0|32@1+ (1,0) [0|0] "mV"  Telemetry,Dashboard
- SG_ BMU_BatteryCurrent : 32|32@1+ (1,0) [0|0] "mA"  Telemetry,Dashboard
+ SG_ BMU_BatteryCurrent : 32|32@1- (1,0) [0|0] "mA"  Telemetry,Dashboard
 
 BO_ 1787 BMU_BatteryPackStatus: 8 BMU
  SG_ BMU_BalanceVoltageRising : 0|16@1+ (1,0) [0|0] "mV"  Telemetry
