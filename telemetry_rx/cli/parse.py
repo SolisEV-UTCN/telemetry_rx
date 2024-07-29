@@ -7,10 +7,10 @@ from influxdb_client import InfluxDBClient, Point, WriteOptions
 # Read and parse .txt file
 def read_and_parse_file(file_path):
     data_points = []
-    with open(file_path, 'r') as file:
+    with open(file_path, "r") as file:
         lines = file.readlines()
         for line in lines:
-            match = re.match(r'(\d+)\s*:\s*([\dA-Fa-f]+)\s*([\dA-Fa-f]+)', line)
+            match = re.match(r"(\d+)\s*:\s*([\dA-Fa-f]+)\s*([\dA-Fa-f]+)", line)
             if match:
                 timestamp = int(match.group(1))
                 value1 = match.group(2)
@@ -33,16 +33,13 @@ def write_to_influxdb(data_points, measurement):
     write_api = client.write_api(write_options=WriteOptions(batch_size=1))
 
     for timestamp, value in data_points:
-
-        point = (Point(measurement).field("value", int.from_bytes(value, byteorder='little'))
-                                   .time(timestamp))
+        point = Point(measurement).field("value", int.from_bytes(value, byteorder="little")).time(timestamp)
         write_api.write(bucket=bucket, org=org, record=point)
 
     client.close()
 
 
 def parse():
-
     data_path = "DataFiles"
 
     for file_directory in os.scandir(data_path):
@@ -56,4 +53,3 @@ def parse():
                 data_points = read_and_parse_file(file)
 
                 write_to_influxdb(data_points, measurement)
-                
