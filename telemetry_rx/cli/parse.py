@@ -25,24 +25,21 @@ def read_and_parse_file(file_path):
     return data_points
 
 
-def write_to_influxdb(data_points, measurement):
-    bucket = "SolisEV"
-    org = "Solis"
-    token = "IDK"
-    url = "http://localhost:8086"
-
-    client = InfluxDBClient(url=url, token=token, org=org)
-    write_api = client.write_api(write_options=WriteOptions(batch_size=1))
+def write_to_influxdb(write_api: InfluxDBClient, credentials: InfluxCreds, data_points, measurement: str):
 
     for timestamp, value in data_points:
         point = Point(measurement).field("value", int.from_bytes(value, byteorder="little")).time(timestamp)
-        write_api.write(bucket=bucket, org=org, record=point)
+        write_api.write(bucket = credentials.as_dict()['bucket'],
+                        org    = credentials.as_dict()['org'],
+                        record = point)
 
-    client.close()
+def parse(data_path: str, credentials: InfluxCreds):
 
-
-def parse(credentials: InfluxCreds):
-    data_path = "DataFiles"
+    # credentials.url doesn't work for me
+    client = InfluxDBClient(url   = credentials.as_dict()['url'],
+                            token = credentials.as_dict()['token'],
+                            org   = credentials.as_dict()['org'])
+    write_api = client.write_api(write_options=WriteOptions(batch_size=1))
 
     for file_directory in os.scandir(data_path):
         for file_path in os.listdir(file_directory.path):
@@ -54,4 +51,6 @@ def parse(credentials: InfluxCreds):
 
                 data_points = read_and_parse_file(file)
 
-                write_to_influxdb(data_points, measurement)
+                write_to_influxdb(write_api, credentials, data_points, measurement)
+
+    client.close()
