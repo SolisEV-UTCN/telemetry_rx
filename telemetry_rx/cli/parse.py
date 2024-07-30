@@ -3,6 +3,8 @@ import re
 
 from influxdb_client import InfluxDBClient, Point, WriteOptions
 
+from telemetry_rx.utils import InfluxCreds
+
 
 # Read and parse .txt file
 def read_and_parse_file(file_path):
@@ -39,7 +41,7 @@ def write_to_influxdb(data_points, measurement):
     client.close()
 
 
-def parse():
+def parse(credentials: InfluxCreds):
     data_path = "DataFiles"
 
     for file_directory in os.scandir(data_path):
