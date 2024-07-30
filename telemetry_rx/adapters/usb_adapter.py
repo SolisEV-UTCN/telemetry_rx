@@ -6,29 +6,33 @@ import serial
 from influxdb_client import Point
 
 from telemetry_rx.adapters import Adapter
-from telemetry_rx.classes import AppState
-
-
-MESSAGE_LEN = 16
-MESSAGE_CNT = 20
-COM_PORT = "/dev/ttyUSB0"
-
-__slots__ = "device"
+from telemetry_rx.utils import AppState
 
 
 class UsbAdapter(Adapter):
-    def __init__(self):
-        super().__init__()
+    MESSAGE_LEN = 16
 
-    def init_device(self) -> AppState:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.running = True
+
+    def init_device(
+        self,
+        port="/dev/ttyUSB0",
+        baudrate=230400,
+        bytesize=serial.EIGHTBITS,
+        parity=serial.PARITY_EVEN,
+        stopbits=serial.STOPBITS_ONE,
+        timeout=None,
+    ) -> AppState:
         try:
             self.device = serial.Serial(
-                port=COM_PORT,
-                baudrate=230400,
-                bytesize=serial.EIGHTBITS,
-                parity=serial.PARITY_EVEN,
-                stopbits=serial.STOPBITS_ONE,
-                timeout=None,
+                port=port,
+                baudrate=baudrate,
+                bytesize=bytesize,
+                parity=parity,
+                stopbits=stopbits,
+                timeout=timeout,
             )
             logging.info(f"Established connection on {self.device.port}.")
             logging.debug(
@@ -43,23 +47,23 @@ class UsbAdapter(Adapter):
             logging.error("Port {COM_PORT} is already in use.")
             return AppState.STOP
         except serial.SerialException as e:
-            logging.error("Could not establish serial communication. To see more info, enable debug flag.")
+            logging.critical("Could not establish serial communication. To see more info, enable debug flag.")
             logging.debug(e)
-            return AppState.STOP
+            return AppState.ERROR
 
     def deinit_device(self) -> None:
         self.device.close()
 
     def read_data(self) -> Iterator[Point]:
         """Reads serial input and converts bytestream to a Point."""
-        while True:
+        while self.running:
             # Read UART bytestream
             logging.debug(f"{self.device.in_waiting} bytes are in input buffer.")
             payload = self.device.read(1)
             if payload[0] != 0xFE:
                 continue
 
-            payload += self.device.read(MESSAGE_LEN - 1)
+            payload += self.device.read(UsbAdapter.MESSAGE_LEN - 1)
 
             try:
                 frame_id, data_h, data_l, crc = self.process_bytes(payload)
@@ -69,7 +73,7 @@ class UsbAdapter(Adapter):
 
             # Validate CRC-32 MPEG-2
             # STM32 algorithm reverses byte order for uint32_t before calculating CRC
-            if not self.validate_crc(crc, data_h[::-1] + data_l[::-1]):
+            if not UsbAdapter.validate_crc(crc, data_h[::-1] + data_l[::-1]):
                 continue
 
             # Decode data
@@ -96,6 +100,6 @@ class UsbAdapter(Adapter):
         Byte[14] /
         Byte[15] = Padding byte (0x7F)
         """
-        if data[0] != 0xFE and data[15] != 0x7F:
+        if data[0] != 0xFE or data[15] != 0x7F:
             raise ValueError("Serial frame is corrupted")
         return struct.unpack("<xH4s4sIx", data)

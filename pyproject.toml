@@ -18,6 +18,7 @@ classifiers = [
 ]
 dependencies = [
   "cantools~=39.4.0",
+  "click~=8.1.0",
   "crc~=7.0.0",
   "influxdb-client[ciso]~=1.44.0",
   "pyserial==3.5",
@@ -27,10 +28,10 @@ dependencies = [
 Documentation = "https://github.com/VorobiovM/telemetry_rx"
 
 [project.optional-dependencies]
-dev = ["pre-commit", "pytest", "ruff"]
+dev = ["pre-commit", "ruff"]
 
 [project.scripts]
-start = "telemetry_rx.cli:main"
+tool = "telemetry_rx.cli:common"
 
 [tool.hatch.version]
 path = "telemetry_rx/version.py"
@@ -40,9 +41,17 @@ directory = "dist/"
 
 [tool.hatch.build.targets.wheel]
 include = ["telemetry_rx"]
+exclude = ["tests"]
 
 [tool.hatch.build.targets.sdist]
 include = ["telemetry_rx", "tests"]
+exclude = ["tests/serial_input"]
+
+[tool.hatch.envs.test]
+dependencies = ["pytest"]
+
+[tool.hatch.envs.test.scripts]
+run = "pytest"
 
 [tool.ruff]
 exclude = [
@@ -86,3 +95,9 @@ quote-style = "double"
 indent-style = "space"
 skip-magic-trailing-comma = false
 line-ending = "auto"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = ["--import-mode=importlib"]
+pythonpath = ["telemetry_rx"]
+testpaths = ["tests"]

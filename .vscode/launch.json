@@ -1,13 +1,4 @@
 {
-    "configurations": [
-        {
-            "name": "Start telemetry",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "__main__.py",
-            "cwd": "${workspaceFolder}/src/telemetry_rx",
-            "console": "integratedTerminal",
-            "justMyCode": true
-        }
-    ]
+    "version": "0.2.0",
+    "configurations": []
 }

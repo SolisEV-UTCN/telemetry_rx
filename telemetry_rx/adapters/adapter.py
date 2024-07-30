@@ -9,10 +9,7 @@ import cantools
 from crc import Calculator, Configuration
 from influxdb_client import Point
 
-from telemetry_rx.classes import AppState
-
-PWD = Path(__file__).parent.parent.absolute()
-PATH_DBC = Path(PWD, "config", "Solis-EV4.dbc")
+from telemetry_rx.utils import AppState
 
 
 class Adapter(ABC):
@@ -25,10 +22,11 @@ class Adapter(ABC):
         final_xor_value=0x0,
     )
 
-    def __init__(self):
+    def __init__(self, path: Path):
         self.device = None
         self.tmp_dir = tempfile.gettempdir()
-        self.dbc = cantools.db.load_file(PATH_DBC, database_format="dbc", encoding="cp1252", cache_dir=self.tmp_dir)
+        self.dbc = cantools.db.load_file(path, database_format="dbc", encoding="cp1252", cache_dir=self.tmp_dir)
+        self.calc = Calculator(Adapter.CRC_CONF, optimized=True)
 
     @abstractmethod
     def init_device(self) -> AppState:
@@ -43,8 +41,7 @@ class Adapter(ABC):
         pass
 
     def validate_crc(self, expected_crc: int, data: bytes) -> bool:
-        calc = Calculator(Adapter.CRC_CONF, optimized=True)
-        crc = calc.checksum(data)
+        crc = self.calc.checksum(data)
         if expected_crc != crc:
             logging.debug(f"Calculated/Expected CRCs: {crc}/{expected_crc}")
         return expected_crc == crc
