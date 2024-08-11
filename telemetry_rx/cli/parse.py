@@ -1,6 +1,7 @@
 import logging
 import os
 import re
+import struct
 from pathlib import Path
 
 from influxdb_client import InfluxDBClient, Point, WriteOptions
@@ -11,19 +12,18 @@ from telemetry_rx.utils import InfluxCreds
 # Read and parse .txt file
 def read_and_parse_file(file_path):
     data_points = []
-    with open(file_path, "r") as file:
-        lines = file.readlines()
-        for line in lines:
-            match = re.match(r"(\d+)\s*:\s*([\dA-Fa-f]+)\s*([\dA-Fa-f]+)", line)
-            if match:
-                timestamp = int(match.group(1))
-                value1 = match.group(2)
-                value2 = match.group(3)
-                byte_array1 = bytes.fromhex(value1)
-                byte_array2 = bytes.fromhex(value2)
-                concatenated_bytes = byte_array1 + byte_array2
+    with open(file_path, "rb") as file:
 
-                data_points.append((timestamp, concatenated_bytes))
+        byteLine = file.read(16)
+        while len(byteLine) == 16:
+
+            byteArray: bytes
+            timestamp, byteArray = struct.unpack("<4xL8s", byteLine)
+
+            data_points.append((timestamp, byteArray))
+
+            byteLine = file.read(16)
+
     return data_points
 
 
