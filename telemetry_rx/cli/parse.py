@@ -1,5 +1,7 @@
+import logging
 import os
 import re
+from pathlib import Path
 
 from influxdb_client import InfluxDBClient, Point, WriteOptions
 
@@ -33,13 +35,12 @@ def write_to_influxdb(write_api: InfluxDBClient, credentials: InfluxCreds, data_
                         org    = credentials.as_dict()['org'],
                         record = point)
 
-def parse(data_path: str, credentials: InfluxCreds):
+def parse(credentials: InfluxCreds, data_path: Path):
 
-    # credentials.url doesn't work for me
     client = InfluxDBClient(url   = credentials.as_dict()['url'],
                             token = credentials.as_dict()['token'],
                             org   = credentials.as_dict()['org'])
-    write_api = client.write_api(write_options=WriteOptions(batch_size=1))
+    write_api = client.write_api(write_options=WriteOptions())
 
     for file_directory in os.scandir(data_path):
         for file_path in os.listdir(file_directory.path):

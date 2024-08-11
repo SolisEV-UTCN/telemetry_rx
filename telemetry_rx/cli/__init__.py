@@ -19,10 +19,12 @@ INFLUX_URL = "http://influx:8086"
 # Common paths
 PWD = Path(__file__).parent.absolute()
 CAN_MAPPING = Path(PWD, "config", "Solis-EV4.dbc")
+OFFLINE_DATA = Path(PWD, "config", "DataFiles")
 
 # Click types
 TYPE_ADAPTER = click.Choice(["USB", "TCP"], case_sensitive=False)
 TYPE_R_PATH = click.Path(exists=True, file_okay=True, dir_okay=False, readable=True, path_type=Path)
+TYPE_DIR = click.Path(exists=True, file_okay=False, dir_okay=True, readable=True, path_type=Path)
 
 
 # fmt: off
@@ -58,12 +60,13 @@ def collect_data(ctx: click.Context, adapter: str, dbc: Path):
 
 
 @common.command("parse")
+@click.option("--path", default=OFFLINE_DATA, type=TYPE_DIR)
 @click.pass_context
-def parse_file(ctx: click.Context):
+def parse_file(ctx: click.Context, path: Path):
     """ Parse file with locally stored CAN data. """
     creds = ctx.find_object(InfluxCreds)
 
-    parse(creds)
+    parse(creds, path)
 
 
 def _credentials(influx_bucket: str, influx_org: str, influx_token: str | None, influx_token_file: Path | None, influx_url: str,) -> InfluxCreds:

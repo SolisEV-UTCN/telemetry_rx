@@ -15,3 +15,6 @@ class InfluxCreds(object):
             "token": self.token,
             "url": self.url,
         }
+
+    def __iter__(self):
+        return iter(self.as_dict())
