@@ -19,7 +19,7 @@ INFLUX_URL = "http://influx:8086"
 # Common paths
 PWD = Path(__file__).parent.absolute()
 CAN_MAPPING = Path(PWD, "config", "Solis-EV4.dbc")
-OFFLINE_DATA = Path(PWD, "config", "DataFiles")
+OFFLINE_DATA = Path(PWD, "config", "Session_2")
 
 # Click types
 TYPE_ADAPTER = click.Choice(["USB", "TCP"], case_sensitive=False)
@@ -42,6 +42,9 @@ def common(ctx: click.Context, influx_bucket: str, influx_org: str, influx_token
     ctx.ensure_object(InfluxCreds)
 
     _verbose(verbose)
+
+    influx_token = influx_token or "token"
+    influx_token_file = influx_token_file or "token_file"
 
     ctx.obj = _credentials(influx_bucket, influx_org, influx_token, influx_token_file, influx_url)
 
@@ -68,6 +71,11 @@ def parse_file(ctx: click.Context, path: Path):
 
     parse(creds, path)
 
+@common.command("flask_server")
+@click.pass_context
+def start_flask_server():
+    """Start flask server"""
+    return None
 
 def _credentials(influx_bucket: str, influx_org: str, influx_token: str | None, influx_token_file: Path | None, influx_url: str,) -> InfluxCreds:
     """Get InfluxDB API credentials."""
