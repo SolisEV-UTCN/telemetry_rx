@@ -10,6 +10,8 @@ from telemetry_rx.cli.run import configure_adapter, setup_main
 from telemetry_rx.cli.parse import parse
 from telemetry_rx.utils import InfluxCreds
 
+import flask
+
 
 # Default values
 INFLUX_BUCKET = datetime.now(UTC).strftime("record_%Y_%m_%d-%H:%M:%S")
@@ -25,6 +27,19 @@ OFFLINE_DATA = Path(PWD, "config", "Session_2")
 TYPE_ADAPTER = click.Choice(["USB", "TCP"], case_sensitive=False)
 TYPE_R_PATH = click.Path(exists=True, file_okay=True, dir_okay=False, readable=True, path_type=Path)
 TYPE_DIR = click.Path(exists=True, file_okay=False, dir_okay=True, readable=True, path_type=Path)
+
+
+# !Flask Server info!
+app = flask.Flask(__name__)
+
+@app.route('/')
+def base():
+    return flask.jsonify({"message":"flask server running.."}), 200
+
+@app.route('/data', methods=['POST'])
+def get_data():
+    data = flask.request.json
+    return flask.jsonify({"data": data}), 201
 
 
 # fmt: off
@@ -73,9 +88,9 @@ def parse_file(ctx: click.Context, path: Path):
 
 @common.command("flask_server")
 @click.pass_context
-def start_flask_server():
-    """Start flask server"""
-    return None
+def start_flask_server(ctx: click.Context) -> None:
+    """Start Flask server"""
+    app.run(host="0.0.0.0", port=5000, debug=True)
 
 def _credentials(influx_bucket: str, influx_org: str, influx_token: str | None, influx_token_file: Path | None, influx_url: str,) -> InfluxCreds:
     """Get InfluxDB API credentials."""
