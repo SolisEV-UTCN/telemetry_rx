@@ -9,8 +9,7 @@ import cantools
 import click
 from influxdb_client import InfluxDBClient
 
-from telemetry_rx.cli.run_udp import start_udp_socket
-from telemetry_rx.cli.run_usart import configure_adapter, setup_main
+from telemetry_rx.cli.listen import configure_adapter, setup_main
 from telemetry_rx.cli.parse import parse
 
 
@@ -25,30 +24,30 @@ CAN_MAPPING = Path(PWD, "config", "Solis-EV4.dbc")
 OFFLINE_DATA = Path(PWD, "config", "Session_2")
 
 # Click types
-TYPE_ADAPTER = click.Choice(["USB", "TCP"], case_sensitive=False)
+TYPE_ADAPTER = click.Choice(["USB", "UDP"], case_sensitive=False)
 TYPE_R_PATH = click.Path(exists=True, file_okay=True, dir_okay=False, readable=True, path_type=Path)
 TYPE_DIR = click.Path(exists=True, file_okay=False, dir_okay=True, readable=True, path_type=Path)
 
 # Help text
-H_BUCKET = "Name of bucket for writting extracted CAN data."
-H_ORG = "Name of organization in InfluxDB."
-H_TOKEN = "String for an InfluxDB API token.\nGenerated token must contain write permissions."
-H_TOKEN_FILE = "File path with a InfluxDB API token.\nGenerated token must contain write permissions."
-H_URL = "InfluxDB entrypoint."
-H_DBC = "File path to DBC."
+H_URL = "Entrypoint to InfluxDB server."
+H_ORG = "Organization in InfluxDB."
+H_TOKEN = "InfluxDB API token. Token must have write permissions."
+H_TOKEN_FILE = "Path to a file with an InfluxDB API token. Token must have write permissions."
+H_BUCKET = "Bucket name for writting extracted CAN data."
+H_DBC = "Path to CAN bus database."
 
 
 # fmt: off
 @click.group()
-@click.option("--influx-bucket", default=INFLUX_BUCKET, envvar="INFLUX_BUCKET", show_envvar=True, allow_from_autoenv=True, type=str, help=H_BUCKET)
-@click.option("--influx-org", default=INFLUX_ORG, envvar="INFLUX_ORG", show_envvar=True, allow_from_autoenv=True, type=str, help=H_ORG)
-@click.option("-t", "--influx-token", envvar="INFLUX_TOKEN", show_envvar=True, allow_from_autoenv=True, type=str, help=H_TOKEN)
-@click.option("--influx-token-file", envvar="INFLUX_TOKEN_FILE", show_envvar=True, allow_from_autoenv=True, type=TYPE_R_PATH, help=H_TOKEN_FILE)
-@click.option("--influx-url", default=INFLUX_URL, envvar="INFLUX_URL", show_envvar=True, allow_from_autoenv=True, type=str, help=H_URL)
+@click.option("--influx-url", default=INFLUX_URL, envvar="INFLUX_URL", allow_from_autoenv=True, type=str, help=H_URL)
+@click.option("--influx-org", default=INFLUX_ORG, envvar="INFLUX_ORG", allow_from_autoenv=True, type=str, help=H_ORG)
+@click.option("--influx-token", envvar="INFLUX_TOKEN", allow_from_autoenv=True, type=str, help=H_TOKEN)
+@click.option("--influx-token-file", envvar="INFLUX_TOKEN_FILE", allow_from_autoenv=True, type=TYPE_R_PATH, help=H_TOKEN_FILE)
+@click.option("--influx-bucket", default=INFLUX_BUCKET, envvar="INFLUX_BUCKET", allow_from_autoenv=True, type=str, help=H_BUCKET)
 @click.option("--dbc", default=CAN_MAPPING, type=TYPE_R_PATH, help=H_DBC)
 @click.option("-v", "--verbose", count=True)
 @click.pass_context
-def common(ctx: click.Context, influx_bucket: str, influx_org: str, influx_token: str | None, influx_token_file: Path | None, influx_url: str, dbc: Path, verbose: int):
+def common(ctx: click.Context, influx_url: str, influx_org: str, influx_token: str | None, influx_token_file: Path | None, influx_bucket: str, dbc: Path, verbose: int):
 # fmt: on
     """ Script for running telemetry. """
     ctx.ensure_object(dict)
@@ -92,14 +91,15 @@ def common(ctx: click.Context, influx_bucket: str, influx_org: str, influx_token
     }
 
 
-@common.command("run_usart")
+@common.command("listen")
 @click.option("--adapter", type=TYPE_ADAPTER, default="USB")
+@click.option("--address", default="/dev/ttyUSB0", help="Connection port for USB adapter. Bind address for UDP adapter.")
 @click.pass_context
-def collect_data(ctx: click.Context, adapter: str):
+def collect_data(ctx: click.Context, adapter: str, address: str):
     """ Collect live CAN data through an adapter. """
     ctx = ctx.find_object(dict)
 
-    adapter = configure_adapter(adapter, ctx["DBC"])
+    adapter = configure_adapter(adapter, ctx["DBC"], address)
     setup_main(ctx["INFLUX_CLIENT"], adapter, ctx["INFLUX_BUCKET"])
 
     _clean_up(ctx["INFLUX_CLIENT"])
@@ -117,25 +117,12 @@ def parse_file(ctx: click.Context, path: Path):
     _clean_up(ctx["INFLUX_CLIENT"])
 
 
-@common.command("run_udp")
-@click.option("--address", default="127.0.0.1")
-@click.option("--port", default=8080)
-@click.pass_context
-def start_socket(ctx: click.Context, address: str, port: int) -> None:
-    """Start UDP socket"""
-    ctx = ctx.find_object(dict)
-
-    start_udp_socket(ctx["INFLUX_CLIENT"], ctx["DBC"], ctx["INFLUX_BUCKET"], address, port)
-
-    _clean_up(ctx["INFLUX_CLIENT"])
-
-
 def _clean_up(client: InfluxDBClient):
     client.close()
 
 
 def _influx_client(influx_org: str, influx_token: str | None, influx_token_file: Path | None, influx_url: str) -> InfluxDBClient:
-    """Get InfluxDB API credentials."""
+    """ Get InfluxDB API credentials. """
     # Get token from string
     if influx_token is not None:
         token = influx_token
@@ -157,7 +144,7 @@ def _influx_client(influx_org: str, influx_token: str | None, influx_token_file:
 
 
 def _verbose(level: int) -> None:
-    """Format logger to be pretty."""
+    """ Format logger to be pretty. """
     # Logger scaffolding
     formatter = logging.Formatter("[{levelname}]{filename}:{message}", style="{")
     handler = logging.StreamHandler(sys.stdout)

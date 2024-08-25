@@ -6,19 +6,10 @@ services:
     container_name: telemetry_rx
     depends_on:
       - influx
-    devices:
+      # devices:
       # Comment out if using TCP adapter
-      - /dev/ttyUSB0:/dev/ttyUSB0
+      # - /dev/ttyUSB0:/dev/ttyUSB0
     environment:
-      # Modify this values in the environment file (.env).
-      # Valid adapters are:
-      #  TCP - Use TCP adapter to read data (Ubiquiti)
-      #  USB - Use USB adapter to read data (xBee, GSM)
-      INPUT_ADAPTER: ${INPUT_ADAPTER}
-      # Valid run modes are:
-      #  debug
-      #  release
-      RUN_MODE: ${RUN_MODE}
       INFLUX_BUCKET: ${INFLUX_BUCKET}
       INFLUX_TOKEN_FILE: /run/secrets/influx_token
       INFLUX_ORG: ${INFLUX_ORG}
@@ -52,31 +43,9 @@ services:
       - influx_password
       - influx_token
 
-  grafana:
-    container_name: grafana
-    depends_on:
-      - influx
-    environment:
-      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/influx_password
-      GF_SECURITY_ADMIN_USER__FILE: /run/secrets/influx_username
-    hostname: interface
-    image: grafana/grafana-oss:11.1.0
-    networks:
-      - solis-network
-    ports:
-      - 3000:3000
-    restart: unless-stopped
-    volumes:
-      - grafana_storage:/var/lib/grafana # Persistence storage
-    secrets:
-      - influx_username
-      - influx_password
-
 volumes:
   influxdb_storage:
     name: "influxdb_storage"
-  grafana_storage:
-    name: "grafana_storage"
 
 secrets:
   influx_username:

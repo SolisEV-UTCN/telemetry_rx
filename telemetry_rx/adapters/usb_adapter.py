@@ -12,27 +12,25 @@ from telemetry_rx.utils import AppState
 class UsbAdapter(Adapter):
     MESSAGE_LEN = 16
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, address: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.running = True
+        self.address = address
+        self.baudrate = 230400
+        self.bytesize = serial.EIGHTBITS
+        self.parity = serial.PARITY_EVEN
+        self.stopbits = serial.STOPBITS_ONE
+        self.timeout = None
 
-    def init_device(
-        self,
-        port="/dev/ttyUSB0",
-        baudrate=230400,
-        bytesize=serial.EIGHTBITS,
-        parity=serial.PARITY_EVEN,
-        stopbits=serial.STOPBITS_ONE,
-        timeout=None,
-    ) -> AppState:
+    def init_device(self) -> AppState:
         try:
             self.device = serial.Serial(
-                port=port,
-                baudrate=baudrate,
-                bytesize=bytesize,
-                parity=parity,
-                stopbits=stopbits,
-                timeout=timeout,
+                port=self.address,
+                baudrate=self.baudrate,
+                bytesize=self.bytesize,
+                parity=self.parity,
+                stopbits=self.stopbits,
+                timeout=self.timeout,
             )
             logging.info(f"Established connection on {self.device.port}.")
             logging.debug(
