@@ -1,12 +1,14 @@
 {
-  "clang-format.executable": "C:/Program Files/LLVM/bin/clang-format.exe", // This is local PATH
-  "cmake.buildDirectory": "${workspaceFolder}/build/target",
-  "editor.detectIndentation": false,
-  "editor.formatOnSave": false,
-  "editor.insertSpaces": true,
-  "editor.tabSize": 4,
-  "terminal.integrated.cwd": ".",
-  "terminal.integrated.defaultProfile.windows": "Git Bash",
-  "cmake.configureOnOpen": true,
-  "cmake.sourceDirectory": "${workspaceFolder}/src/plug&play"
+  "[json]": {
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.tabSize": 2,
+    "editor.trimAutoWhitespace": true
+  },
+  "[python]": {
+    "editor.tabSize": 4,
+    "editor.formatOnSave": false
+  },
+  "files.insertFinalNewline": true
 }

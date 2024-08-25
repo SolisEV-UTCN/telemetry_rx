@@ -1,0 +1,438 @@
+VERSION ""
+
+
+NS_ :
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+	BO_TX_BU_
+	BA_DEF_REL_
+	BA_REL_
+	BA_DEF_DEF_REL_
+	BU_SG_REL_
+	BU_EV_REL_
+	BU_BO_REL_
+	SG_MUL_VAL_
+
+BS_:
+
+BU_: MPPT1 MPPT2 MotorController BMU Dashboard Telemetry Auxiliary DriverControl
+
+
+BO_ 3221225472 VECTOR__INDEPENDENT_SIG_MSG: 0 Vector__XXX
+ SG_ MC_Reserved : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ MC_Reserved2 : 32|32@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ MC_Reserved1 : 0|32@1+ (1,0) [0|0] "N/A" Vector__XXX
+ SG_ NewSignal_0052 : 16|8@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ NewSignal_0147 : 24|8@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 512 MPPT1_Power: 8 MPPT1
+ SG_ MPPT1_InputVoltage : 0|16@1- (0.01,0) [-327|327] "V"  Dashboard,Telemetry
+ SG_ MPPT1_InputCurrent : 16|16@1- (0.0005,0) [-16|16] "A"  Dashboard,Telemetry
+ SG_ MPPT1_OutputVoltage : 32|16@1- (0.01,0) [-327|327] "V"  Telemetry
+ SG_ MPPT1_OutputCurrent : 48|16@1- (0.0005,0) [-16|16] "A"  Telemetry
+
+BO_ 513 MPPT1_Status: 5 MPPT1
+ SG_ MPPT1_Mode : 0|8@1+ (1,0) [0|0] ""  Telemetry
+ SG_ MPPT1_Fault : 8|8@1+ (1,0) [0|0] ""  Telemetry
+ SG_ MPPT1_Enabled : 16|8@1+ (1,0) [0|0] ""  Telemetry
+ SG_ MPPT1_AmbientTemperature : 24|8@1- (1,0) [-128|128] "C"  Telemetry
+ SG_ MPPT1_HeatsinkTemperature : 32|8@1- (1,0) [-128|128] "C"  Telemetry
+
+BO_ 528 MPPT2_Power: 8 MPPT2
+ SG_ MPPT2_InputVoltage : 0|16@1- (0.01,0) [-327|327] "V"  Telemetry,Dashboard
+ SG_ MPPT2_InputCurrent : 16|16@1- (0.0005,0) [-16|16] "A"  Telemetry,Dashboard
+ SG_ MPPT2_OutputVoltage : 32|16@1- (0.01,0) [-327|327] "V"  Telemetry
+ SG_ MPPT2_OutputCurrent : 48|16@1- (0.0005,0) [-16|16] "A"  Telemetry
+
+BO_ 529 MPPT2_Status: 5 MPPT2
+ SG_ MPPT2_Mode : 0|8@1+ (1,0) [0|0] ""  Telemetry
+ SG_ MPPT_Fault : 8|8@1+ (1,0) [0|0] ""  Telemetry
+ SG_ MPPT2_Enabled : 16|8@1+ (1,0) [0|0] ""  Telemetry
+ SG_ MPPT2_AmbientTemperature : 24|8@1- (1,0) [-128|128] "C"  Telemetry
+ SG_ MPPT2_HeatsinkTemperature : 32|8@1- (1,0) [-128|128] "C"  Telemetry
+
+BO_ 1024 MC_ID: 8 MotorController
+ SG_ MC_ProhelionID : 0|32@1+ (1,0) [0|0] ""  Telemetry
+ SG_ MC_SerialNumber : 32|32@1+ (1,0) [0|0] ""  Telemetry
+
+BO_ 1025 MC_Status: 8 MotorController
+ SG_ MC_LimitFlags : 0|16@1+ (1,0) [0|0] ""  Telemetry
+ SG_ MC_ErrorFlags : 16|16@1+ (1,0) [0|0] ""  Telemetry
+ SG_ MC_ActiveMotor : 32|16@1+ (1,0) [0|0] ""  Telemetry
+ SG_ MC_TransmitErrorCount : 48|8@1+ (1,0) [0|0] ""  Telemetry
+ SG_ MC_ReceiveErrorCount : 56|8@1+ (1,0) [0|0] ""  Telemetry
+
+BO_ 1026 MC_Bus: 8 MotorController
+ SG_ MC_BusCurrent : 32|32@1- (1,0) [0|0] "A"  Telemetry,Dashboard
+ SG_ MC_BusVoltage : 0|32@1- (1,0) [0|0] "V"  Telemetry,Dashboard
+
+BO_ 1027 MC_Velocity: 8 MotorController
+ SG_ MC_MotorVelocity : 0|32@1- (1,0) [0|0] "rpm"  Telemetry
+ SG_ MC_VehicleVelocity : 32|32@1- (1,0) [0|0] "m/s"  Telemetry,Dashboard
+
+BO_ 1028 MC_PhaseCurrent: 8 MotorController
+ SG_ MC_PhaseBCurrent : 0|32@1- (1,0) [0|0] "Arms"  Telemetry
+ SG_ MC_PhaseCCurrent : 32|32@1- (1,0) [0|0] "Arms"  Telemetry
+
+BO_ 1030 MC_MotorCurrentVector: 8 MotorController
+ SG_ MC_Iq : 0|32@1- (1,0) [0|0] "A"  Telemetry
+ SG_ MC_Id : 32|32@1- (1,0) [0|0] "A"  Telemetry
+
+BO_ 1031 MC_MotorBackEMF: 8 MotorController
+ SG_ MC_BEMFq : 0|32@1- (1,0) [0|0] "V"  Telemetry
+ SG_ MC_BEMFd : 32|32@1- (1,0) [0|0] "V"  Telemetry
+
+BO_ 1032 MC_15VRail: 8 MotorController
+ SG_ MC_15VSupply : 32|32@1- (1,0) [0|0] "V"  Telemetry
+
+BO_ 1033 MC_33VRail: 8 MotorController
+ SG_ MC_19VSupply : 0|32@1- (1,0) [0|0] "V"  Telemetry
+ SG_ MC_33VSupply : 32|32@1- (1,0) [0|0] "V"  Telemetry
+
+BO_ 1035 MC_MotorTemperature: 8 MotorController
+ SG_ MC_MotorTemp : 0|32@1- (1,0) [0|0] "C"  Telemetry
+ SG_ MC_HeatsinkTemp : 32|32@1- (1,0) [0|0] "C"  Telemetry
+
+BO_ 1036 MC_DSPTemperature: 8 MotorController
+ SG_ MC_DSPBoardTemp : 0|32@1- (1,0) [0|0] "C"  Telemetry
+
+BO_ 1038 MC_Odometer: 8 MotorController
+ SG_ MC_Odometer : 0|32@1- (1,0) [0|0] "m"  Telemetry
+ SG_ MC_DCBusAmpHours : 32|32@1- (1,0) [0|0] "Ah"  Telemetry
+
+BO_ 1047 MC_SlipSpeed: 8 MotorController
+ SG_ MC_SlipSpeed : 32|32@1- (1,0) [0|0] "Hz"  Telemetry
+
+BO_ 1029 MC_MotorVoltageVector: 8 MotorController
+ SG_ MC_Vq : 0|32@1- (1,0) [0|0] "V"  Telemetry
+ SG_ MC_Vd : 32|32@1- (1,0) [0|0] "V"  Telemetry
+
+BO_ 1536 BMU_ID: 8 BMU
+ SG_ BMU_DeviceID : 0|32@1+ (1,0) [0|0] ""  Telemetry
+ SG_ BMU_Serial : 32|32@1+ (1,0) [0|0] ""  Telemetry
+
+BO_ 1537 BMU_CMU1_Status: 8 BMU
+ SG_ BMU_CMU1_Serial : 0|32@1+ (1,0) [0|0] ""  Telemetry
+ SG_ BMU_CMU1_PCBTemperature : 32|16@1- (0.1,0) [0|0] "C"  Telemetry
+ SG_ BMU_CMU1_CellTemperature : 48|16@1- (0.1,0) [0|0] "C"  Telemetry
+
+BO_ 1538 BMU_CMU1_Voltage1: 8 BMU
+ SG_ BMU_CMU1_C0_Voltage : 0|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU1_C1_Voltage : 16|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU1_C2_Voltage : 32|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU1_C3_Voltage : 48|16@1- (1,0) [0|0] "mV"  Telemetry
+
+BO_ 1539 BMU_CMU1_Voltage2: 8 BMU
+ SG_ BMU_CMU1_C4_Voltage : 0|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU1_C5_Voltage : 16|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU1_C6_Voltage : 32|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU1_C7_Voltage : 48|16@1- (1,0) [0|0] "mV"  Telemetry
+
+BO_ 1540 BMU_CMU2_Status: 8 BMU
+ SG_ BMU_CMU2_Status : 0|32@1+ (1,0) [0|0] ""  Telemetry
+ SG_ BMU_CMU2_PCBTemperature : 32|16@1- (0.1,0) [0|0] "C"  Telemetry
+ SG_ BMU_CMU2_CellTemperature : 48|16@1- (0.1,0) [0|0] "C"  Telemetry
+
+BO_ 1541 BMU_CMU2_Voltage1: 8 BMU
+ SG_ BMU_CMU2_C0_Voltage : 0|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU2_C1_Voltage : 16|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU2_C2_Voltage : 32|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU2_C3_Voltage : 48|16@1- (1,0) [0|0] "mV"  Telemetry
+
+BO_ 1542 BMU_CMU2_Voltage2: 8 BMU
+ SG_ BMU_CMU2_C4_Voltage : 0|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU2_C5_Voltage : 16|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU2_C6_Voltage : 32|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU2_C7_Voltage : 48|16@1- (1,0) [0|0] "mV"  Telemetry
+
+BO_ 1543 BMU_CMU3_Status: 8 BMU
+ SG_ BMU_CMU3_Status : 0|32@1+ (1,0) [0|0] ""  Telemetry
+ SG_ BMU_CMU3_PCBTemperature : 32|16@1- (0.1,0) [0|0] "C"  Telemetry
+ SG_ BMU_CMU3_CellTemperature : 48|16@1- (0.1,0) [0|0] "C"  Telemetry
+
+BO_ 1544 BMU_CMU3_Voltage1: 8 BMU
+ SG_ BMU_CMU3_C0_Voltage : 0|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU3_C1_Voltage : 16|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU3_C2_Voltage : 32|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU3_C3_Voltage : 48|16@1- (1,0) [0|0] "mV"  Telemetry
+
+BO_ 1545 BMU_CMU3_Voltage2: 8 BMU
+ SG_ BMU_CMU3_C4_Voltage : 0|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU3_C5_Voltage : 16|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU3_C6_Voltage : 32|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU3_C7_Voltage : 48|16@1- (1,0) [0|0] "mV"  Telemetry
+
+BO_ 1546 BMU_CMU4_Status: 8 BMU
+ SG_ BMU_CMU4_Status : 0|32@1+ (1,0) [0|0] ""  Telemetry
+ SG_ BMU_CMU4_PCBTemperature : 32|16@1- (0.1,0) [0|0] "C"  Telemetry
+ SG_ BMU_CMU4_CellTemperature : 48|16@1- (0.1,0) [0|0] "C"  Telemetry
+
+BO_ 1547 BMU_CMU4_Voltage1: 8 BMU
+ SG_ BMU_CMU4_C0_Voltage : 0|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU4_C1_Voltage : 16|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU4_C2_Voltage : 32|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU4_C3_Voltage : 48|16@1- (1,0) [0|0] "mV"  Telemetry
+
+BO_ 1548 BMU_CMU4_Voltage2: 8 BMU
+ SG_ BMU_CMU4_C4_Voltage : 0|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU4_C5_Voltage : 16|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU4_C6_Voltage : 32|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU4_C7_Voltage : 48|16@1- (1,0) [0|0] "mV"  Telemetry
+
+BO_ 1549 BMU_CMU5_Status: 8 BMU
+ SG_ BMU_CMU5_Status : 0|32@1+ (1,0) [0|0] ""  Telemetry
+ SG_ BMU_CMU5_PCBTemperature : 32|16@1- (0.1,0) [0|0] "C"  Telemetry
+ SG_ BMU_CMU5_CellTemperature : 48|16@1- (0.1,0) [0|0] "C"  Telemetry
+
+BO_ 1550 BMU_CMU5_Voltage1: 8 BMU
+ SG_ BMU_CMU5_C0_Voltage : 0|16@1+ (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU5_C1_Voltage : 16|16@1+ (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU5_C2_Voltage : 32|16@1+ (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU5_C3_Voltage : 48|16@1+ (1,0) [0|0] "mV"  Telemetry
+
+BO_ 1551 BMU_CMU5_Voltage2: 8 BMU
+ SG_ BMU_CMU5_C4_Voltage : 0|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU5_C5_Voltage : 16|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU5_C6_Voltage : 32|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CMU5_C7_Voltage : 48|16@1- (1,0) [0|0] "mV"  Telemetry
+
+BO_ 1780 BMU_PackStateOfCharge: 8 BMU
+ SG_ BMU_SoC : 0|32@1- (1,0) [0|0] "Ah"  Telemetry
+ SG_ BMU_SoCPercentage : 32|32@1- (100,0) [0|0] "%"  Telemetry,Dashboard
+
+BO_ 1781 BMU_PackBalanceStateOfCharge: 8 BMU
+ SG_ BMU_BalanceSoC : 0|32@1- (1,0) [0|0] "Ah"  Telemetry
+ SG_ BMU_BalanceSoCPercentage : 32|32@1- (100,0) [0|0] "%"  Telemetry
+
+BO_ 1782 BMU_ChargerControlInformation: 8 BMU
+ SG_ BMU_ChargingCellVolError : 0|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_CellTempMargin : 16|16@1- (0.1,0) [0|0] "C"  Telemetry
+ SG_ BMU_DischargingCellVolError : 32|16@1- (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_TotalPackCapacity : 48|16@1+ (1,0) [0|0] "Ah"  Telemetry
+
+BO_ 1783 BMU_PreChargeStatus: 8 BMU
+ SG_ BMU_PreChargeContactorStatus : 0|8@1+ (1,0) [0|0] ""  Telemetry,Dashboard
+ SG_ BMU_PreChargeState : 8|8@1+ (1,0) [0|0] ""  Telemetry
+ SG_ BMU_12VSupplyVoltage : 16|16@1+ (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_PreChargeTimer : 48|8@1+ (1,0) [0|0] ""  Telemetry
+ SG_ BMU_PreChargeTimerCount : 56|8@1+ (1,0) [0|0] ""  Telemetry
+
+BO_ 1784 BMU_MinMaxVoltage: 8 BMU
+ SG_ BMU_MinCellVoltage : 0|16@1+ (1,0) [0|0] "mV"  Telemetry,Dashboard
+ SG_ BMU_MaxCellVoltage : 16|16@1+ (1,0) [0|0] "mV"  Telemetry,Dashboard
+ SG_ BMU_CMUMinVoltage : 32|8@1+ (1,0) [0|0] ""  Telemetry
+ SG_ BMU_CellMinVoltage : 40|8@1+ (1,0) [0|0] ""  Telemetry
+ SG_ BMU_CMUMaxVoltage : 48|8@1+ (1,0) [0|0] ""  Telemetry
+ SG_ BMU_CellMaxVoltage : 56|8@1+ (1,0) [0|0] ""  Telemetry
+
+BO_ 1785 BMU_MinMaxTemperature: 8 BMU
+ SG_ BMU_MinCellTemperature : 0|16@1+ (0.1,0) [0|0] "C"  Telemetry,Dashboard
+ SG_ BMU_MaxCellTemperature : 16|16@1+ (0.1,0) [0|0] "C"  Telemetry,Dashboard
+ SG_ BMU_CMUMinTemperature : 32|8@1+ (1,0) [0|0] ""  Telemetry
+ SG_ BMU_CellMinTemperature : 40|8@1+ (1,0) [0|0] ""  Telemetry
+ SG_ BMU_CMUMaxTemperature : 48|8@1+ (1,0) [0|0] ""  Telemetry
+ SG_ BMU_CellMaxTemperature : 56|8@1+ (1,0) [0|0] ""  Telemetry
+
+BO_ 1786 BMU_BatteryPack: 8 BMU
+ SG_ BMU_BatteryVoltage : 0|32@1+ (1,0) [0|0] "mV"  Telemetry,Dashboard
+ SG_ BMU_BatteryCurrent : 32|32@1- (1,0) [0|0] "mA"  Telemetry,Dashboard
+
+BO_ 1787 BMU_BatteryPackStatus: 8 BMU
+ SG_ BMU_BalanceVoltageRising : 0|16@1+ (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_BalanceVoltageFalling : 16|16@1+ (1,0) [0|0] "mV"  Telemetry
+ SG_ BMU_StatusFlags : 32|8@1+ (1,0) [0|0] ""  Telemetry
+ SG_ BMU_CMUCount : 40|8@1+ (1,0) [0|0] ""  Telemetry
+ SG_ BMU_FirmwareNumber : 48|16@1+ (1,0) [0|0] ""  Telemetry
+
+BO_ 1788 BMU_BatteryPackFanStatus: 8 BMU
+ SG_ BMU_FanSpeed0 : 0|16@1+ (1,0) [0|0] "rpm"  Telemetry
+ SG_ BMU_FanSpeed1 : 16|16@1+ (1,0) [0|0] "rpm"  Telemetry
+ SG_ BMU_12VFansConsumption : 32|16@1+ (1,0) [0|0] "mA"  Telemetry
+ SG_ BMU_12VCMUConsumtion : 48|16@1+ (1,0) [0|0] "mA"  Telemetry
+
+BO_ 1789 BMU_ExtendedBatteryPackStatus: 8 BMU
+ SG_ BMU_ExtendedPackStatus : 0|32@1+ (1,0) [0|0] ""  Telemetry
+ SG_ BMU_HardwareVersion : 32|8@1+ (1,0) [0|0] ""  Telemetry
+ SG_ BMU_ModelID : 40|8@1+ (1,0) [0|0] ""  Telemetry
+
+BO_ 1285 BMU_DriverControlSwitch: 8 Dashboard
+ SG_ BMU_State : 0|16@1+ (1,0) [0|0] ""  Telemetry,BMU
+
+BO_ 1042 MC_ActiveMotorChange: 8 Dashboard
+ SG_ MC_ConfigurationAccessKey : 0|48@1+ (1,0) [0|0] ""  MotorController,Telemetry
+ SG_ MC_SelectActiveMotor : 48|16@1+ (1,0) [0|0] ""  MotorController,Telemetry
+
+BO_ 1281 MC_MotorDriveCommand: 8 Dashboard
+ SG_ MC_MotorVelocityCommand : 0|32@1- (1,0) [0|0] "rpm"  MotorController,Telemetry
+ SG_ MC_CurrentReferenceCommand : 32|32@1- (100,0) [0|0] "%"  MotorController,Telemetry
+
+BO_ 1282 MC_MotorPowerCommand: 8 Dashboard
+ SG_ MC_BusCurrentCommand : 32|32@1- (100,0) [0|0] "%"  MotorController,Telemetry
+
+BO_ 1283 MC_ResetCommand: 8 Dashboard
+ SG_ MC_Unused : 0|64@1+ (1,0) [0|0] ""  MotorController,Telemetry
+
+BO_ 1792 AUX_Status: 1 Auxiliary
+ SG_ AUX_Status : 0|8@1+ (1,0) [0|0] ""  Telemetry,Dashboard
+
+BO_ 1793 AUX_Command: 1 Dashboard
+ SG_ AUX_Command : 0|8@1+ (1,0) [0|0] ""  Telemetry,Auxiliary
+
+BO_ 1280 DC_Status: 8 DriverControl
+ SG_ DC_ID : 32|32@1+ (1,0) [0|0] ""  Telemetry
+ SG_ DC_Serial : 0|32@1+ (1,0) [0|0] ""  Telemetry
+
+
+
+CM_ BU_ DriverControl "Usually is substituted by Dashboard";
+CM_ SG_ 513 MPPT1_Mode "0 - Constant Input Voltage
+1 - Constant Input Current
+2 - Minimum Input Current
+3 - Constant Output Voltage
+4 - Constant Output Current
+5 - Temperature De-rating
+6 - Fault";
+CM_ SG_ 513 MPPT1_Fault "0 - OK (No Error)
+1 - Configuration Error
+2 - Input Over Voltage
+3 - Output Over Voltage
+4 - Output Over Current
+5 - Input Over Current
+6 - Input Under Current
+7 - Phase Over Current
+8 - Fault";
+CM_ SG_ 513 MPPT1_Enabled "0 - Disabled
+1 - Enabled";
+CM_ SG_ 529 MPPT2_Mode "0 - Constant Input Voltage
+1 - Constant Input Current
+2 - Minimum Input Current
+3 - Constant Output Voltage
+4 - Constant Output Current
+5 - Temperature De-rating
+6 - Fault";
+CM_ SG_ 529 MPPT_Fault "0 - OK (No Error)
+1 - Configuration Error
+2 - Input Over Voltage
+3 - Output Over Voltage
+4 - Output Over Current
+5 - Input Over Current
+6 - Input Under Current
+7 - Phase Over Current
+8 - Fault";
+CM_ SG_ 529 MPPT2_Enabled "0 - Disabled
+1 - Enabled";
+CM_ SG_ 1025 MC_LimitFlags "Bit 0 - Output Voltage PWM
+Bit 1 - Motor Current
+Bit 2 - Velocity
+Bit 3 - Bus Current
+Bit 4 - Bus Voltage Upper Limit
+Bit 5 - Bus Voltage Lower Limit
+Bit 6 - IPM or Motor Temperature
+Bit 7..15 - Reserved";
+CM_ SG_ 1025 MC_ErrorFlags "Bit 0 - Hardware Over Current
+Bit 1 - Software Over Current
+Bit 2 - DC Bus over voltage
+Bit 3 - Bad motor position hall sequence
+Bit 4 - Watchdog caused last reset
+Bit 5 - Config read error
+Bit 6 - 15V Rail under voltage lock out
+Bit 7 - Desaturation fault
+Bit 8 - Motor Over Speed
+Bit 9..15 - Reserved";
+CM_ SG_ 1783 BMU_PreChargeContactorStatus "0x01 = Error status of contactor 1 driver (0 = OK, 1 = error )
+0x02 = Error status of contactor 2 driver
+0x04 = Output status of contactor 1 driver (0 = Off, 1 = On)
+0x08 = Output status of contactor 2 driver
+0x10 = 12V contactor supply voltage OK (0 = Fault, 1 = OK)
+0x20 = Error status of contactor 3 driver
+0x40 = Output status of contactor 3 driver
+0x80 = Unused";
+CM_ SG_ 1783 BMU_PreChargeState "0 = Error
+1 = Idle
+5 = Enable Pack
+2 = Measure
+3 = Pre-charge
+4 = Run";
+CM_ SG_ 1783 BMU_12VSupplyVoltage "";
+CM_ SG_ 1783 BMU_PreChargeTimer "0x00 = Pre-charge timer not elapsed
+0x01 = Pre-charge timer elapsed. (Do not care if timeout disabled)";
+CM_ SG_ 1787 BMU_StatusFlags "0x01 = Cell Over Voltage
+0x02 = Cell Under Voltage
+0x04 = Cell Over Temperature
+0x08 = Measurement Untrusted (redundant channel mismatch)
+0x10 = CMU Communications Timeout (lost CMU)
+0x20 = Vehicle Communications Timeout (lost EVDC)
+0x40 = BMU is in Setup mode
+0x80 = CMU CAN bus power status
+";
+CM_ SG_ 1789 BMU_ExtendedPackStatus "0x00000001 = Cell Over Voltage
+0x00000002 = Cell Under Voltage
+0x00000004 = Cell Over Temperature
+0x00000008 = Measurement Untrusted (channel mismatch)
+0x00000010 = CMU Communications Timeout (lost CMU)
+0x00000020 = Vehicle Communications Timeout (lost EVDC)
+0x00000040 = BMU is in Setup mode
+0x00000080 = CMU CAN bus power status
+0x00000100 = Pack Isolation test failure
+0x00000200 = SoCmeasurement is not valid
+0x00000400 = CAN 12V supply is low - about to shut down
+0x00000800 = A contactor is stuck / not engaged
+0x00001000 = A CMU has detected an extra cell present";
+CM_ SG_ 1285 BMU_State "0x0000 = Off/Safe
+0x0010 = Accessories
+0x0020 = Ignition Run
+0x0040 = Ignition Start";
+CM_ SG_ 1793 AUX_Command "Bit 0 - Sign left
+Bit 1 - Sign right
+Bit 2 - Fan
+Bit 3 - Brake
+Bit 4 - Horn
+Bit 5 - Hazards
+Bit 6 - Camera
+Bit 7 - Lights";
+SIG_VALTYPE_ 1026 MC_BusCurrent : 1;
+SIG_VALTYPE_ 1026 MC_BusVoltage : 1;
+SIG_VALTYPE_ 1027 MC_MotorVelocity : 1;
+SIG_VALTYPE_ 1027 MC_VehicleVelocity : 1;
+SIG_VALTYPE_ 1028 MC_PhaseBCurrent : 1;
+SIG_VALTYPE_ 1028 MC_PhaseCCurrent : 1;
+SIG_VALTYPE_ 1030 MC_Iq : 1;
+SIG_VALTYPE_ 1030 MC_Id : 1;
+SIG_VALTYPE_ 1031 MC_BEMFq : 1;
+SIG_VALTYPE_ 1031 MC_BEMFd : 1;
+SIG_VALTYPE_ 1032 MC_15VSupply : 1;
+SIG_VALTYPE_ 1033 MC_19VSupply : 1;
+SIG_VALTYPE_ 1033 MC_33VSupply : 1;
+SIG_VALTYPE_ 1035 MC_MotorTemp : 1;
+SIG_VALTYPE_ 1035 MC_HeatsinkTemp : 1;
+SIG_VALTYPE_ 1036 MC_DSPBoardTemp : 1;
+SIG_VALTYPE_ 1038 MC_Odometer : 1;
+SIG_VALTYPE_ 1038 MC_DCBusAmpHours : 1;
+SIG_VALTYPE_ 1047 MC_SlipSpeed : 1;
+SIG_VALTYPE_ 1029 MC_Vq : 1;
+SIG_VALTYPE_ 1029 MC_Vd : 1;
+SIG_VALTYPE_ 1780 BMU_SoC : 1;
+SIG_VALTYPE_ 1780 BMU_SoCPercentage : 1;
+SIG_VALTYPE_ 1781 BMU_BalanceSoC : 1;
+SIG_VALTYPE_ 1781 BMU_BalanceSoCPercentage : 1;
+SIG_VALTYPE_ 1281 MC_MotorVelocityCommand : 1;
+SIG_VALTYPE_ 1281 MC_CurrentReferenceCommand : 1;
+SIG_VALTYPE_ 1282 MC_BusCurrentCommand : 1;

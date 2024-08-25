@@ -28,7 +28,7 @@ ___EDIT:___ Plug&Play has a very large power consumption. Further development is
 
 ## xBee - Escort car antenna
 
-On the escort vehicle, __xBee__ should be located at the height of the windshield.  
+On the escort vehicle, __xBee__ should be located at the height of the windshield.
 Its purpose is to read data from the __challanger antenna__ and store it in InfluxDB.
 
 ### Usage
@@ -64,7 +64,7 @@ Its purpose is to read data from the __challanger antenna__ and store it in Infl
 
 #### Stop process:
 
-To stop the app, run the following commands in container's bash `exit`.  
+To stop the app, run the following commands in container's bash `exit`.
 If you started docker in detached mode `docker compose down`.
 
 ### Ports
@@ -77,7 +77,7 @@ The services in the app run on the following ports:
 
 
 > If docker container is running as a detached process, you can connect to it by running following commands in bash:
-> 
+>
 > ```
 > docker container ls
 > docker container attach <CONTAINER_ID>
@@ -103,20 +103,3 @@ The app creates an admin users. Default values of the username and password is s
 ### Database
 
 The app creates a default InfluxDB database called `solis`.
-
-## xBee - Challanger antenna
-
-On the challanger vehicle, __xBee__ should be located at the top of the windshield.  
-Its purpose is to send CAN data to the __escort car antenna__.  
-___Optionaly:___ Store CAN raw data in the on-board Micro-SD card.
-
-### Usage
-
-#### Debug (WIP):
-
-1. Install [STM32 Cube IDE](https://www.st.com/en/development-tools/stm32cubeide.html#get-software) on your host machine.
-1. Start STM32 Cube IDE.
-1. Open project: `File > Open Projects from File System...`.
-1. Select `Import source` directory to *<repo_path>/src_tx/CAN_Tranciever.ioc*.
-1. Press `Finish`.
-> Additional configuring is required.
