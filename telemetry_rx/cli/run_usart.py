@@ -1,24 +1,24 @@
-from pathlib import Path
 import logging
 
+from cantools.database import Database
 from influxdb_client import InfluxDBClient, WriteOptions, WritePrecision
 from influxdb_client.client.util.multiprocessing_helper import MultiprocessingWriter
 
 from telemetry_rx.adapters import Adapter, TcpAdapter, UsbAdapter
-from telemetry_rx.utils import AppState, InfluxCreds
+from telemetry_rx.utils import AppState
 
 
-def configure_adapter(adapter: str, dbc_path: Path) -> Adapter:
+def configure_adapter(adapter: str, dbc: Database) -> Adapter:
     """Select adapter to medium where the data will arrive."""
     adapter = adapter.upper()
 
     if adapter == "USB":
         logging.info("USB adapter selected.")
-        reader = UsbAdapter(dbc_path)
+        reader = UsbAdapter(dbc)
 
     elif adapter == "TCP":
         logging.info("TCP adapter selected.")
-        reader = TcpAdapter(dbc_path)
+        reader = TcpAdapter(dbc)
 
     else:
         logging.debug(f"INPUT_ADAPTER={adapter}")
@@ -28,28 +28,16 @@ def configure_adapter(adapter: str, dbc_path: Path) -> Adapter:
     return reader
 
 
-def setup_main(reader: Adapter, credentials: InfluxCreds) -> None:
+def setup_main(client: InfluxDBClient, reader: Adapter, bucket: str) -> None:
     """Init bucket for recording, than monitor CAN traffic."""
-    # Debug info
-    logging.debug(f"INFLUX_BUCKET={credentials.bucket}")
-    logging.debug(f"INFLUX_ORG={credentials.org}")
-    logging.debug(f"INFLUX_URL={credentials.url}")
-
-    # Create bucket if it doesn't exists
-    with InfluxDBClient(url=credentials.url, token=credentials.token, org=credentials.org) as influxdb_client:
-        buckets_api = influxdb_client.buckets_api()
-        if not buckets_api.find_bucket_by_name(credentials.bucket):
-            logging.info(f"Creating {credentials.bucket} bucket.")
-            buckets_api.create_bucket(bucket_name=credentials.bucket)
-
     # Write points in batches to InfluxDB
     with MultiprocessingWriter(
-        url=credentials.url,
-        token=credentials.token,
-        org=credentials.org,
+        url=client.url,
+        token=client.token,
+        org=client.org,
         write_options=WriteOptions(batch_size=5000),
     ) as writer:
-        main_loop(reader, writer, credentials.bucket)
+        main_loop(reader, writer, bucket)
 
 
 def main_loop(reader: Adapter, writer: MultiprocessingWriter, bucket: str):

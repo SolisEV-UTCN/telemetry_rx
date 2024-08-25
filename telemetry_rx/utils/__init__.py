@@ -1,4 +1,4 @@
-from telemetry_rx.utils.influx_credentials import InfluxCreds
+from telemetry_rx.utils.constants import MAX_DEPTH
 from telemetry_rx.utils.state import AppState
 
-__all__ = ["AppState", "InfluxCreds"]
+__all__ = ["MAX_DEPTH", "AppState"]
