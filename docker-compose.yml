@@ -6,9 +6,9 @@ services:
     container_name: telemetry_rx
     depends_on:
       - influx
-      # devices:
-      # Comment out if using TCP adapter
-      # - /dev/ttyUSB0:/dev/ttyUSB0
+    # devices:
+    # # Comment out if using UDP adapter
+    #   - /dev/ttyUSB0:/dev/ttyUSB0
     environment:
       INFLUX_BUCKET: ${INFLUX_BUCKET}
       INFLUX_TOKEN_FILE: /run/secrets/influx_token
