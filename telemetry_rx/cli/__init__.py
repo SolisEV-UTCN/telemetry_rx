@@ -11,6 +11,7 @@ from influxdb_client import InfluxDBClient
 
 from telemetry_rx.cli.listen import configure_adapter, setup_main
 from telemetry_rx.cli.parse import parse
+from telemetry_rx.utils import AppContext
 
 
 # Default values
@@ -19,9 +20,8 @@ INFLUX_ORG = "solis"
 INFLUX_URL = "http://influx:8086"
 
 # Common paths
-PWD = Path(__file__).parent.absolute()
-CAN_MAPPING = Path(PWD, "config", "Solis-EV4.dbc")
-OFFLINE_DATA = Path(PWD, "config", "Session_2")
+CAN_MAPPING = Path(__file__).parents[1].absolute() / "config" / "Solis-EV4.dbc"
+OFFLINE_DATA = Path(__file__).parents[2].absolute() / "tests" / "serial_input"
 
 # Click types
 TYPE_ADAPTER = click.Choice(["USB", "UDP"], case_sensitive=False)
@@ -39,6 +39,7 @@ H_DBC = "Path to CAN bus database."
 
 # fmt: off
 @click.group()
+@click.pass_context
 @click.option("--influx-url", default=INFLUX_URL, envvar="INFLUX_URL", allow_from_autoenv=True, type=str, help=H_URL)
 @click.option("--influx-org", default=INFLUX_ORG, envvar="INFLUX_ORG", allow_from_autoenv=True, type=str, help=H_ORG)
 @click.option("--influx-token", envvar="INFLUX_TOKEN", allow_from_autoenv=True, type=str, help=H_TOKEN)
@@ -46,12 +47,9 @@ H_DBC = "Path to CAN bus database."
 @click.option("--influx-bucket", default=INFLUX_BUCKET, envvar="INFLUX_BUCKET", allow_from_autoenv=True, type=str, help=H_BUCKET)
 @click.option("--dbc", default=CAN_MAPPING, type=TYPE_R_PATH, help=H_DBC)
 @click.option("-v", "--verbose", count=True)
-@click.pass_context
 def common(ctx: click.Context, influx_url: str, influx_org: str, influx_token: str | None, influx_token_file: Path | None, influx_bucket: str, dbc: Path, verbose: int):
 # fmt: on
     """ Script for running telemetry. """
-    ctx.ensure_object(dict)
-
     _verbose(verbose)
 
     # Debug info
@@ -69,52 +67,46 @@ def common(ctx: click.Context, influx_url: str, influx_org: str, influx_token: s
     client = _influx_client(influx_org, influx_token, influx_token_file, influx_url)
     if not client.ping():
         logging.error("Couldn't establish connection to InfluxDB.")
-        return -1
-
-    # Create bucket if it doesn't exists
-    buckets_api = client.buckets_api()
-    if not buckets_api.find_bucket_by_name(influx_bucket):
-        logging.info(f"Creating {influx_bucket} bucket.")
-        buckets_api.create_bucket(bucket_name=influx_bucket)
+    else:
+        # Create bucket if it doesn't exists
+        buckets_api = client.buckets_api()
+        if not buckets_api.find_bucket_by_name(influx_bucket):
+            logging.info(f"Creating {influx_bucket} bucket.")
+            buckets_api.create_bucket(bucket_name=influx_bucket)
 
     # Load DBC
     try:
         dbc = cantools.db.load_file(dbc, database_format="dbc", encoding="cp1252", cache_dir=tempfile.gettempdir())
     except cantools.db.UnsupportedDatabaseFormatError:
         logging.error("Failed to read DBC file.")
-        return -1
 
-    ctx.obj = {
-        "DBC": dbc,
-        "INFLUX_CLIENT": client,
-        "INFLUX_BUCKET": influx_bucket
-    }
+    ctx.ensure_object(AppContext)
+    ctx.obj = AppContext(dbc=dbc, client=client, bucket_name=influx_bucket)
 
 
 @common.command("listen")
+@click.pass_obj
 @click.option("--adapter", type=TYPE_ADAPTER, default="USB")
 @click.option("--address", default="/dev/ttyUSB0", help="Connection port for USB adapter. Bind address for UDP adapter.")
-@click.pass_context
-def collect_data(ctx: click.Context, adapter: str, address: str):
+def collect_data(ctx: AppContext, adapter: str, address: str):
     """ Collect live CAN data through an adapter. """
-    ctx = ctx.find_object(dict)
+    logging.debug(f"Adapter: {adapter}")
+    logging.debug(f"Address: {address}")
 
-    adapter = configure_adapter(adapter, ctx["DBC"], address)
-    setup_main(ctx["INFLUX_CLIENT"], adapter, ctx["INFLUX_BUCKET"])
+    adapter = configure_adapter(adapter, ctx.dbc, address)
+    setup_main(ctx.client, adapter, ctx.bucket_name)
 
-    _clean_up(ctx["INFLUX_CLIENT"])
+    _clean_up(ctx.client)
 
 
 @common.command("parse")
+@click.pass_obj
 @click.option("--path", default=OFFLINE_DATA, type=TYPE_DIR)
-@click.pass_context
-def parse_file(ctx: click.Context, path: Path):
+def parse_file(ctx: AppContext, path: Path):
     """ Parse file with locally stored CAN data. """
-    ctx = ctx.find_object(dict)
+    parse(ctx.client, ctx.dbc, path, ctx.bucket_name)
 
-    parse(ctx["INFLUX_CLIENT"], ctx["DBC"], path, ctx["INFLUX_BUCKET"])
-
-    _clean_up(ctx["INFLUX_CLIENT"])
+    _clean_up(ctx.client)
 
 
 def _clean_up(client: InfluxDBClient):

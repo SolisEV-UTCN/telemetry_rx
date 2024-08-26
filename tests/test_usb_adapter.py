@@ -10,7 +10,7 @@ CAN_MAPPING = Path(PWD, "telemetry_rx", "config", "Solis-EV4.dbc")
 
 
 def test_process_bytes():
-    adapter = UsbAdapter(CAN_MAPPING)
+    adapter = UsbAdapter(path=CAN_MAPPING)
 
     # Test valid input
     seq = bytes(

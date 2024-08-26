@@ -31,7 +31,7 @@ Documentation = "https://github.com/VorobiovM/telemetry_rx"
 dev = ["pre-commit", "ruff"]
 
 [project.scripts]
-tool = "telemetry_rx.cli:common"
+tool = "telemetry_rx.__main__:main"
 
 [tool.hatch.version]
 path = "telemetry_rx/version.py"

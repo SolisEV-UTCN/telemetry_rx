@@ -14,11 +14,11 @@ def configure_adapter(adapter: str, dbc: Database, address: str) -> Adapter:
 
     if adapter == "USB":
         logging.info("USB adapter selected.")
-        reader = UsbAdapter(dbc, address)
+        reader = UsbAdapter(address, dbc)
 
     elif adapter == "UDP":
         logging.info("UDP adapter selected.")
-        reader = UdpAdapter(dbc, address)
+        reader = UdpAdapter(address, dbc)
 
     else:
         logging.debug(f"INPUT_ADAPTER={adapter}")
