@@ -1,5 +1,6 @@
 import logging
 import socket
+import struct
 from collections.abc import Iterator
 
 from cantools.database import Database
@@ -43,10 +44,37 @@ class UdpAdapter(Adapter):
                 yield point
 
     @staticmethod
-    def process_data(dbc: Database, data: list[bytes]) -> Point | None:
+    def process_data(dbc: Database, data: bytes) -> Point | None:
         """Data is received over UDP in 14 bytes, network order.
         A message consists of 2 bytes of frame ID and 8 bytes of data.
         Ex.: | 66 CB 65 6F | 04 01 | 00 01 02 03 04 05 06 07 |
              |  Timestamp  |   ID  |           DATA          |
         """
-        return Point()
+
+        if len(data) != 14:
+            logging.error(f"Data received is not 14 bytes long: {data}")
+            return None
+
+        timestamp_bytes = data[:4]
+        frame_id_bytes = data[4:6]
+        data_bytes = data[6:]
+
+        timestamp = struct.unpack('!I', timestamp_bytes)[0]
+        frame_id = struct.unpack('!H', frame_id_bytes)[0]
+
+        try:
+            message = dbc.get_message_by_frame_id(frame_id)
+            data = message.decode(data_bytes)
+        except struct.error:
+            logging.error(f"Error decoding CAN message: {struct.error}")
+
+        logging.debug(f"Timestamp: {timestamp}")
+        logging.debug(f"Frame id: {frame_id}")
+        logging.debug(f"Data: {data}")
+
+        point = Point("CAN_DATA").time(timestamp).tag("frame_id", frame_id)
+
+        for signal, value in data.items():
+            point.field(signal, value)
+
+        return point

@@ -29,7 +29,7 @@ def configure_adapter(adapter: str, dbc: Database, address: str) -> Adapter:
 
 
 def setup_main(client: InfluxDBClient, reader: Adapter, bucket: str) -> None:
-    """Init bucket for recording, than monitor CAN traffic."""
+    """Init bucket for recording, then monitor CAN traffic."""
     # Write points in batches to InfluxDB
     with MultiprocessingWriter(
         url=client.url,
