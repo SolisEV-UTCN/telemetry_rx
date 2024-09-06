@@ -68,7 +68,7 @@ def common(ctx: click.Context, influx_url: str, influx_org: str, influx_token: s
     if not client.ping():
         logging.error("Couldn't establish connection to InfluxDB.")
     else:
-        # Create bucket if it doesn't exists
+        # Create bucket if it doesn't exist
         buckets_api = client.buckets_api()
         if not buckets_api.find_bucket_by_name(influx_bucket):
             logging.info(f"Creating {influx_bucket} bucket.")
