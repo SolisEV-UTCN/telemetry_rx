@@ -59,22 +59,26 @@ class UdpAdapter(Adapter):
         frame_id_bytes = data[4:6]
         data_bytes = data[6:]
 
-        timestamp = struct.unpack('!I', timestamp_bytes)[0]
-        frame_id = struct.unpack('!H', frame_id_bytes)[0]
+        timestamp = struct.unpack("!I", timestamp_bytes)[0]
+        frame_id = struct.unpack("!H", frame_id_bytes)[0]
+        logging.debug(f"Timestamp: {timestamp}")
+        logging.debug(f"Frame ID: {frame_id}")
 
         try:
             message = dbc.get_message_by_frame_id(frame_id)
-            data = message.decode(data_bytes)
-        except struct.error:
-            logging.error(f"Error decoding CAN message: {struct.error}")
+            logging.debug(f"Received message: {data_bytes}")
+        except KeyError:
+            logging.warn(f"Received unknown message with {frame_id:04X} ID.")
+            return None
 
-        logging.debug(f"Timestamp: {timestamp}")
-        logging.debug(f"Frame id: {frame_id}")
-        logging.debug(f"Data: {data}")
+        fields = message.decode_simple(data)
+        logging.debug(f"Parsed data: {fields}")
 
-        point = Point("CAN_DATA").time(timestamp).tag("frame_id", frame_id)
-
-        for signal, value in data.items():
-            point.field(signal, value)
-
-        return point
+        return Point.from_dict(
+            {
+                "measurement": "solar_vehicle",
+                "tags": {"ecu": message.senders[0]},
+                "fields": fields,
+                "time": timestamp,
+            }
+        )

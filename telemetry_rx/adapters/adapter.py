@@ -47,7 +47,7 @@ class Adapter(ABC):
         # Get message formatter
         try:
             message = self.dbc.get_message_by_frame_id(frame_id)
-            logging.debug(f"Receive message {message}")
+            logging.debug(f"Receive message: {message}")
         except KeyError:
             logging.warn(f"Received unknown message with {frame_id:04X} ID.")
             return None
