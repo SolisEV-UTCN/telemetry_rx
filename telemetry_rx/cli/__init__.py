@@ -60,9 +60,6 @@ def common(ctx: click.Context, influx_url: str, influx_org: str, influx_token: s
     logging.debug(f"INFLUX_URL={influx_url}")
     logging.debug(f"DBC_PATH={dbc}")
 
-    influx_token = influx_token or "token"
-    influx_token_file = influx_token_file or "token_file"
-
     # Initialize an InfluxDB client
     client = _influx_client(influx_org, influx_token, influx_token_file, influx_url)
     if not client.ping():
@@ -124,10 +121,10 @@ def _influx_client(influx_org: str, influx_token: str | None, influx_token_file:
         file = open(Path(influx_token_file), "rt")
         token = file.readline().strip()
         file.close()
+        logging.debug(f"INFLUX_TOKEN_FILE contains '{token}'")
 
     # Raise error otherwise
     else:
-        logging.debug(f"INFLUX_TOKEN_FILE={influx_token_file}")
         raise ValueError(
             "Provide INFLUX_TOKEN or INFLUX_TOKEN_FILE. Run command with -h flag for more info."
         )

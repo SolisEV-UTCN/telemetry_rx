@@ -29,7 +29,6 @@ services:
       DOCKER_INFLUXDB_INIT_PASSWORD_FILE: /run/secrets/influx_password
       DOCKER_INFLUXDB_INIT_USERNAME_FILE: /run/secrets/influx_username
       INFLUXDB_HTTP_AUTH_ENABLED: false
-    hostname: database
     image: influxdb:2.7-alpine
     networks:
       - solis-network
@@ -38,6 +37,10 @@ services:
     restart: on-failure
     volumes:
       - influxdb_storage:/var/lib/influxdb2 # Persistence storage
+      # Dashboard templates
+      - type: bind
+        source: ./templates
+        target: /etc/influx/templates
     secrets:
       - influx_username
       - influx_password
