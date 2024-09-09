@@ -300,6 +300,14 @@ BO_ 1280 DC_Status: 8 DriverControl
  SG_ DC_ID : 32|32@1+ (1,0) [0|0] ""  Telemetry
  SG_ DC_Serial : 0|32@1+ (1,0) [0|0] ""  Telemetry
 
+BO_ 1037 MC_Reserved_2: 8 MotorController
+ SG_ MC_Reserved_2_1 : 0|32@1+ (1,0) [0|0] ""  Telemetry
+ SG_ MC_Reserved_2_2 : 32|32@1+ (1,0) [0|0] ""  Telemetry
+
+BO_ 1034 MC_Reserved_1: 8 MotorController
+ SG_ MC_Reserved_1_1 : 0|32@1+ (1,0) [0|0] ""  Telemetry
+ SG_ MC_Reserved_1_2 : 32|32@1+ (1,0) [0|0] ""  Telemetry
+
 
 
 CM_ BU_ DriverControl "Usually is substituted by Dashboard";
