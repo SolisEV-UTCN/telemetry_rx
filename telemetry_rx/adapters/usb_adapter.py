@@ -71,7 +71,7 @@ class UsbAdapter(Adapter):
 
             # Validate CRC-32 MPEG-2
             # STM32 algorithm reverses byte order for uint32_t before calculating CRC
-            if not UsbAdapter.validate_crc(crc, data_h[::-1] + data_l[::-1]):
+            if not self.validate_crc(crc, data_h[::-1] + data_l[::-1]):
                 continue
 
             # Decode data
