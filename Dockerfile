@@ -9,4 +9,4 @@ COPY ./ ./
 
 RUN python -m pip install .
 
-ENTRYPOINT [ "python", "telemetry_rx/__main__.py", "listen", "--adapter", "USB", "--address", "/dev/ttyUSB0" ]
+ENTRYPOINT [ "python", "telemetry_rx/__main__.py", "-v", "listen", "--adapter", "TCP", "--address", "127.0.0.1:8883" ]

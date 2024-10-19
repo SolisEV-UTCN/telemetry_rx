@@ -4,7 +4,7 @@ from cantools.database import Database
 from influxdb_client import InfluxDBClient, WriteOptions, WritePrecision
 from influxdb_client.client.util.multiprocessing_helper import MultiprocessingWriter
 
-from telemetry_rx.adapters import Adapter, UdpAdapter, UsbAdapter
+from telemetry_rx.adapters import Adapter, TcpAdapter, UdpAdapter, UsbAdapter
 from telemetry_rx.utils import AppState
 
 
@@ -19,6 +19,10 @@ def configure_adapter(adapter: str, dbc: Database, address: str) -> Adapter:
     elif adapter == "UDP":
         logging.info("UDP adapter selected.")
         reader = UdpAdapter(address, dbc)
+
+    elif adapter == "TCP":
+        logging.info("TCP adapter selected.")
+        reader = TcpAdapter(address, dbc)
 
     else:
         logging.debug(f"INPUT_ADAPTER={adapter}")

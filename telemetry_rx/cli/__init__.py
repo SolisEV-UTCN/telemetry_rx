@@ -24,7 +24,7 @@ CAN_MAPPING = Path(__file__).parents[1].absolute() / "config" / "Solis-EV4.dbc"
 OFFLINE_DATA = Path(__file__).parents[2].absolute() / "tests" / "serial_input"
 
 # Click types
-TYPE_ADAPTER = click.Choice(["USB", "UDP"], case_sensitive=False)
+TYPE_ADAPTER = click.Choice(["TCP", "USB", "UDP"], case_sensitive=False)
 TYPE_R_PATH = click.Path(exists=True, file_okay=True, dir_okay=False, readable=True, path_type=Path)
 TYPE_DIR = click.Path(exists=True, file_okay=False, dir_okay=True, readable=True, path_type=Path)
 

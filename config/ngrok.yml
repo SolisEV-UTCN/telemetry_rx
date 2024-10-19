@@ -1,0 +1,11 @@
+version: 3
+agent:
+  authtoken: 1l3QEvGgUSWjkhthV1obeYj3I46_X8mUNU5tiH8kwAhyUoFb
+  log_level: info
+  log: stdout
+  web_addr: 127.0.0.1:4040
+tunnels:
+  app:
+    addr: telemetry_rx:8883
+    proto: tcp
+    remote_addr: 8.tcp.eu.ngrok.io:27979

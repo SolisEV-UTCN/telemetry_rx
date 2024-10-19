@@ -1,26 +1,26 @@
 services:
-  core:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: telemetry_rx
-    depends_on:
-      - influx
-    devices:
-      # Comment out if using adapter other than USB
-      - /dev/ttyUSB0:/dev/ttyUSB0
-    environment:
-      INFLUX_BUCKET: ${INFLUX_BUCKET}
-      INFLUX_TOKEN_FILE: /run/secrets/influx_token
-      INFLUX_ORG: ${INFLUX_ORG}
-    networks:
-      - solis-network
-    restart: unless-stopped
-    secrets:
-      - influx_token
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: telemetry_rx
+  #   depends_on:
+  #     - database
+  #     # - tunnel
+  #     # devices:
+  #     #   # Comment out if using adapter other than USB
+  #     #   - /dev/ttyUSB0:/dev/ttyUSB0
+  #   environment:
+  #     INFLUX_TOKEN_FILE: /run/secrets/influx_token
+  #     INFLUX_ORG: ${INFLUX_ORG}
+  #   networks:
+  #     - solis-network
+  #   restart: unless-stopped
+  #   secrets:
+  #     - influx_token
 
-  influx:
-    container_name: influx_v2
+  database:
+    container_name: influx
     environment:
       DOCKER_INFLUXDB_INIT_ADMIN_TOKEN_FILE: /run/secrets/influx_token
       DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUX_BUCKET}
@@ -45,6 +45,24 @@ services:
       - influx_username
       - influx_password
       - influx_token
+  # tunnel:
+  #   container_name: ngrok
+  #   image: ngrok/ngrok:latest
+  #   restart: on-failure
+  #   command:
+  #     - "start"
+  #     - "app"
+  #     - "--config"
+  #     - "/home/ngrok/.config/ngrok/ngrok.yml"
+  #   networks:
+  #     - solis-network
+  #   ports:
+  #     - 4040:4040
+  #   volumes:
+  #     # Dashboard templates
+  #     - type: bind
+  #       source: ./config/ngrok.yml
+  #       target: /home/ngrok/.config/ngrok/ngrok.yml
 
 volumes:
   influxdb_storage:
