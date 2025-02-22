@@ -87,8 +87,8 @@ def common(ctx: click.Context, influx_url: str, influx_org: str, influx_token: s
 
 @common.command("listen")
 @click.pass_obj
-@click.option("--adapter", type=TYPE_ADAPTER, default="USB")
-@click.option("--address", default="/dev/ttyUSB0", help="Connection port for USB adapter. Bind address for UDP adapter.")
+@click.option("--adapter", type=TYPE_ADAPTER, default="USB", envvar="SOLIS_ADAPTER")
+@click.option("--address", default="/dev/ttyUSB0", envvar="SOLIS_ADDRESS", help="Connection port for USB adapter. Bind address for TCP adapter.")
 def collect_data(ctx: AppContext, adapter: str, address: str):
     """ Collect live CAN data through an adapter. """
     logging.debug(f"Adapter: {adapter}")

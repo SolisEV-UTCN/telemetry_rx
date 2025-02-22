@@ -9,9 +9,4 @@ COPY ./ ./
 
 RUN python -m pip install -e .
 
-ENV ADAPTER=${INFLUX_BUCKET}
-ENV ADDRESS=${INFLUX_BUCKET}
-ENV BUCKET=${INFLUX_BUCKET}
-ENV ORG=${INFLUX_ORG}
-
-ENTRYPOINT [ "python", "telemetry_rx/__main__.py", "--influx-bucket", ${BUCKET}, "--influx-org", ${ORG}, "listen", "--adapter", ${ADAPTER}, "--address", ${ADDRESS} ]
+ENTRYPOINT [ "python", "src/telemetry_rx/__main__.py", "listen" ]
