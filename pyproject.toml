@@ -1,6 +1,6 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools >= 75.0", "setuptools_scm[toml]", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "telemetry_rx"
@@ -8,19 +8,24 @@ dynamic = ["version"]
 description = "Escort vehicle telemetry reciever, with support for USART & TCP/IP adapters."
 readme = "README.md"
 requires-python = ">=3.12"
-license = "MIT"
-authors = [{ name = "Vorobiov Mihail", email = "mihail.vorobiov@gmail.com" }]
+license = { file = "LICENSE.md" }
+authors = [
+  { name = "Vorobiov Mihail", email = "mihail.vorobiov@gmail.com" },
+  { name = "Dersedan Denisa", email = "dersedand@gmail.com" },
+]
 keywords = ["telemetry", "solis"]
 classifiers = [
   "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Topic :: Scientific/Engineering :: Visualization",
 ]
 dependencies = [
-  "cantools~=39.4.0",
+  "cantools~=40.2.0",
   "click~=8.1.0",
-  "crc~=7.0.0",
-  "influxdb-client[ciso]~=1.44.0",
+  "crc~=7.1.0",
+  "influxdb-client[ciso]~=1.48.0",
   "pyserial==3.5",
 ]
 
@@ -28,30 +33,15 @@ dependencies = [
 Documentation = "https://github.com/VorobiovM/telemetry_rx"
 
 [project.optional-dependencies]
-dev = ["pre-commit", "ruff"]
+dev = ["pre-commit", "pytest", "ruff"]
 
 [project.scripts]
 tool = "telemetry_rx.__main__:main"
 
-[tool.hatch.version]
-path = "telemetry_rx/version.py"
-
-[tool.hatch.build]
-directory = "dist/"
-
-[tool.hatch.build.targets.wheel]
-include = ["telemetry_rx"]
-exclude = ["tests"]
-
-[tool.hatch.build.targets.sdist]
-include = ["telemetry_rx", "tests"]
-exclude = ["tests/serial_input"]
-
-[tool.hatch.envs.test]
-dependencies = ["pytest"]
-
-[tool.hatch.envs.test.scripts]
-run = "pytest"
+[tool.setuptools_scm]
+version_scheme = "guess-next-dev"
+local_scheme = "node-and-date"
+fallback_version = "0.0.1.dev0+unknown"
 
 [tool.ruff]
 exclude = [

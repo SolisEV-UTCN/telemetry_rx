@@ -9,4 +9,9 @@ COPY ./ ./
 
 RUN python -m pip install -e .
 
-ENTRYPOINT [ "python", "telemetry_rx/__main__.py", "-vvv", "--influx-bucket", "nires_2025_v2", "listen", "--adapter", "USB", "--address", "/dev/ttyUSB0" ]
+ENV ADAPTER=${INFLUX_BUCKET}
+ENV ADDRESS=${INFLUX_BUCKET}
+ENV BUCKET=${INFLUX_BUCKET}
+ENV ORG=${INFLUX_ORG}
+
+ENTRYPOINT [ "python", "telemetry_rx/__main__.py", "--influx-bucket", ${BUCKET}, "--influx-org", ${ORG}, "listen", "--adapter", ${ADAPTER}, "--address", ${ADDRESS} ]

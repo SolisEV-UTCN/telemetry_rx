@@ -40,14 +40,12 @@ BO_ 3221225472 VECTOR__INDEPENDENT_SIG_MSG: 0 Vector__XXX
  SG_ MC_Reserved : 0|8@1+ (1,0) [0|0] "" Vector__XXX
  SG_ MC_Reserved2 : 0|32@1+ (1,0) [0|0] "" Vector__XXX
  SG_ MC_Reserved1 : 0|32@1+ (1,0) [0|0] "N/A" Vector__XXX
- SG_ NewSignal_0052 : 0|8@1+ (1,0) [0|0] "" Vector__XXX
- SG_ NewSignal_0147 : 0|8@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 512 MPPT1_Power: 8 MPPT1
- SG_ MPPT1_InputVoltage : -1|16@0- (0.01,0) [-327|327] "V"  Dashboard,Telemetry
- SG_ MPPT1_InputCurrent : 15|16@0- (0.0005,0) [-16|16] "A"  Dashboard,Telemetry
- SG_ MPPT1_OutputVoltage : 31|16@0- (0.01,0) [-327|327] "V"  Telemetry
- SG_ MPPT1_OutputCurrent : 47|16@0- (0.0005,0) [-16|16] "A"  Telemetry
+ SG_ MPPT1_InputVoltage : 0|16@1- (0.01,0) [-327|327] "V"  Dashboard,Telemetry
+ SG_ MPPT1_InputCurrent : 16|16@1- (0.0005,0) [-16|16] "A"  Dashboard,Telemetry
+ SG_ MPPT1_OutputVoltage : 32|16@1- (0.01,0) [-327|327] "V"  Telemetry
+ SG_ MPPT1_OutputCurrent : 48|16@1- (0.0005,0) [-16|16] "A"  Telemetry
 
 BO_ 513 MPPT1_Status: 5 MPPT1
  SG_ MPPT1_Mode : 0|8@1+ (1,0) [0|0] ""  Telemetry
@@ -57,10 +55,10 @@ BO_ 513 MPPT1_Status: 5 MPPT1
  SG_ MPPT1_HeatsinkTemperature : 32|8@1- (1,0) [-128|128] "C"  Telemetry
 
 BO_ 528 MPPT2_Power: 8 MPPT2
- SG_ MPPT2_InputVoltage : -1|16@0- (0.01,0) [-327|327] "V"  Telemetry,Dashboard
- SG_ MPPT2_InputCurrent : 15|16@0- (0.0005,0) [-16|16] "A"  Telemetry,Dashboard
- SG_ MPPT2_OutputVoltage : 31|16@0- (0.01,0) [-327|327] "V"  Telemetry
- SG_ MPPT2_OutputCurrent : 47|16@0- (0.0005,0) [-16|16] "A"  Telemetry
+ SG_ MPPT2_InputVoltage : 0|16@1- (0.01,0) [-327|327] "V"  Telemetry,Dashboard
+ SG_ MPPT2_InputCurrent : 16|16@1- (0.0005,0) [-16|16] "A"  Telemetry,Dashboard
+ SG_ MPPT2_OutputVoltage : 32|16@1- (0.01,0) [-327|327] "V"  Telemetry
+ SG_ MPPT2_OutputCurrent : 48|16@1- (0.0005,0) [-16|16] "A"  Telemetry
 
 BO_ 529 MPPT2_Status: 5 MPPT2
  SG_ MPPT2_Mode : 0|8@1+ (1,0) [0|0] ""  Telemetry
@@ -416,6 +414,14 @@ Bit 4 - Horn
 Bit 5 - Hazards
 Bit 6 - Camera
 Bit 7 - Lights";
+SIG_VALTYPE_ 512 MPPT1_InputVoltage : 1;
+SIG_VALTYPE_ 512 MPPT1_InputCurrent : 1;
+SIG_VALTYPE_ 512 MPPT1_OutputVoltage : 1;
+SIG_VALTYPE_ 512 MPPT1_OutputCurrent : 1;
+SIG_VALTYPE_ 528 MPPT2_InputVoltage : 1;
+SIG_VALTYPE_ 528 MPPT2_InputCurrent : 1;
+SIG_VALTYPE_ 528 MPPT2_OutputVoltage : 1;
+SIG_VALTYPE_ 528 MPPT2_OutputCurrent : 1;
 SIG_VALTYPE_ 1026 MC_BusCurrent : 1;
 SIG_VALTYPE_ 1026 MC_BusVoltage : 1;
 SIG_VALTYPE_ 1027 MC_MotorVelocity : 1;

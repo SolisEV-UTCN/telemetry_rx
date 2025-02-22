@@ -69,7 +69,11 @@ def common(ctx: click.Context, influx_url: str, influx_org: str, influx_token: s
         buckets_api = client.buckets_api()
         if not buckets_api.find_bucket_by_name(influx_bucket):
             logging.info(f"Creating {influx_bucket} bucket.")
-            buckets_api.create_bucket(bucket_name=influx_bucket)
+            bucket = buckets_api.create_bucket(bucket_name=influx_bucket)
+            # Make `tests` bucket with retention policy of 3 days
+            if influx_bucket == "tests":
+                bucket.retention_rules = "3d"
+                buckets_api.update_bucket(bucket)
 
     # Load DBC
     try:
@@ -141,14 +145,11 @@ def _verbose(level: int) -> None:
     root = logging.getLogger()
 
     # Set level of debug info
-    if level >= 2:
+    if level >= 1:
         handler.setLevel(logging.DEBUG)
         root.setLevel(logging.DEBUG)
-    elif level == 1:
+    else:
         handler.setLevel(logging.INFO)
         root.setLevel(logging.INFO)
-    else:
-        handler.setLevel(logging.WARN)
-        root.setLevel(logging.WARN)
 
     root.addHandler(handler)

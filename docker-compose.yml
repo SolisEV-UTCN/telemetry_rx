@@ -6,13 +6,16 @@ services:
     container_name: telemetry_rx
     depends_on:
       - database
-        #- tunnel
+      # - tunnel
     devices:
-    # Comment out if using adapter other than USB
+      # Comment out if using adapter other than USB
       - /dev/ttyUSB0:/dev/ttyUSB0
     environment:
+      SOLIS_ADAPTER: USB
+      SOLIS_ADDRESS: /dev/ttyUSB0
+      INFLUX_BUCKET: tests
       INFLUX_TOKEN_FILE: /run/secrets/influx_token
-      INFLUX_ORG: ${INFLUX_ORG}
+      INFLUX_ORG: solis
     networks:
       - solis-network
     restart: unless-stopped
@@ -23,9 +26,9 @@ services:
     container_name: influx
     environment:
       DOCKER_INFLUXDB_INIT_ADMIN_TOKEN_FILE: /run/secrets/influx_token
-      DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUX_BUCKET}
+      DOCKER_INFLUXDB_INIT_BUCKET: tests
       DOCKER_INFLUXDB_INIT_MODE: setup
-      DOCKER_INFLUXDB_INIT_ORG: ${INFLUX_ORG}
+      DOCKER_INFLUXDB_INIT_ORG: solis
       DOCKER_INFLUXDB_INIT_PASSWORD_FILE: /run/secrets/influx_password
       DOCKER_INFLUXDB_INIT_USERNAME_FILE: /run/secrets/influx_username
       INFLUXDB_HTTP_AUTH_ENABLED: false
@@ -45,6 +48,7 @@ services:
       - influx_username
       - influx_password
       - influx_token
+    entrypoint: config/influx_entrypoint.sh
   # tunnel:
   #   container_name: ngrok
   #   image: ngrok/ngrok:latest
