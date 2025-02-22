@@ -1,7 +1,7 @@
 VERSION ""
 
 
-NS_ :
+NS_ : 
 	NS_DESC_
 	CM_
 	BA_DEF_
@@ -38,10 +38,8 @@ BU_: MPPT1 MPPT2 MotorController BMU Dashboard Telemetry Auxiliary DriverControl
 
 BO_ 3221225472 VECTOR__INDEPENDENT_SIG_MSG: 0 Vector__XXX
  SG_ MC_Reserved : 0|8@1+ (1,0) [0|0] "" Vector__XXX
- SG_ MC_Reserved2 : 32|32@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ MC_Reserved2 : 0|32@1+ (1,0) [0|0] "" Vector__XXX
  SG_ MC_Reserved1 : 0|32@1+ (1,0) [0|0] "N/A" Vector__XXX
- SG_ NewSignal_0052 : 16|8@1+ (1,0) [0|0] "" Vector__XXX
- SG_ NewSignal_0147 : 24|8@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 512 MPPT1_Power: 8 MPPT1
  SG_ MPPT1_InputVoltage : 0|16@1- (0.01,0) [-327|327] "V"  Dashboard,Telemetry
@@ -64,7 +62,7 @@ BO_ 528 MPPT2_Power: 8 MPPT2
 
 BO_ 529 MPPT2_Status: 5 MPPT2
  SG_ MPPT2_Mode : 0|8@1+ (1,0) [0|0] ""  Telemetry
- SG_ MPPT_Fault : 8|8@1+ (1,0) [0|0] ""  Telemetry
+ SG_ MPPT2_Fault : 8|8@1+ (1,0) [0|0] ""  Telemetry
  SG_ MPPT2_Enabled : 16|8@1+ (1,0) [0|0] ""  Telemetry
  SG_ MPPT2_AmbientTemperature : 24|8@1- (1,0) [-128|128] "C"  Telemetry
  SG_ MPPT2_HeatsinkTemperature : 32|8@1- (1,0) [-128|128] "C"  Telemetry
@@ -300,9 +298,18 @@ BO_ 1280 DC_Status: 8 DriverControl
  SG_ DC_ID : 32|32@1+ (1,0) [0|0] ""  Telemetry
  SG_ DC_Serial : 0|32@1+ (1,0) [0|0] ""  Telemetry
 
+BO_ 1037 MC_Reserved_2: 8 MotorController
+ SG_ MC_Reserved_2_1 : 0|32@1+ (1,0) [0|0] ""  Telemetry
+ SG_ MC_Reserved_2_2 : 32|32@1+ (1,0) [0|0] ""  Telemetry
+
+BO_ 1034 MC_Reserved_1: 8 MotorController
+ SG_ MC_Reserved_1_1 : 0|32@1+ (1,0) [0|0] ""  Telemetry
+ SG_ MC_Reserved_1_2 : 32|32@1+ (1,0) [0|0] ""  Telemetry
+
 
 
 CM_ BU_ DriverControl "Usually is substituted by Dashboard";
+CM_ BO_ 3221225472 "This is a message for not used signals, created by Vector CANdb++ DBC OLE DB Provider.";
 CM_ SG_ 513 MPPT1_Mode "0 - Constant Input Voltage
 1 - Constant Input Current
 2 - Minimum Input Current
@@ -328,7 +335,7 @@ CM_ SG_ 529 MPPT2_Mode "0 - Constant Input Voltage
 4 - Constant Output Current
 5 - Temperature De-rating
 6 - Fault";
-CM_ SG_ 529 MPPT_Fault "0 - OK (No Error)
+CM_ SG_ 529 MPPT2_Fault "0 - OK (No Error)
 1 - Configuration Error
 2 - Input Over Voltage
 3 - Output Over Voltage
@@ -371,7 +378,6 @@ CM_ SG_ 1783 BMU_PreChargeState "0 = Error
 2 = Measure
 3 = Pre-charge
 4 = Run";
-CM_ SG_ 1783 BMU_12VSupplyVoltage "";
 CM_ SG_ 1783 BMU_PreChargeTimer "0x00 = Pre-charge timer not elapsed
 0x01 = Pre-charge timer elapsed. (Do not care if timeout disabled)";
 CM_ SG_ 1787 BMU_StatusFlags "0x01 = Cell Over Voltage
@@ -408,6 +414,14 @@ Bit 4 - Horn
 Bit 5 - Hazards
 Bit 6 - Camera
 Bit 7 - Lights";
+SIG_VALTYPE_ 512 MPPT1_InputVoltage : 1;
+SIG_VALTYPE_ 512 MPPT1_InputCurrent : 1;
+SIG_VALTYPE_ 512 MPPT1_OutputVoltage : 1;
+SIG_VALTYPE_ 512 MPPT1_OutputCurrent : 1;
+SIG_VALTYPE_ 528 MPPT2_InputVoltage : 1;
+SIG_VALTYPE_ 528 MPPT2_InputCurrent : 1;
+SIG_VALTYPE_ 528 MPPT2_OutputVoltage : 1;
+SIG_VALTYPE_ 528 MPPT2_OutputCurrent : 1;
 SIG_VALTYPE_ 1026 MC_BusCurrent : 1;
 SIG_VALTYPE_ 1026 MC_BusVoltage : 1;
 SIG_VALTYPE_ 1027 MC_MotorVelocity : 1;
@@ -436,3 +450,4 @@ SIG_VALTYPE_ 1781 BMU_BalanceSoCPercentage : 1;
 SIG_VALTYPE_ 1281 MC_MotorVelocityCommand : 1;
 SIG_VALTYPE_ 1281 MC_CurrentReferenceCommand : 1;
 SIG_VALTYPE_ 1282 MC_BusCurrentCommand : 1;
+

@@ -1,4 +1,24 @@
 {
     "version": "0.2.0",
-    "configurations": []
+    "configurations": [
+        {
+            "name": "Debug: Listen TCP",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/telemetry_rx/__main__.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-vvv",
+                "--influx-url",
+                "127.0.0.1:8080",
+                "--influx-token",
+                "bSABwrZlRnDHl2Z0eB4IIG6IkTA65NbKMLC9Oknx-9t8YDfcrBckM85fVpgclLQtgSYG3EkV0UOgWKTdylVhmA==",
+                "listen",
+                "--adapter",
+                "TCP",
+                "--address",
+                "127.0.0.1:8883"
+            ]
+        }
+    ]
 }

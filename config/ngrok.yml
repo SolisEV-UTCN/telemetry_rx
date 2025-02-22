@@ -1,0 +1,11 @@
+version: 3
+agent:
+  authtoken: <TOKEN>
+  log_level: info
+  log: stdout
+  web_addr: 127.0.0.1:4040
+tunnels:
+  app:
+    addr: telemetry_rx:8883
+    proto: tcp
+    remote_addr: <ADDR>

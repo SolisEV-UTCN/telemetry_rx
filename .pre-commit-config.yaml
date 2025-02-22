@@ -7,7 +7,9 @@ repos:
     -   id: check-yaml
     -   id: detect-private-key
     -   id: end-of-file-fixer
+        exclude: '^(.*\.sh|.*\.dbc)$'  # Exclude config and DBC
     -   id: trailing-whitespace
+        exclude: '^(.*\.sh|.*\.dbc)$'  # Exclude config and DBC
 - repo: https://github.com/astral-sh/ruff-pre-commit
   rev: v0.5.1
   hooks:

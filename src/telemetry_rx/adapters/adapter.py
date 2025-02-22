@@ -1,11 +1,9 @@
 import logging
-import tempfile
 import time
 from abc import ABC, abstractmethod
 from collections.abc import Iterator
-from pathlib import Path
 
-import cantools
+from cantools.database import Database
 from crc import Calculator, Configuration
 from influxdb_client import Point
 
@@ -22,10 +20,9 @@ class Adapter(ABC):
         final_xor_value=0x0,
     )
 
-    def __init__(self, path: Path):
+    def __init__(self, dbc: Database):
         self.device = None
-        self.tmp_dir = tempfile.gettempdir()
-        self.dbc = cantools.db.load_file(path, database_format="dbc", encoding="cp1252", cache_dir=self.tmp_dir)
+        self.dbc = dbc
         self.calc = Calculator(Adapter.CRC_CONF, optimized=True)
 
     @abstractmethod
@@ -50,7 +47,7 @@ class Adapter(ABC):
         # Get message formatter
         try:
             message = self.dbc.get_message_by_frame_id(frame_id)
-            logging.debug(f"Receive message {message}")
+            logging.debug(f"Receive message: {message}")
         except KeyError:
             logging.warn(f"Received unknown message with {frame_id:04X} ID.")
             return None
