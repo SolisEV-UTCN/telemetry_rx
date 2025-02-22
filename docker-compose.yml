@@ -1,23 +1,23 @@
 services:
-  # app:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   container_name: telemetry_rx
-  #   depends_on:
-  #     - database
-  #     # - tunnel
-  #     # devices:
-  #     #   # Comment out if using adapter other than USB
-  #     #   - /dev/ttyUSB0:/dev/ttyUSB0
-  #   environment:
-  #     INFLUX_TOKEN_FILE: /run/secrets/influx_token
-  #     INFLUX_ORG: ${INFLUX_ORG}
-  #   networks:
-  #     - solis-network
-  #   restart: unless-stopped
-  #   secrets:
-  #     - influx_token
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: telemetry_rx
+    depends_on:
+      - database
+        #- tunnel
+    devices:
+    # Comment out if using adapter other than USB
+      - /dev/ttyUSB0:/dev/ttyUSB0
+    environment:
+      INFLUX_TOKEN_FILE: /run/secrets/influx_token
+      INFLUX_ORG: ${INFLUX_ORG}
+    networks:
+      - solis-network
+    restart: unless-stopped
+    secrets:
+      - influx_token
 
   database:
     container_name: influx
