@@ -39,7 +39,10 @@ services:
       - 8080:8086
     restart: on-failure
     volumes:
-      - influxdb_storage:/var/lib/influxdb2 # Persistence storage
+      # Persistence storage
+      - influxdb_storage:/var/lib/influxdb2
+      # Autoload templates
+      - ./config/init.sh:/docker-entrypoint-initdb.d/init.sh
       # Dashboard templates
       - type: bind
         source: ./templates
@@ -48,7 +51,6 @@ services:
       - influx_username
       - influx_password
       - influx_token
-    entrypoint: config/influx_entrypoint.sh
   # tunnel:
   #   container_name: ngrok
   #   image: ngrok/ngrok:latest
