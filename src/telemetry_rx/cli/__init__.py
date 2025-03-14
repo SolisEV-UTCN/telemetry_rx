@@ -7,7 +7,7 @@ from pathlib import Path
 
 import cantools
 import click
-from influxdb_client import InfluxDBClient
+from influxdb_client import InfluxDBClient, BucketRetentionRules
 
 from telemetry_rx.cli.listen import configure_adapter, setup_main
 from telemetry_rx.cli.parse import parse
@@ -71,10 +71,14 @@ def common(ctx: click.Context, influx_url: str, influx_org: str, influx_token: s
         if not buckets_api.find_bucket_by_name(influx_bucket):
             logging.info(f"Creating {influx_bucket} bucket.")
             bucket = buckets_api.create_bucket(bucket_name=influx_bucket)
-            # Make `tests` bucket with retention policy of 3 days
+            # Make `tests` bucket with retention policy of 3 days => 259200 seconds
             if influx_bucket == "tests":
-                bucket.retention_rules = "3d"
-                buckets_api.update_bucket(bucket)
+                retention_rule = BucketRetentionRules(type="expire", every_seconds=259200)
+                buckets_api.update_bucket(Bucket(
+                    id=bucket.id,
+                    name=bucket.name,
+                    org_id=bucket.org_id,
+                    retention_rules=[retention_rule]))
 
     # Load DBC
     try:
