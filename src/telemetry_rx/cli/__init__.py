@@ -8,6 +8,7 @@ from pathlib import Path
 import cantools
 import click
 from influxdb_client import InfluxDBClient, BucketRetentionRules
+from influxdb_client.domain import Bucket
 
 from telemetry_rx.cli.listen import configure_adapter, setup_main
 from telemetry_rx.cli.parse import parse
