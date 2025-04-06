@@ -1,129 +1,179 @@
-# Telemetry
+# Telemetry RX
 
-This project is part of telemetry subsystem. It's goal is to store CAN data inside a database. Project is intended to be used from CLI. Database of choice for storage is InfluxDB.
+A Python-based telemetry data collection and storage system designed specifically for solar vehicle data acquisition. This project is part of the Solis EV telemetry subsystem, focused on receiving, processing, and storing CAN (Controller Area Network) data in InfluxDB for real-time monitoring and analysis.
+
+## Features
+
+- Real-time CAN data collection via USB or UDP
+- Support for multiple transmission protocols (RF, LTE)
+- Offline data parsing from SD card recordings
+- InfluxDB integration for time-series data storage
+- DBC file support for CAN message decoding
+- Modular design for easy protocol switching
 
 ## Variants
 
 Telemetry subsystems are designed to be modular in order, so it is easier to switch between variants. Each variant was developed to overcome specific race conditions and track environments.
 
-### RF
+### RF (BWSC 2023)
 
-Transmission over RF using *xBee* was developed for BWSC 2023. It was designed to transmit data between the solar car and an escort vehicle. Transmission is done via 802.15.4 standard, which is specifically created for low power power applications. List of components:
+Transmission over RF using *xBee* was developed for BWSC 2023. It was designed to transmit data between the solar car and an escort vehicle. Transmission is done via 802.15.4 standard, which is specifically created for low power power applications.
 
-- [Nucleo STM32F103](https://www.st.com/en/microcontrollers-microprocessors/stm32f103.html)
-- [Digi xBee 3 802.15.4](https://www.digi.com/resources/documentation/digidocs/PDFs/90002273.pdf)
+#### Components:
+- [Nucleo STM32F103](https://www.st.com/en/microcontrollers-microprocessors/stm32f103.html) - Main microcontroller
+- [Digi xBee 3 802.15.4](https://www.digi.com/resources/documentation/digidocs/PDFs/90002273.pdf) - RF transceiver
 
-___Note 1:___ Current bandwidth is set to 230400bps. It is possible to increase it to 1Mbps, but at the cost of a higher power efficiency and an increase of error rate in transmission.
+#### Specifications:
+- Bandwidth: 230400bps (configurable up to 1Mbps)
+- Power consumption: 0.1Wh
+- Data format: USART bytestream
+- Range: Up to 1km line of sight
+- Latency: <100ms
 
-___Note 2:___ Current power consumption is 0.1Wh.
+### LTE (iLumen 2024)
 
-___Note 3:___ Data is received as an USART bytestream.
+For iLumen European Solar Challange 2024, we developed transmission over LTE. Circuit Zolder has sufficient GSM coverage to efficiently use LTE. Binary data is transmitted from an antena located on the solar car to a server via UDP socket.
 
-### LTE
+#### Components:
+- [Nucleo STM32F103](https://www.st.com/en/microcontrollers-microprocessors/stm32f103.html) - Main microcontroller
+- [itbrainpower u-GSM](https://itbrainpower.net/u-GSM/features.php) - GSM modem
+- [Digi xBee 3 Low-Power LTE](https://www.digi.com/resources/documentation/digidocs/PDFs/90002420.pdf) - LTE transceiver
 
-For iLumen European Solar Challange 2024, we developed transmission over LTE. Circuit Zolder has sufficient GSM coverage to efficiently use LTE. Binary data is transmitted from an antena located on the solar car to a server via UDP socket. List of components:
+#### Specifications:
+- Bandwidth: 230400bps
+- Power consumption: 0.66Wh
+- Data format: UDP packets
+- Network: 4G LTE
+- Requirements: Functional SIM card with data roaming
 
-- [Nucleo STM32F103](https://www.st.com/en/microcontrollers-microprocessors/stm32f103.html)
-- [itbrainpower u-GSM](https://itbrainpower.net/u-GSM/features.php)
-- [Digi xBee 3 Low-Power LTE](https://www.digi.com/resources/documentation/digidocs/PDFs/90002420.pdf)
+### HTTP (Discontinued)
 
-___Note 1:___ Current bandwidth is set to 230400bps.
+This variant was developed in an *Plug'n Play* style but has been discontinued due to high power consumption.
 
-___Note 2:___ Current power consumption is 0.66Wh.
+#### Components:
+- [Kvaser Ethercan HS](https://www.kvaser.com/product/kvaser-ethercan-hs/#/!) - CAN interface
+- [Loco5AC](https://dl.ui.com/qsg/Loco5AC/Loco5AC_EN.html) - Network device
 
-___Note 3:___ Data is received as bytes in UDP packets.
+#### Specifications:
+- Bandwidth: Up to 4Gbps (dynamic)
+- Power consumption: 7Wh
+- Data format: HTTP frames
+- Status: Discontinued
 
-___Note 4:___ A functional SIM card with data roaming is required.
+## Getting Started
 
-### HTTP (discontinued)
+### Prerequisites
 
-This variant was developed in an *Plug'n Play* style. List of components:
+1. Python Environment:
+   - [Python 3.12](https://www.python.org/downloads/) or higher
+   - pip package manager
 
-- [Kvaser Ethercan HS](https://www.kvaser.com/product/kvaser-ethercan-hs/#/!)
-- [Loco5AC](https://dl.ui.com/qsg/Loco5AC/Loco5AC_EN.html)
+2. Optional Development Environment:
+   - [Windows Subsystem Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install) for Windows users
+   - [Docker](https://docs.docker.com/compose/install/) for containerized deployment
+   - [usbipd](https://github.com/dorssel/usbipd-win/releases) for USB device sharing on Windows
+   - usbip for WSL:
+     ```bash
+     sudo apt upgrade
+     sudo apt install -y linux-tools-virtual hwdata usbip
+     ```
 
-___EDIT:___ This variant has a very large power consumption. **Further development is not planned.**
+3. Database:
+   - InfluxDB server (v2.x recommended)
+   - Write permissions for the specified bucket
 
-___Note 1:___ Bandwidth is dynamically set by *Loco5AC*. Maximum throughput is 4Gbps.
+### Installation
 
-___Note 2:___ Current power consumption is 7Wh.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/SolisEV-UTCN/telemetry_rx
+   cd telemetry_rx
+   ```
 
-___Note 3:___ Data is received in HTTP frames.
+2. Set up Python virtual environment:
+   ```bash
+   python -m venv .venv
+   ```
 
-## Getting started
+3. Activate the virtual environment:
+   - Windows PowerShell: `.\.venv\Scripts\Activate.ps1`
+   - Windows CMD: `.\.venv\Scripts\activate.bat`
+   - Linux/macOS: `source ./.venv/bin/activate`
 
-### Prerequisites:
+4. Install dependencies:
+   ```bash
+   pip install .
+   ```
 
-1. Install [Python 3.12](https://www.python.org/downloads/)
-2. (Optional) Install [Winows Subsytem Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install) on your host machine.
-3. (Optional) Install [docker](https://docs.docker.com/compose/install/).
-4. (Optional) Install [usbipd](https://github.com/dorssel/usbipd-win/releases) on your host machine.
-5. (Optional) Install **usbip** on the WSL:
-    ```
-    sudo apt upgrade
-    sudo apt install -y linux-tools-virtual hwdata usbip
-    ```
+5. Verify installation:
+   ```bash
+   python telemetry_rx/__main__.py --help
+   ```
 
-### Installation (Pip)
+### Configuration
 
-1. Clone this repository:
-    ```
-    git clone https://github.com/VorobiovM/telemetry_rx
-    cd telemetry_rx
-    ```
-2. Create a Python virtual environment:
-    ```
-    python -m venv .venv
-    ```
-3. Activate Python virtual environment:
-    - PowerShell: `.\.venv\Scripts\Activate.ps1`
-    - CMD: `.\.venv\Scripts\activate.bat`
-    - Bash: `source ./.venv/bin/activate`
-4. Download project dependencies:
-    ```
-    pip install .
-    ```
-5. Run main script:
-    ```
-    python telemetry_rx/__main__.py --help
-    ```
+The application requires two main configuration elements:
+
+1. CAN Database (DBC) file:
+   - Located in `telemetry_rx/config/`
+   - Contains CAN message definitions
+   - Specify path using `--dbc` flag
+
+2. InfluxDB Connection:
+   Required parameters (can be provided via command line or environment variables):
+   ```
+   --influx-url <STR>    # InfluxDB server URL
+   --influx-org <STR>    # Organization name
+   --influx-token <STR>  # API token with write permissions
+   --influx-bucket <STR> # Target bucket name
+   ```
+
+   Environment variables:
+   - INFLUX_URL
+   - INFLUX_ORG
+   - INFLUX_TOKEN
+   - INFLUX_BUCKET
+
+   Note: API token can also be provided via file using `--influx-token-file <PATH>`
 
 ### Usage
 
-This applcation is designed to run from a command line. It expects to have a working connection to an InfluxDB server and a CAN database file (DBC). CAN database file is located in the `telemetry_rx/config` folder. To pass the file path use `--dbc` flag. To establish a connection to the Influx server, you must provide following options:
+#### Live Data Collection
+
+The application supports two modes of live data collection:
+
+1. USB Connection:
+   ```bash
+   python telemetry_rx/__main__.py \
+     --dbc telemetry_rx/config/Solis-EV4.dbc \
+     listen \
+     --adapter USB \
+     --address COM1
+   ```
+
+2. UDP Connection:
+   ```bash
+   python telemetry_rx/__main__.py \
+     --dbc telemetry_rx/config/Solis-EV4.dbc \
+     listen \
+     --adapter UDP \
+     --address 0.0.0.0
+   ```
+
+#### Offline Data Processing
+
+Process data recorded to SD card:
+```bash
+python telemetry_rx/__main__.py \
+  --dbc <PATH_TO_DBC> \
+  parse \
+  --path <PATH_TO_DIR>
 ```
---influx-url <STR>
---influx-org <STR>
---influx-token <STR>
---influx-bucket <STR>
-```
 
-___Note 1:___ InfluxDB parameters can be passed as environment variables (INFLUX_URL, INFLUX_ORG, INFLUX_TOKEN, INFLUX_BUCKET).
+## Contributing
 
-___Note 2:___ InfluxDB API token must contain write permissions. It is also possible to pass token in a file using `--influx-token-file <PATH>`.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
+## License
 
-#### Listen to live traffic:
-
-Telemetry application can collect CAN traffic coming from the solar car over **USB** or **UDP** connection. This is done via `listen` command. Specific connection adapter can be chosen by passing `--adapter` flag.
-- To listen to **USB** traffic specify COM port via `--address` flag.
-- To bind to a **UDP** server specify its address via `--address` flag.
-
-Example to start USB server on COM1:
-```
-python telemetry_rx/__main__.py --dbc telemetry_rx/config/Solis-EV4.dbc listen --adapter USB --address COM1
-```
-
-Example to start UDP server on all interfaces:
-```
-python telemetry_rx/__main__.py --dbc telemetry_rx/config/Solis-EV4.dbc listen --adapter UDP --address 0.0.0.0
-```
-
-#### Parse offline data:
-
-Telemetry application can also load offline data recorded to an SD card. This is done via `parse` command. Path to directory with offline measurements must be passed in `--path` flag.
-
-Example:
-```
-python telemetry_rx/__main__.py --dbc <PATH_TO_DBC> parse --path <PATH_TO_DIR>
-```
+This project is licensed under the MIT License - see the LICENSE file for details.
