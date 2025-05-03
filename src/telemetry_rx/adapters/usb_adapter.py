@@ -1,6 +1,7 @@
 import logging
 import struct
 from collections.abc import Iterator
+from datetime import datetime
 
 import serial
 from influxdb_client import Point
@@ -10,7 +11,7 @@ from telemetry_rx.utils import AppState
 
 
 class UsbAdapter(Adapter):
-    MESSAGE_LEN = 16
+    MESSAGE_LEN = 21  # Updated to include 5 bytes for timestamp
 
     def __init__(self, address: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -64,7 +65,7 @@ class UsbAdapter(Adapter):
             payload += self.device.read(UsbAdapter.MESSAGE_LEN - 1)
 
             try:
-                frame_id, data_h, data_l, crc = self.process_bytes(payload)
+                frame_id, data_h, data_l, timestamp, crc = self.process_bytes(payload)
             except ValueError:
                 logging.debug(f"Received: {payload}")
                 continue
@@ -77,9 +78,19 @@ class UsbAdapter(Adapter):
             # Decode data
             point = self.parse_data(frame_id, data_h + data_l)
             if point is not None:
+                # Add timestamp to the point
+                dt = datetime(
+                    year=datetime.now().year,  # Current year
+                    month=timestamp[4],        # Month
+                    day=timestamp[3],          # Day
+                    hour=timestamp[2],         # Hour
+                    minute=timestamp[1],       # Minute
+                    second=timestamp[0]        # Second
+                )
+                point.time(dt)
                 yield point
 
-    def process_bytes(self, data: bytes) -> tuple[int, bytes, bytes, int]:
+    def process_bytes(self, data: bytes) -> tuple[int, bytes, bytes, bytes, int]:
         r"""Incoming serial data is expected to be of following structure:
         Byte[00] = Padding byte (0xFE)
         Byte[01] = CAN frame ID - 1st byte (order intel)
@@ -92,12 +103,17 @@ class UsbAdapter(Adapter):
         Byte[08] |
         Byte[09] |
         Byte[10] /
-        Byte[11] \
-        Byte[12] | Computed CRC-32 (order intel)
-        Byte[13] |
-        Byte[14] /
-        Byte[15] = Padding byte (0x7F)
+        Byte[11] \ //second
+        Byte[12] | //minute
+        Byte[13] | //hour
+        Byte[14] | //day
+        Byte[15] / //month
+        Byte[16] \
+        Byte[17] | Computed CRC-32 (order intel)
+        Byte[18] |
+        Byte[19] /
+        Byte[20] = Padding byte (0x7F)
         """
-        if data[0] != 0xFE or data[15] != 0x7F:
+        if data[0] != 0xFE or data[20] != 0x7F:
             raise ValueError("Serial frame is corrupted")
-        return struct.unpack("<xH4s4sIx", data)
+        return struct.unpack("<xH4s4s5sIx", data)
