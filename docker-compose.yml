@@ -7,9 +7,9 @@ services:
     depends_on:
       - database
       # - tunnel
-    devices:
-      # Comment out if using adapter other than USB
-      - /dev/ttyUSB0:/dev/ttyUSB0
+    # devices:
+    #   # Comment out if using adapter other than USB
+    #   - /dev/ttyUSB0:/dev/ttyUSB0
     environment:
       SOLIS_ADAPTER: USB
       SOLIS_ADDRESS: /dev/ttyUSB0
@@ -19,13 +19,13 @@ services:
     networks:
       - solis-network
     restart: unless-stopped
-    secrets:
-      - influx_token
+    #secrets:
+    #  - influx_token
 
   database:
     container_name: influx
     environment:
-      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN_FILE: /run/secrets/influx_token
+    #  DOCKER_INFLUXDB_INIT_ADMIN_TOKEN_FILE: /run/secrets/influx_token
       DOCKER_INFLUXDB_INIT_BUCKET: tests
       DOCKER_INFLUXDB_INIT_MODE: setup
       DOCKER_INFLUXDB_INIT_ORG: solis
@@ -50,7 +50,7 @@ services:
     secrets:
       - influx_username
       - influx_password
-      - influx_token
+      #- influx_token
   # tunnel:
   #   container_name: ngrok
   #   image: ngrok/ngrok:latest
@@ -79,8 +79,8 @@ secrets:
     file: secrets/influx_username.txt
   influx_password:
     file: secrets/influx_password.txt
-  influx_token:
-    file: secrets/influx_token.txt
+  # influx_token:
+  #   file: secrets/influx_token.txt
 
 networks:
   solis-network:
