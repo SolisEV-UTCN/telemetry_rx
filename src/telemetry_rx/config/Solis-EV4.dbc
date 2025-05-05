@@ -42,30 +42,30 @@ BO_ 3221225472 VECTOR__INDEPENDENT_SIG_MSG: 0 Vector__XXX
  SG_ MC_Reserved1 : 0|32@1+ (1,0) [0|0] "N/A" Vector__XXX
 
 BO_ 512 MPPT1_Power: 8 MPPT1
- SG_ MPPT1_InputVoltage : 0|16@1- (0.01,0) [-327|327] "V"  Dashboard,Telemetry
- SG_ MPPT1_InputCurrent : 16|16@1- (0.0005,0) [-16|16] "A"  Dashboard,Telemetry
- SG_ MPPT1_OutputVoltage : 32|16@1- (0.01,0) [-327|327] "V"  Telemetry
- SG_ MPPT1_OutputCurrent : 48|16@1- (0.0005,0) [-16|16] "A"  Telemetry
+ SG_ MPPT1_InputVoltage : 7|16@0- (0.01,0) [-327|327] "V"  Dashboard,Telemetry
+ SG_ MPPT1_InputCurrent : 23|16@0- (0.0005,0) [-16|16] "A"  Dashboard,Telemetry
+ SG_ MPPT1_OutputVoltage : 39|16@0- (0.01,0) [-327|327] "V"  Telemetry
+ SG_ MPPT1_OutputCurrent : 55|16@0- (0.0005,0) [-16|16] "A"  Telemetry
 
 BO_ 513 MPPT1_Status: 5 MPPT1
- SG_ MPPT1_Mode : 0|8@1+ (1,0) [0|0] ""  Telemetry
- SG_ MPPT1_Fault : 8|8@1+ (1,0) [0|0] ""  Telemetry
- SG_ MPPT1_Enabled : 16|8@1+ (1,0) [0|0] ""  Telemetry
- SG_ MPPT1_AmbientTemperature : 24|8@1- (1,0) [-128|128] "C"  Telemetry
- SG_ MPPT1_HeatsinkTemperature : 32|8@1- (1,0) [-128|128] "C"  Telemetry
+ SG_ MPPT1_Mode : 7|8@0+ (1,0) [0|0] ""  Telemetry
+ SG_ MPPT1_Fault : 15|8@0+ (1,0) [0|0] ""  Telemetry
+ SG_ MPPT1_Enabled : 23|8@0+ (1,0) [0|0] ""  Telemetry
+ SG_ MPPT1_AmbientTemperature : 31|8@0- (1,0) [-128|128] "C"  Telemetry
+ SG_ MPPT1_HeatsinkTemperature : 39|8@0- (1,0) [-128|128] "C"  Telemetry
 
 BO_ 528 MPPT2_Power: 8 MPPT2
- SG_ MPPT2_InputVoltage : 0|16@1- (0.01,0) [-327|327] "V"  Telemetry,Dashboard
- SG_ MPPT2_InputCurrent : 16|16@1- (0.0005,0) [-16|16] "A"  Telemetry,Dashboard
- SG_ MPPT2_OutputVoltage : 32|16@1- (0.01,0) [-327|327] "V"  Telemetry
- SG_ MPPT2_OutputCurrent : 48|16@1- (0.0005,0) [-16|16] "A"  Telemetry
+ SG_ MPPT2_InputVoltage : 7|16@0- (0.01,0) [-327|327] "V"  Telemetry,Dashboard
+ SG_ MPPT2_InputCurrent : 23|16@0- (0.0005,0) [-16|16] "A"  Telemetry,Dashboard
+ SG_ MPPT2_OutputVoltage : 39|16@0- (0.01,0) [-327|327] "V"  Telemetry
+ SG_ MPPT2_OutputCurrent : 55|16@0- (0.0005,0) [-16|16] "A"  Telemetry
 
 BO_ 529 MPPT2_Status: 5 MPPT2
- SG_ MPPT2_Mode : 0|8@1+ (1,0) [0|0] ""  Telemetry
- SG_ MPPT2_Fault : 8|8@1+ (1,0) [0|0] ""  Telemetry
- SG_ MPPT2_Enabled : 16|8@1+ (1,0) [0|0] ""  Telemetry
- SG_ MPPT2_AmbientTemperature : 24|8@1- (1,0) [-128|128] "C"  Telemetry
- SG_ MPPT2_HeatsinkTemperature : 32|8@1- (1,0) [-128|128] "C"  Telemetry
+ SG_ MPPT2_Mode : 7|8@0+ (1,0) [0|0] ""  Telemetry
+ SG_ MPPT2_Fault : 15|8@0+ (1,0) [0|0] ""  Telemetry
+ SG_ MPPT2_Enabled : 23|8@0+ (1,0) [0|0] ""  Telemetry
+ SG_ MPPT2_AmbientTemperature : 31|8@0- (1,0) [-128|128] "C"  Telemetry
+ SG_ MPPT2_HeatsinkTemperature : 39|8@0- (1,0) [-128|128] "C"  Telemetry
 
 BO_ 1024 MC_ID: 8 MotorController
  SG_ MC_ProhelionID : 0|32@1+ (1,0) [0|0] ""  Telemetry
@@ -79,12 +79,12 @@ BO_ 1025 MC_Status: 8 MotorController
  SG_ MC_ReceiveErrorCount : 56|8@1+ (1,0) [0|0] ""  Telemetry
 
 BO_ 1026 MC_Bus: 8 MotorController
- SG_ MC_BusCurrent : 32|32@1- (1,0) [0|0] "A"  Telemetry,Dashboard
- SG_ MC_BusVoltage : 0|32@1- (1,0) [0|0] "V"  Telemetry,Dashboard
+ SG_ MC_BusCurrent : 32|32@1- (1,0) [-10000|10000] "A"  Telemetry,Dashboard
+ SG_ MC_BusVoltage : 0|32@1- (1,0) [-10000|10000] "V"  Telemetry,Dashboard
 
 BO_ 1027 MC_Velocity: 8 MotorController
- SG_ MC_MotorVelocity : 0|32@1- (1,0) [0|0] "rpm"  Telemetry
- SG_ MC_VehicleVelocity : 32|32@1- (1,0) [0|0] "m/s"  Telemetry,Dashboard
+ SG_ MC_MotorVelocity : 0|32@1- (1,0) [-10000|10000] "rpm"  Telemetry
+ SG_ MC_VehicleVelocity : 32|32@1- (1,0) [-10000|10000] "m/s"  Telemetry,Dashboard
 
 BO_ 1028 MC_PhaseCurrent: 8 MotorController
  SG_ MC_PhaseBCurrent : 0|32@1- (1,0) [0|0] "Arms"  Telemetry
@@ -280,7 +280,7 @@ BO_ 1042 MC_ActiveMotorChange: 8 Dashboard
 
 BO_ 1281 MC_MotorDriveCommand: 8 Dashboard
  SG_ MC_MotorVelocityCommand : 0|32@1- (1,0) [0|0] "rpm"  MotorController,Telemetry
- SG_ MC_CurrentReferenceCommand : 32|32@1- (100,0) [0|0] "%"  MotorController,Telemetry
+ SG_ MC_CurrentReferenceCommand : 32|32@1- (100,0) [-101|101] "%"  MotorController,Telemetry
 
 BO_ 1282 MC_MotorPowerCommand: 8 Dashboard
  SG_ MC_BusCurrentCommand : 32|32@1- (100,0) [0|0] "%"  MotorController,Telemetry
