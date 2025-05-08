@@ -9,4 +9,4 @@ COPY ./ ./
 
 RUN python -m pip install -e .
 
-ENTRYPOINT [ "python", "src/telemetry_rx/__main__.py", "listen" ]
+ENTRYPOINT [ "python", "src/telemetry_rx/__main__.py", "-v", "listen" ]
