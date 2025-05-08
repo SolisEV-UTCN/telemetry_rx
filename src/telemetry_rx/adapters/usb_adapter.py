@@ -67,6 +67,8 @@ class UsbAdapter(Adapter):
             payload += self.device.read(UsbAdapter.MESSAGE_LEN - 1)
             logging.debug(f"Full payload length: {len(payload)}")
             logging.debug(f"Full payload: {payload.hex()}")
+            logging.debug(f"Expected length: {UsbAdapter.MESSAGE_LEN}")
+            logging.debug(f"First byte: {payload[0]:02x}, Last byte: {payload[-1]:02x}")
 
             try:
                 frame_id, data_h, data_l, timestamp, crc = self.process_bytes(payload)
