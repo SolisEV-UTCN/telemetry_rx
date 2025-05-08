@@ -87,6 +87,7 @@ class UsbAdapter(Adapter):
                     minute=timestamp[1],       # Minute
                     second=timestamp[0]        # Second
                 )
+                logging.debug(f"Created datetime: {dt}")
                 point.time(dt)
                 yield point
 
