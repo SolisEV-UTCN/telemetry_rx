@@ -9,6 +9,8 @@ from influxdb_client import Point
 from telemetry_rx.adapters import Adapter
 from telemetry_rx.utils import AppState
 
+# 2025-05-08 14:00:00
+
 
 class UsbAdapter(Adapter):
     MESSAGE_LEN = 21  # Updated to include 5 bytes for timestamp
