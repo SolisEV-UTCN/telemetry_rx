@@ -63,10 +63,14 @@ class UsbAdapter(Adapter):
                 continue
 
             payload += self.device.read(UsbAdapter.MESSAGE_LEN - 1)
+            logging.debug(f"Full payload length: {len(payload)}")
+            logging.debug(f"Full payload: {payload.hex()}")
 
             try:
                 frame_id, data_h, data_l, timestamp, crc = self.process_bytes(payload)
-            except ValueError:
+                logging.debug(f"Processed bytes - frame_id: {frame_id}, timestamp: {timestamp.hex()}")
+            except ValueError as e:
+                logging.debug(f"Failed to process bytes: {e}")
                 logging.debug(f"Received: {payload}")
                 continue
 
