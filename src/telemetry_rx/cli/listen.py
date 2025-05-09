@@ -34,6 +34,18 @@ def configure_adapter(adapter: str, dbc: Database, address: str) -> Adapter:
 
 def setup_main(client: InfluxDBClient, reader: Adapter, bucket: str) -> None:
     """Init bucket for recording, then monitor CAN traffic."""
+    # Verify connection and bucket
+    try:
+        buckets_api = client.buckets_api()
+        bucket_info = buckets_api.find_bucket_by_name(bucket)
+        if not bucket_info:
+            logging.error(f"Bucket '{bucket}' not found!")
+            return
+        logging.info(f"Connected to InfluxDB. Using bucket: {bucket}")
+    except Exception as e:
+        logging.error(f"Failed to connect to InfluxDB: {str(e)}")
+        return
+
     # Write points in batches to InfluxDB
     with MultiprocessingWriter(
         url=client.url,
@@ -62,9 +74,14 @@ def main_loop(reader: Adapter, writer: MultiprocessingWriter, bucket: str):
         try:
             # Continious reading
             for data in reader.read_data():
-                logging.debug(f"Writing to {bucket}: {data}")
-                logging.debug(f"Point details - measurement: {data.name}, tags: {data.tags}, fields: {data.fields}, time: {data.time}")
-                writer.write(bucket=bucket, record=data, write_precision=WritePrecision.NS)
+                try:
+                    logging.debug(f"Writing to {bucket}: {data}")
+                    logging.debug(f"Point details - measurement: {data._name}, tags: {data.tags}, fields: {data.fields}, time: {data.time}")
+                    writer.write(bucket=bucket, record=data, write_precision=WritePrecision.NS)
+                    logging.debug("Successfully wrote to InfluxDB")
+                except Exception as e:
+                    logging.error(f"Failed to write to InfluxDB: {str(e)}")
+                    logging.error(f"Point that failed: {data}")
 
         except KeyboardInterrupt:
             state = AppState.STOP
