@@ -58,7 +58,7 @@ class Adapter(ABC):
         return Point.from_dict(
             {
                 "measurement": "solar_vehicle",
-                "tags": {"ecu": message.senders[0]},
+                "tags": {"ecu": message.senders[0] if message.senders else "unknown"},
                 "fields": fields,
             }
         )
