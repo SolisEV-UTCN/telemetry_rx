@@ -67,10 +67,8 @@ def main_loop(reader: Adapter, writer: MultiprocessingWriter, bucket: str):
                 try:
                     logging.debug(f"Raw Point object: {data}")
                     logging.debug(f"Point object type: {type(data)}")
-                    logging.debug(f"Point object dir: {dir(data)}")
-                    logging.debug(f"Point object dict: {data.__dict__}")
+                    logging.debug(f"Point line protocol: {data.to_line_protocol()}")
                     logging.debug(f"Writing to {bucket}: {data}")
-                    logging.debug(f"Point details - measurement: {data._name}, tags: {data._tags}, fields: {data._fields}, time: {data._time}")
                     
                     # Try to write the point
                     try:
@@ -78,11 +76,11 @@ def main_loop(reader: Adapter, writer: MultiprocessingWriter, bucket: str):
                         logging.debug("Successfully wrote point to InfluxDB")
                     except Exception as write_error:
                         logging.error(f"Failed to write point to InfluxDB: {str(write_error)}")
-                        logging.error(f"Point that failed to write: {data}")
+                        logging.error(f"Point that failed to write: {data.to_line_protocol()}")
                         raise
                 except Exception as e:
                     logging.error(f"Failed to process point: {str(e)}")
-                    logging.error(f"Point object state: {data}")
+                    logging.error(f"Point object state: {data.to_line_protocol() if hasattr(data, 'to_line_protocol') else data}")
                     raise
 
         except KeyboardInterrupt:
