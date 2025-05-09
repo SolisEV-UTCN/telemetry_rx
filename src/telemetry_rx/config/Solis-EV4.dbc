@@ -294,7 +294,7 @@ BO_ 1792 AUX_Status: 1 Auxiliary
 BO_ 1793 AUX_Command: 1 Dashboard
  SG_ AUX_Command : 0|8@1+ (1,0) [0|0] ""  Telemetry,Auxiliary
 
-BO_ 1794 Test_Variable: 8 Telemetry
+BO_ 1794 Test_Variable: 8 Test
  SG_ Test_Variable : 0|32@1- (1,0) [0|0] ""  Telemetry
 
 BO_ 1280 DC_Status: 8 DriverControl
@@ -450,6 +450,7 @@ SIG_VALTYPE_ 1780 BMU_SoC : 1;
 SIG_VALTYPE_ 1780 BMU_SoCPercentage : 1;
 SIG_VALTYPE_ 1781 BMU_BalanceSoC : 1;
 SIG_VALTYPE_ 1781 BMU_BalanceSoCPercentage : 1;
+SIG_VALTYPE_ 1794 Test_Variable : 1;
 SIG_VALTYPE_ 1281 MC_MotorVelocityCommand : 1;
 SIG_VALTYPE_ 1281 MC_CurrentReferenceCommand : 1;
 SIG_VALTYPE_ 1282 MC_BusCurrentCommand : 1;
