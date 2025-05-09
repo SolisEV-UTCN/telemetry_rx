@@ -62,7 +62,8 @@ def main_loop(reader: Adapter, writer: MultiprocessingWriter, bucket: str):
         try:
             # Continious reading
             for data in reader.read_data():
-                logging.debug(f"Writting to {bucket}: {data}")
+                logging.debug(f"Writing to {bucket}: {data}")
+                logging.debug(f"Point details - measurement: {data.name}, tags: {data.tags}, fields: {data.fields}, time: {data.time}")
                 writer.write(bucket=bucket, record=data, write_precision=WritePrecision.NS)
 
         except KeyboardInterrupt:

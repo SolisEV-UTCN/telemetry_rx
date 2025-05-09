@@ -9,9 +9,6 @@ from influxdb_client import Point
 from telemetry_rx.adapters import Adapter
 from telemetry_rx.utils import AppState
 
-# 2025-05-08 14:00:00
-
-
 class UsbAdapter(Adapter):
     MESSAGE_LEN = 21  # Updated to include 5 bytes for timestamp
 
@@ -96,7 +93,8 @@ class UsbAdapter(Adapter):
                     second=timestamp[0]        # Second
                 )
                 logging.debug(f"Created datetime: {dt}")
-                point.time(dt)
+                # Convert to nanoseconds timestamp
+                point.time(int(dt.timestamp() * 1e9))
                 yield point
 
     def process_bytes(self, data: bytes) -> tuple[int, bytes, bytes, bytes, int]:

@@ -60,6 +60,5 @@ class Adapter(ABC):
                 "measurement": "solar_vehicle",
                 "tags": {"ecu": message.senders[0]},
                 "fields": fields,
-                "time": time.time_ns(),
             }
         )
