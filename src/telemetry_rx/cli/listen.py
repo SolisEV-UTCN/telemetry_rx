@@ -70,7 +70,7 @@ def main_loop(reader: Adapter, writer: MultiprocessingWriter, bucket: str):
                     logging.debug(f"Point object dir: {dir(data)}")
                     logging.debug(f"Point object dict: {data.__dict__}")
                     logging.debug(f"Writing to {bucket}: {data}")
-                    logging.debug(f"Point details - measurement: {data._name}, tags: {data.tags}, fields: {data.fields}, time: {data.time}")
+                    logging.debug(f"Point details - measurement: {data._name}, tags: {data._tags}, fields: {data._fields}, time: {data._time}")
                     
                     # Try to write the point
                     try:
