@@ -62,9 +62,18 @@ def main_loop(reader: Adapter, writer: MultiprocessingWriter, bucket: str):
         try:
             # Continious reading
             for data in reader.read_data():
-                logging.debug(f"Writing to {bucket}: {data}")
-                logging.debug(f"Point details - measurement: {data._name}, tags: {data._tags}, fields: {data._fields}, time: {data._time}")
-                writer.write(bucket=bucket, record=data, write_precision=WritePrecision.NS)
+                try:
+                    logging.debug(f"Raw Point object: {data}")
+                    logging.debug(f"Point object type: {type(data)}")
+                    logging.debug(f"Point object dir: {dir(data)}")
+                    logging.debug(f"Point object dict: {data.__dict__}")
+                    logging.debug(f"Writing to {bucket}: {data}")
+                    logging.debug(f"Point details - measurement: {data._name}, tags: {data.tags}, fields: {data.fields}, time: {data.time}")
+                    writer.write(bucket=bucket, record=data, write_precision=WritePrecision.NS)
+                except Exception as e:
+                    logging.error(f"Failed to write to InfluxDB: {str(e)}")
+                    logging.error(f"Point object state: {data}")
+                    raise
 
         except KeyboardInterrupt:
             state = AppState.STOP

@@ -55,10 +55,12 @@ class Adapter(ABC):
         fields = message.decode_simple(data)
         logging.debug(f"Parsed data: {fields}")
 
-        return Point.from_dict(
-            {
-                "measurement": "solar_vehicle",
-                "tags": {"ecu": message.senders[0] if message.senders else "unknown"},
-                "fields": fields,
-            }
-        )
+        point_dict = {
+            "measurement": "solar_vehicle",
+            "tags": {"ecu": message.senders[0]},
+            "fields": fields,
+        }
+        logging.debug(f"Creating Point with dict: {point_dict}")
+        point = Point.from_dict(point_dict)
+        logging.debug(f"Created Point object: {point}")
+        return point

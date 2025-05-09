@@ -94,7 +94,10 @@ class UsbAdapter(Adapter):
                 )
                 logging.debug(f"Created datetime: {dt}")
                 # Convert to nanoseconds timestamp
-                point.time(int(dt.timestamp() * 1e9))
+                ns_timestamp = int(dt.timestamp() * 1e9)
+                logging.debug(f"Setting timestamp to: {ns_timestamp}")
+                point.time(ns_timestamp)
+                logging.debug(f"Point after timestamp: {point}")
                 yield point
 
     def process_bytes(self, data: bytes) -> tuple[int, bytes, bytes, bytes, int]:
