@@ -35,12 +35,14 @@ def configure_adapter(adapter: str, dbc: Database, address: str) -> Adapter:
 def setup_main(client: InfluxDBClient, reader: Adapter, bucket: str) -> None:
     """Init bucket for recording, then monitor CAN traffic."""
     # Write points in batches to InfluxDB
+    logging.info(f"Setting up InfluxDB writer with URL: {client.url}, org: {client.org}, bucket: {bucket}")
     with MultiprocessingWriter(
         url=client.url,
         token=client.token,
         org=client.org,
         write_options=WriteOptions(batch_size=5000),
     ) as writer:
+        logging.info("InfluxDB writer initialized successfully")
         main_loop(reader, writer, bucket)
 
 
@@ -69,9 +71,17 @@ def main_loop(reader: Adapter, writer: MultiprocessingWriter, bucket: str):
                     logging.debug(f"Point object dict: {data.__dict__}")
                     logging.debug(f"Writing to {bucket}: {data}")
                     logging.debug(f"Point details - measurement: {data._name}, tags: {data.tags}, fields: {data.fields}, time: {data.time}")
-                    writer.write(bucket=bucket, record=data, write_precision=WritePrecision.NS)
+                    
+                    # Try to write the point
+                    try:
+                        writer.write(bucket=bucket, record=data, write_precision=WritePrecision.NS)
+                        logging.debug("Successfully wrote point to InfluxDB")
+                    except Exception as write_error:
+                        logging.error(f"Failed to write point to InfluxDB: {str(write_error)}")
+                        logging.error(f"Point that failed to write: {data}")
+                        raise
                 except Exception as e:
-                    logging.error(f"Failed to write to InfluxDB: {str(e)}")
+                    logging.error(f"Failed to process point: {str(e)}")
                     logging.error(f"Point object state: {data}")
                     raise
 
