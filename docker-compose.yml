@@ -69,10 +69,26 @@ services:
   #     - type: bind
   #       source: ./config/ngrok.yml
   #       target: /home/ngrok/.config/ngrok/ngrok.yml
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    networks:
+      - solis-network
+    depends_on:
+      - database
+    restart: unless-stopped
 
 volumes:
   influxdb_storage:
     name: "influxdb_storage"
+  grafana-storage:
 
 secrets:
   influx_username:
