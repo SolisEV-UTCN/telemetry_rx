@@ -47,19 +47,29 @@ class Adapter(ABC):
         # Get message formatter
         try:
             message = self.dbc.get_message_by_frame_id(frame_id)
-            logging.debug(f"Receive message: {message}")
+            logging.debug(f"Found message in DBC: {message.name}")
         except KeyError:
             logging.warn(f"Received unknown message with {frame_id:04X} ID.")
             return None
 
-        fields = message.decode_simple(data)
-        logging.debug(f"Parsed data: {fields}")
+        try:
+            fields = message.decode_simple(data)
+            logging.debug(f"Decoded fields for {message.name}: {fields}")
+        except Exception as e:
+            logging.error(f"Failed to decode message {message.name}: {e}")
+            return None
 
-        return Point.from_dict(
-            {
-                "measurement": "solar_vehicle",
-                "tags": {"ecu": message.senders[0]},
-                "fields": fields,
-                "time": time.time_ns(),
-            }
-        )
+        try:
+            point = Point.from_dict(
+                {
+                    "measurement": "solar_vehicle",
+                    "tags": {"ecu": message.senders[0]},
+                    "fields": fields,
+                    "time": time.time_ns(),
+                }
+            )
+            logging.debug(f"Created point for {message.name} from {message.senders[0]}")
+            return point
+        except Exception as e:
+            logging.error(f"Failed to create point for {message.name}: {e}")
+            return None

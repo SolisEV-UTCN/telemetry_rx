@@ -59,25 +59,32 @@ class UsbAdapter(Adapter):
             logging.debug(f"{self.device.in_waiting} bytes are in input buffer.")
             payload = self.device.read(1)
             if payload[0] != 0xFE:
+                logging.debug(f"Skipping invalid start byte: {payload[0]:02x}")
                 continue
 
             payload += self.device.read(UsbAdapter.MESSAGE_LEN - 1)
+            logging.debug(f"Received: {payload}")
 
             try:
                 frame_id, data_h, data_l, crc = self.process_bytes(payload)
-            except ValueError:
-                logging.debug(f"Received: {payload}")
+                logging.debug(f"Processed bytes - Frame ID: {frame_id:04x}, Data H: {data_h.hex()}, Data L: {data_l.hex()}, CRC: {crc:08x}")
+            except ValueError as e:
+                logging.debug(f"Failed to process bytes: {e}")
                 continue
 
             # Validate CRC-32 MPEG-2
             # STM32 algorithm reverses byte order for uint32_t before calculating CRC
             if not self.validate_crc(crc, data_h[::-1] + data_l[::-1]):
+                logging.debug(f"CRC validation failed - Expected: {crc:08x}, Data: {(data_h[::-1] + data_l[::-1]).hex()}")
                 continue
 
             # Decode data
             point = self.parse_data(frame_id, data_h + data_l)
             if point is not None:
+                logging.debug(f"Created InfluxDB point: {point.to_line_protocol()}")
                 yield point
+            else:
+                logging.debug(f"Failed to create InfluxDB point for frame ID: {frame_id:04x}")
 
     def process_bytes(self, data: bytes) -> tuple[int, bytes, bytes, int]:
         r"""Incoming serial data is expected to be of following structure:
