@@ -16,7 +16,7 @@ class UsbAdapter(Adapter):
         super().__init__(*args, **kwargs)
         self.running = True
         self.address = address
-        self.baudrate = 115200
+        self.baudrate = 230400
         self.bytesize = serial.EIGHTBITS
         self.parity = serial.PARITY_EVEN
         self.stopbits = serial.STOPBITS_ONE
