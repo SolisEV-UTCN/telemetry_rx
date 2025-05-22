@@ -74,9 +74,9 @@ class UsbAdapter(Adapter):
 
             # Validate CRC-32 MPEG-2
             # STM32 algorithm reverses byte order for uint32_t before calculating CRC
-            if not self.validate_crc(crc, data_h[::-1] + data_l[::-1]):
-                logging.debug(f"CRC validation failed - Expected: {crc:08x}, Data: {(data_h[::-1] + data_l[::-1]).hex()}")
-                continue
+            # if not self.validate_crc(crc, data_h[::-1] + data_l[::-1]):
+            #     logging.debug(f"CRC validation failed - Expected: {crc:08x}, Data: {(data_h[::-1] + data_l[::-1]).hex()}")
+            #     continue
 
             # Decode data
             point = self.parse_data(frame_id, data_h + data_l)
@@ -99,10 +99,10 @@ class UsbAdapter(Adapter):
         Byte[08] |
         Byte[09] |
         Byte[10] /
-        Byte[11] \
-        Byte[12] | Computed CRC-32 (order intel)
-        Byte[13] |
-        Byte[14] /
+        Byte[11] \ //second
+        Byte[12] | //minute
+        Byte[13] | //hour
+        Byte[14] / //day of month
         Byte[15] = Padding byte (0x7F)
         """
         if data[0] != 0xFE or data[15] != 0x7F:
